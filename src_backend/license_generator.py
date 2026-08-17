@@ -1,5 +1,5 @@
 """
-SK Enterprises | 1-Year Client Cryptographic License Generator
+SK Enterprises | 1-Year Client Cryptographic License Engine
 Founder & Architect: Sumeet Kumar
 """
 import json
