@@ -10,6 +10,9 @@ venv/
 ENV/
 _extracted_staging_temp/
 Output_Installer/
+build/
+dist/
+*.spec
 *.exe
 *.log
 .DS_Store

@@ -1,26 +1,32 @@
+"""
+SK Enterprises | Project SK AI 4.0 (Project JARVIS 4.0)
+Inventor & Sole Architect: Sumeet Kumar
+Master Enterprise Entry Point & Runtime Orchestrator
+"""
 import os
 import sys
 import json
-import subprocess
+import traceback
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent
+# Add Base Directory to sys.path
+from core.system_paths import BASE_DIR, APPDATA_DIR, LOGS_DIR, CRASH_LOG, log_crash_and_notify
+
 sys.path.insert(0, str(BASE_DIR))
 
-from core.commercial_auth_rbac import CommercialAccessGate
-from core.autonomous_learner import AutonomousLearningEngine
-from core.education_matrix import UniversalEducationMatrix
-from core.data_analyst_engine import DataAnalystSuite
-from core.cloud_admin_engine import CloudAdminActuator
-from core.astrology_engine import VedicAstrologyCore
+def run_headless_console():
+    from core.commercial_auth_rbac import CommercialAccessGate
+    from core.autonomous_learner import AutonomousLearningEngine
+    from core.education_matrix import UniversalEducationMatrix
+    from core.data_analyst_engine import DataAnalystSuite
+    from core.cloud_admin_engine import CloudAdminActuator
+    from core.astrology_engine import VedicAstrologyCore
 
-def main():
     print("=" * 85)
     print("  SK ENTERPRISES | PROJECT SK AI 4.0 (PROJECT JARVIS 4.0)")
     print("  INVENTOR & SOLE ARCHITECT: SUMEET KUMAR | COMMERCIAL COGNITIVE OS")
     print("=" * 85)
 
-    # 1. लाइसेंस और आइडेंटिटी लोड करना
     license_file = BASE_DIR / "config" / "license.key"
     if license_file.exists():
         print("[SECURITY]: Lifetime Admin Master License Verified for Sumeet Kumar.")
@@ -28,14 +34,12 @@ def main():
     identity_file = BASE_DIR / "config" / "system_identity.json"
     if identity_file.exists():
         ident = json.loads(identity_file.read_text(encoding="utf-8"))
-        print(f"[IDENTITY]: {ident['system_name']} | Creator: {ident['inventor']} ({ident['organization']})")
+        print(f"[IDENTITY]: {ident.get('system_name')} | Creator: {ident.get('inventor')} ({ident.get('organization')})")
 
-    # 2. बैकग्राउंड लर्निंग इंजन चालू करना
     learner = AutonomousLearningEngine()
     learner.start_daemon()
     print("[COGNITION]: 24x7 Self-Learning & Skill Expansion Daemon ACTIVE.")
 
-    # 3. सभी डोमेन इंजन इनिशियलाइज़ करना
     edu = UniversalEducationMatrix()
     data_suite = DataAnalystSuite()
     cloud_admin = CloudAdminActuator()
@@ -48,6 +52,24 @@ def main():
     print(f" -> Vedic Astrology: Ephemeris & Kundali Engine Synchronized.")
 
     print("\n[SYSTEM READY]: Project SK AI 4.0 Operational in Master Enterprise Mode.")
+
+def main():
+    try:
+        # Change working directory to BASE_DIR so relative resource lookup always works
+        os.chdir(str(BASE_DIR))
+
+        # Check if CLI/headless mode is requested
+        if "--headless" in sys.argv or "--cli" in sys.argv:
+            run_headless_console()
+            return
+
+        # Default: Launch GUI Dashboard
+        from core.gui_dashboard import launch_gui
+        launch_gui()
+
+    except Exception as e:
+        log_crash_and_notify("SK AI 4.0 Startup Error", e)
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
