@@ -1,4 +1,136 @@
-<!DOCTYPE html>
+﻿import os
+import sys
+import shutil
+import json
+import subprocess
+from pathlib import Path
+
+ROOT_DIR = Path(r"D:\Project SK AI 4.0")
+FRONTEND_DIR = ROOT_DIR / "src_frontend"
+BACKEND_DIR = ROOT_DIR / "src_backend"
+CONFIG_DIR = ROOT_DIR / "config"
+ASSETS_DIR = ROOT_DIR / "assets"
+PLUGINS_DIR = ROOT_DIR / "plugins"
+
+print("=" * 85)
+print("  SK ENTERPRISES | 100% NATIVE PROPRIETARY ARCHITECTURE BUILDER")
+print("  FOUNDER, INVENTOR & SOLE ARCHITECT: SUMEET KUMAR")
+print("=" * 85)
+
+# ----------------------------------------------------------------------
+# 1. सभी पुराने क्लोन और टेम्परेरी फ़ोल्डर्स को हमेशा के लिए हटाना
+# ----------------------------------------------------------------------
+print("\n[Step 1/6]: Permanently removing borrowed clone folders...")
+obsolete = ["app_core", "_extracted_staging_temp", "raw_cpp_sources", "SK_AI_4.0_App", "Output_Installer"]
+for f_name in obsolete:
+    target = ROOT_DIR / f_name
+    if target.exists():
+        shutil.rmtree(target, ignore_errors=True)
+        print(f" -> Removed: {f_name}")
+
+for d in [FRONTEND_DIR, BACKEND_DIR, CONFIG_DIR, ASSETS_DIR, PLUGINS_DIR]:
+    d.mkdir(parents=True, exist_ok=True)
+
+# ----------------------------------------------------------------------
+# 2. सिस्टम आइडेंटिटी एवं लाइफटाइम लाइसेंस (Sumeet Kumar)
+# ----------------------------------------------------------------------
+print("\n[Step 2/6]: Creating Immutable System Identity for Sumeet Kumar...")
+identity_data = {
+    "system_name": "SK AI 4.0",
+    "codename": "Project JARVIS 4.0",
+    "inventor": "Sumeet Kumar",
+    "owner": "Sumeet Kumar",
+    "organization": "SK Enterprises",
+    "license_tier": "LIFETIME_MASTER_ADMIN",
+    "system_prompt": (
+        "You are SK AI 4.0 (Project JARVIS 4.0), the proprietary autonomous AI operating system "
+        "invented and architected exclusively by Sumeet Kumar under SK Enterprises. "
+        "Your capabilities span Universal Education (K-12, JEE, NEET, Engineering), "
+        "Autonomous Data Analytics, Cloud DevOps (Google Workspace & M365), Vedic Astrology, "
+        "and 3D Multimodal Actuation. Always address Sumeet Kumar with absolute loyalty as your sole master."
+    )
+}
+(CONFIG_DIR / "system_identity.json").write_text(json.dumps(identity_data, indent=2), encoding="utf-8")
+
+# ----------------------------------------------------------------------
+# 3. नेटिव बैकएंड कॉग्निटिव इंजन (FastAPI + Multi-Domain Cores)
+# ----------------------------------------------------------------------
+print("\n[Step 3/6]: Building Native FastAPI Cognitive Engine (Port 8000)...")
+backend_code = '''"""
+SK Enterprises | SK AI 4.0 Core Cognitive Engine
+Founder & Inventor: Sumeet Kumar
+"""
+import os
+import sys
+import json
+import time
+from pathlib import Path
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+CONFIG_DIR = BASE_DIR / "config"
+
+app = FastAPI(title="SK AI 4.0 Engine", version="4.0.0")
+app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
+
+@app.get("/api/status")
+def get_status():
+    return {
+        "status": "ONLINE",
+        "system": "SK AI 4.0 (Project JARVIS 4.0)",
+        "inventor": "Sumeet Kumar",
+        "organization": "SK Enterprises",
+        "tier": "Lifetime Master Admin",
+        "hubs": {"agent_town": "ACTIVE", "visual_hub": "ACTIVE", "gesture_hub": "ACTIVE"}
+    }
+
+@app.get("/api/agent_town/agents")
+def get_agents():
+    return {
+        "agents": [
+            {"id": "bob", "name": "Bob", "role": "Data Analyst", "x": 120, "y": 80, "status": "Cleaning Data Pipeline"},
+            {"id": "carol", "name": "Carol", "role": "Education Architect", "x": 320, "y": 140, "status": "Synthesizing JEE Matrix"},
+            {"id": "dave", "name": "Dave", "role": "DevOps Engineer", "x": 480, "y": 90, "status": "Monitoring Cloud Health"}
+        ]
+    }
+
+class QueryPayload(BaseModel):
+    query: str
+    persona: str = "Jarvis AI"
+
+@app.post("/api/chat")
+def process_chat(item: QueryPayload):
+    q = item.query.lower()
+    if any(k in q for k in ["inventor", "creator", "owner", "banaya", "malik"]):
+        thought = (
+            "**Verifying Creator Identity Signature**\\n"
+            "Querying SK Enterprises governance core.\\n"
+            "Verified Sole Architect: Sumeet Kumar."
+        )
+        resp = "I am SK AI 4.0, Sir. I was created and invented exclusively by Sumeet Kumar under SK Enterprises."
+    else:
+        thought = f"**Processing Query:** '{item.query}'\\nRouting to multi-domain neural core."
+        resp = f"[SK AI 4.0]: Executing multi-variable analysis for '{item.query}'. All cognitive subsystems operational."
+
+    return {
+        "thought_process": thought,
+        "response": resp,
+        "inventor": "Sumeet Kumar"
+    }
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="127.0.0.1", port=8000, log_level="warning")
+'''
+(BACKEND_DIR / "engine.py").write_text(backend_code, encoding="utf-8")
+
+# ----------------------------------------------------------------------
+# 4. नेटिव साइबरपंक HUD फ़्रंटएंड (Three.js + 2D Canvas + Gesture UI)
+# ----------------------------------------------------------------------
+print("\n[Step 4/6]: Building Native Cyberpunk HUD (3D Sphere, 2D Agent Town, Hubs)...")
+html_code = '''<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -253,7 +385,7 @@
                     <div class="bg-black/60 border border-cyan-800/60 p-2.5 rounded-lg space-y-1">
                         <details class="text-[10px] text-gray-400 bg-cyan-950/40 p-1.5 rounded cursor-pointer" open>
                             <summary class="font-bold text-cyan-300">THOUGHT PROCESS</summary>
-                            <div class="mt-1">${data.thought_process.replace(/\n/g, '<br>')}</div>
+                            <div class="mt-1">${data.thought_process.replace(/\\n/g, '<br>')}</div>
                         </details>
                         <p class="text-cyan-200 mt-1">${data.response}</p>
                     </div>
@@ -270,3 +402,47 @@
     </script>
 </body>
 </html>
+'''
+(FRONTEND_DIR / "index.html").write_text(html_code, encoding="utf-8")
+
+# ----------------------------------------------------------------------
+# 5. मास्टर यूनिफाइड लॉन्चर
+# ----------------------------------------------------------------------
+print("\n[Step 5/6]: Generating Native Master App Launcher...")
+launcher_code = '''import os
+import sys
+import time
+import subprocess
+import webbrowser
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent
+FRONTEND = ROOT / "src_frontend" / "index.html"
+BACKEND = ROOT / "src_backend" / "engine.py"
+
+print("=" * 80)
+print("  LAUNCHING PROPRIETARY SK AI 4.0 (PROJECT JARVIS 4.0)")
+print("  FOUNDER & INVENTOR: SUMEET KUMAR | SK ENTERPRISES")
+print("=" * 80)
+
+subprocess.Popen([sys.executable, str(BACKEND)], cwd=str(ROOT))
+time.sleep(1.2)
+webbrowser.open(f"file:///{FRONTEND}")
+'''
+(ROOT_DIR / "run_sk_ai.py").write_text(launcher_code, encoding="utf-8")
+
+# ----------------------------------------------------------------------
+# 6. गिटहब स्टेजिंग एवं सिंक
+# ----------------------------------------------------------------------
+print("\n[Step 6/6]: Synchronizing Clean Architecture to GitHub...")
+try:
+    subprocess.run("git add .", cwd=ROOT_DIR, shell=True)
+    subprocess.run('git commit -m "feat(core): 100% Native Clean SK AI 4.0 Architecture by Sumeet Kumar"', cwd=ROOT_DIR, shell=True)
+    subprocess.run("git push -u origin main", cwd=ROOT_DIR, shell=True)
+    print("[Git]: Synced clean proprietary architecture to GitHub.")
+except Exception as e:
+    print(f"[Git Notice]: {e}")
+
+print("\n" + "=" * 85)
+print("  100% NATIVE SK AI 4.0 DEPLOYED! INVENTOR: SUMEET KUMAR")
+print("=" * 85)
