@@ -38,6 +38,7 @@ app.add_middleware(
 # 1. System Status & Identity Lock
 # -------------------------------------------------------------
 @app.get("/api/system/status")
+@app.get("/api/status")
 def get_system_status():
     identity = {
         "system_name": "SK AI 4.0",
@@ -125,6 +126,7 @@ AGENTS_STATE = [
 ]
 
 @app.get("/api/agent_town/state")
+@app.get("/api/agent_town/agents")
 def get_agent_town_state():
     return {
         "timestamp": time.time(),
@@ -285,6 +287,7 @@ class ChatQuery(BaseModel):
     persona: str = "Jarvis AI"
 
 @app.post("/api/chat/process")
+@app.post("/api/chat")
 async def process_chat(item: ChatQuery):
     q = item.query.strip().lower()
     
