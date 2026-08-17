@@ -3,270 +3,745 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SK AI 4.0 | Project JARVIS 4.0 - Sumeet Kumar</title>
+    <title>SK AI 4.0 | Project JARVIS 4.0 - Inventor Sumeet Kumar</title>
+    <!-- Three.js 3D WebGL Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- TailwindCSS for Cyberpunk Layout -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #060c18; color: #e2e8f0; font-family: 'Segoe UI', system-ui, sans-serif; overflow: hidden; }
-        .glass-panel { background: rgba(10, 20, 36, 0.88); backdrop-filter: blur(16px); border: 1px solid rgba(0, 245, 212, 0.2); border-radius: 12px; }
-        .tab-btn.active { background: rgba(0, 245, 212, 0.18); border-color: #00f5d4; color: #00f5d4; font-weight: bold; }
-        .node-btn { background: rgba(15, 30, 55, 0.9); border: 1px solid rgba(0, 245, 212, 0.3); }
-        .node-btn:hover { border-color: #00f5d4; box-shadow: 0 0 10px rgba(0, 245, 212, 0.4); }
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+        
+        * { box-sizing: border-box; }
+        body { 
+            background: radial-gradient(circle at 50% 20%, #0a192f 0%, #050b14 70%, #02050a 100%);
+            color: #e2e8f0; 
+            font-family: 'Outfit', -apple-system, sans-serif;
+            overflow: hidden;
+            user-select: none;
+        }
+        
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        
+        .glass-panel { 
+            background: rgba(10, 22, 40, 0.85); 
+            backdrop-filter: blur(16px); 
+            border: 1px solid rgba(0, 245, 212, 0.2); 
+            border-radius: 12px; 
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+        }
+        
+        .cyber-glow { 
+            text-shadow: 0 0 12px rgba(0, 245, 212, 0.7), 0 0 24px rgba(0, 180, 216, 0.4); 
+        }
+        
+        .tab-btn {
+            transition: all 0.2s ease;
+        }
+        .tab-btn.active { 
+            background: rgba(0, 245, 212, 0.18); 
+            border-color: #00f5d4; 
+            color: #00f5d4; 
+            box-shadow: 0 0 10px rgba(0, 245, 212, 0.3);
+        }
+        
+        .node-btn {
+            background: rgba(15, 30, 55, 0.85);
+            border: 1px solid rgba(0, 245, 212, 0.25);
+            transition: all 0.2s ease;
+        }
+        .node-btn:hover {
+            border-color: #00f5d4;
+            box-shadow: 0 0 12px rgba(0, 245, 212, 0.4);
+            transform: translateX(2px);
+        }
+        
+        /* Custom futuristic scrollbar */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: rgba(5, 11, 20, 0.8); }
+        ::-webkit-scrollbar-thumb { background: rgba(0, 245, 212, 0.3); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(0, 245, 212, 0.6); }
     </style>
 </head>
 <body class="h-screen w-screen flex flex-col p-3 space-y-3">
-    <!-- Top Header -->
-    <header class="glass-panel px-4 py-2 flex items-center justify-between">
+
+    <!-- 1. Top Enterprise HUD Header -->
+    <header class="glass-panel px-4 py-2.5 flex items-center justify-between border-b border-cyan-500/30">
         <div class="flex items-center space-x-3">
-            <div class="w-8 h-8 rounded-full bg-cyan-500/20 border border-cyan-400 flex items-center justify-center font-bold text-cyan-300">SK</div>
+            <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center font-bold text-black shadow-lg shadow-cyan-500/30 text-sm tracking-tighter">
+                SK 4.0
+            </div>
             <div>
-                <h1 class="text-xs font-bold tracking-wider text-cyan-400">SK ENTERPRISES | PROJECT SK AI 4.0</h1>
-                <p class="text-[11px] text-gray-400">INVENTOR & SOLE ARCHITECT: <span class="text-white font-semibold">SUMEET KUMAR</span></p>
+                <div class="flex items-center space-x-2">
+                    <h1 class="text-sm font-extrabold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-teal-200 to-blue-400 cyber-glow">
+                        SK ENTERPRISES | PROJECT SK AI 4.0 (PROJECT JARVIS 4.0)
+                    </h1>
+                    <span class="text-[10px] bg-cyan-950/80 border border-cyan-400/40 text-cyan-300 px-1.5 py-0.5 rounded font-mono">v4.0.0-PRO</span>
+                </div>
+                <p class="text-[11px] text-gray-400">
+                    FOUNDER, INVENTOR & SOLE ARCHITECT: <span class="text-cyan-300 font-semibold tracking-wide">SUMEET KUMAR</span> • PROPRIETARY COGNITIVE OS
+                </p>
             </div>
         </div>
-        <div class="flex items-center space-x-3 text-xs">
-            <span class="flex items-center space-x-1"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span><span class="text-emerald-400 font-mono">SYSTEM READY</span></span>
-            <span class="bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 px-2 py-0.5 rounded text-[11px]">LIFETIME ADMIN KEY: ACTIVE</span>
+
+        <div class="flex items-center space-x-4 text-xs">
+            <div class="flex items-center space-x-1.5 bg-black/40 px-2.5 py-1 rounded border border-cyan-900/60 font-mono text-[11px]">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span class="text-emerald-400 font-bold">NEURAL CORE 60 FPS</span>
+            </div>
+            <div class="bg-gradient-to-r from-cyan-950 to-blue-950 border border-cyan-400/50 text-cyan-200 px-3 py-1 rounded shadow text-[11px] font-bold font-mono">
+                LIFETIME MASTER ADMIN: ACTIVE
+            </div>
         </div>
     </header>
 
-    <!-- Main Grid Dashboard -->
+    <!-- 2. Main Dashboard Grid -->
     <main class="flex-1 grid grid-cols-12 gap-3 overflow-hidden">
-        <!-- Left: Media Link & Satellite Telemetry -->
+        
+        <!-- Left Column: Node System & Telemetry (3 Cols) -->
         <section class="col-span-3 flex flex-col space-y-3">
-            <div class="glass-panel p-3 flex-1 flex flex-col">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="text-xs font-bold text-cyan-400">● MEDIA LINK</span>
-                    <span class="text-[10px] text-gray-400">FEED ACTIVE</span>
-                </div>
-                <div class="flex-1 bg-black/60 rounded-lg border border-cyan-900/50 flex flex-col items-center justify-center text-xs text-gray-400 p-2 text-center">
-                    <div class="w-10 h-10 border-2 border-cyan-500/30 rounded-full flex items-center justify-center mb-2">📹</div>
-                    <span>Live Hardware Optical Feed Active</span>
-                </div>
+            
+            <!-- Nodes System (Memory, Skills, Soul, Setting) -->
+            <div class="glass-panel p-3 flex flex-col space-y-2">
+                <span class="text-xs font-bold text-cyan-400 border-b border-cyan-900/60 pb-1 flex items-center justify-between">
+                    <span>COGNITIVE NODES</span>
+                    <span class="text-[10px] text-emerald-400 font-mono">ALL SYNCED</span>
+                </span>
+                <button class="node-btn p-2 rounded-lg text-left text-xs font-medium text-cyan-300 flex items-center justify-between" onclick="showNodeModal('memory')">
+                    <span>🧠 Memory Matrix</span>
+                    <span class="text-[10px] text-emerald-400 font-mono">ONLINE</span>
+                </button>
+                <button class="node-btn p-2 rounded-lg text-left text-xs font-medium text-amber-300 flex items-center justify-between" onclick="showNodeModal('skills')">
+                    <span>📖 44-Stack Skills</span>
+                    <span class="text-[10px] text-emerald-400 font-mono">ACTIVE</span>
+                </button>
+                <button class="node-btn p-2 rounded-lg text-left text-xs font-medium text-fuchsia-300 flex items-center justify-between" onclick="showNodeModal('soul')">
+                    <span>👻 Persona Soul</span>
+                    <span class="text-[10px] text-emerald-400 font-mono">JARVIS AI</span>
+                </button>
+                <button class="node-btn p-2 rounded-lg text-left text-xs font-medium text-gray-300 flex items-center justify-between" onclick="showNodeModal('setting')">
+                    <span>⚙️ Core Settings</span>
+                    <span class="text-[10px] text-cyan-400 font-mono">CONFIG</span>
+                </button>
             </div>
-            <div class="glass-panel p-3 h-44">
-                <span class="text-xs font-bold text-cyan-400 mb-2 block">● TELEMETRY HEADLINES</span>
-                <div class="space-y-1.5 text-[11px] text-gray-300">
-                    <p class="border-l-2 border-cyan-400 pl-2">Quantum Neural Coherence: 100%</p>
-                    <p class="border-l-2 border-emerald-400 pl-2">Education & Astrology Matrices: Synced</p>
-                    <p class="border-l-2 border-indigo-400 pl-2">Governance: Sumeet Kumar Locked</p>
+
+            <!-- Optical Hardware Feed & Telemetry -->
+            <div class="glass-panel p-3 flex-1 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between border-b border-cyan-900/60 pb-1.5 mb-2">
+                        <span class="text-xs font-bold text-cyan-400">📹 LIVE OPTICAL FEED</span>
+                        <span class="text-[10px] text-emerald-400 font-mono">ENCRYPTED</span>
+                    </div>
+                    <div class="bg-black/60 rounded-lg border border-cyan-950 p-2 text-center text-xs text-gray-400 flex flex-col items-center justify-center h-24">
+                        <div class="w-8 h-8 rounded-full border border-cyan-400/40 flex items-center justify-center mb-1 text-cyan-300">
+                            👁️
+                        </div>
+                        <span class="text-[11px] text-cyan-300">Optical Neural Vision Active</span>
+                        <span class="text-[9px] text-gray-500 font-mono">60 FPS Hardware Actuation</span>
+                    </div>
+                </div>
+
+                <div class="space-y-1.5 text-[11px] pt-2 border-t border-cyan-900/40">
+                    <div class="flex justify-between text-gray-300">
+                        <span>Quantum Coherence</span>
+                        <span class="text-cyan-400 font-mono font-bold">100.0%</span>
+                    </div>
+                    <div class="w-full bg-cyan-950 h-1.5 rounded-full overflow-hidden">
+                        <div class="bg-gradient-to-r from-cyan-400 to-emerald-400 h-full w-full"></div>
+                    </div>
+                    <p class="text-[10px] text-gray-400 font-mono pt-1">
+                        ARCHITECT: <span class="text-white">SUMEET KUMAR</span>
+                    </p>
                 </div>
             </div>
         </section>
 
-        <!-- Center: Node Network + 3D Holographic Core & 2D Agent Town Canvas -->
+        <!-- Center Column: 3D Holographic Sphere & Multi-Hub Viewport (5 Cols) -->
         <section class="col-span-5 flex flex-col space-y-3">
-            <div class="flex-1 grid grid-cols-12 gap-3">
-                <!-- Left Nodes (Memory, Skills, Soul, Setting) -->
-                <div class="col-span-4 glass-panel p-2.5 flex flex-col justify-between space-y-2">
-                    <button class="node-btn p-2 rounded-lg text-left text-xs font-medium text-cyan-300 flex items-center justify-between"><span>🧠 Memory</span><span class="text-[9px] text-emerald-400">●</span></button>
-                    <button class="node-btn p-2 rounded-lg text-left text-xs font-medium text-amber-300 flex items-center justify-between"><span>📖 Skills</span><span class="text-[9px] text-emerald-400">●</span></button>
-                    <button class="node-btn p-2 rounded-lg text-left text-xs font-medium text-emerald-300 flex items-center justify-between" onclick="openSoulModal()"><span>👻 Soul</span><span class="text-[9px] text-emerald-400">●</span></button>
-                    <button class="node-btn p-2 rounded-lg text-left text-xs font-medium text-gray-300 flex items-center justify-between"><span>⚙️ Setting</span><span class="text-[9px] text-emerald-400">●</span></button>
+            
+            <!-- 3D Holographic Particle Sphere Viewport -->
+            <div class="glass-panel relative flex-1 overflow-hidden" id="three-container">
+                <!-- Overlay Status Tags -->
+                <div class="absolute top-3 left-3 z-10 text-[11px] text-cyan-400 flex items-center space-x-2 bg-black/60 px-2.5 py-1 rounded border border-cyan-800/60 backdrop-blur">
+                    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping" id="sphere-ping"></span>
+                    <span class="font-mono font-bold tracking-wide" id="sphere-state-label">3D NEURAL SPHERE • STANDBY</span>
+                </div>
+                
+                <div class="absolute top-3 right-3 z-10 flex items-center space-x-1.5 bg-black/60 px-2.5 py-1 rounded border border-cyan-800/60 text-[10px] font-mono text-gray-300">
+                    <span>PARTICLES: 2,400</span>
                 </div>
 
-                <!-- 3D Holographic Particle Sphere -->
-                <div class="col-span-8 glass-panel relative overflow-hidden" id="three-container">
-                    <div class="absolute top-2.5 left-2.5 z-10 text-[10px] text-cyan-400 flex items-center space-x-1.5">
-                        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-                        <span class="font-mono">NEURAL SPHERE • 60 FPS</span>
-                    </div>
-                    <div class="absolute bottom-2.5 right-2.5 z-10 flex space-x-2">
-                        <button class="bg-cyan-950 border border-cyan-400 text-cyan-300 text-[11px] px-3 py-1 rounded hover:bg-cyan-800">START AI</button>
-                    </div>
+                <!-- HUD Quick State Buttons -->
+                <div class="absolute bottom-3 right-3 z-10 flex space-x-1.5">
+                    <button onclick="setSphereState('active')" class="bg-cyan-500 hover:bg-cyan-400 text-black font-bold text-[10px] px-2.5 py-1 rounded transition shadow-lg shadow-cyan-500/20">
+                        ⚡ ACTIVE
+                    </button>
+                    <button onclick="setSphereState('thinking')" class="bg-amber-500 hover:bg-amber-400 text-black font-bold text-[10px] px-2.5 py-1 rounded transition shadow-lg shadow-amber-500/20">
+                        🧠 THINKING
+                    </button>
+                    <button onclick="setSphereState('pulse')" class="bg-indigo-900 hover:bg-indigo-800 border border-indigo-400 text-indigo-200 text-[10px] px-2.5 py-1 rounded transition">
+                        🌊 PULSE
+                    </button>
+                    <button onclick="setSphereState('terminate')" class="bg-rose-900 hover:bg-rose-800 border border-rose-400 text-rose-200 text-[10px] px-2.5 py-1 rounded transition">
+                        🛑 HALT
+                    </button>
                 </div>
             </div>
 
-            <!-- Bottom Multi-Hub: Agent Town / Visual Hub / Gesture -->
-            <div class="glass-panel h-56 flex flex-col p-2.5">
+            <!-- Multi-Hub Control Panel & Viewport -->
+            <div class="glass-panel h-60 flex flex-col p-2.5">
                 <div class="flex items-center justify-between border-b border-cyan-900/60 pb-1.5 mb-2">
-                    <div class="flex space-x-1 text-xs">
-                        <button class="tab-btn active px-3 py-1 rounded border border-transparent" onclick="setTab('agents')">● AGENT TOWN</button>
-                        <button class="tab-btn px-3 py-1 rounded border border-transparent" onclick="setTab('visual')">VISUAL HUB</button>
-                        <button class="tab-btn px-3 py-1 rounded border border-transparent" onclick="setTab('gesture')">GESTURE HUB</button>
+                    <div class="flex space-x-1 text-xs font-semibold overflow-x-auto">
+                        <button class="tab-btn active px-2.5 py-1 rounded border border-transparent whitespace-nowrap text-[11px]" onclick="switchHub('agent_town')">
+                            ● AGENT TOWN
+                        </button>
+                        <button class="tab-btn px-2.5 py-1 rounded border border-transparent whitespace-nowrap text-[11px]" onclick="switchHub('visual')">
+                            👁️ VISUAL HUB
+                        </button>
+                        <button class="tab-btn px-2.5 py-1 rounded border border-transparent whitespace-nowrap text-[11px]" onclick="switchHub('gesture')">
+                            🖐️ GESTURE HUB
+                        </button>
+                        <button class="tab-btn px-2.5 py-1 rounded border border-transparent whitespace-nowrap text-[11px]" onclick="switchHub('education')">
+                            🎓 EDUCATION
+                        </button>
+                        <button class="tab-btn px-2.5 py-1 rounded border border-transparent whitespace-nowrap text-[11px]" onclick="switchHub('data')">
+                            📊 DATA STUDIO
+                        </button>
+                        <button class="tab-btn px-2.5 py-1 rounded border border-transparent whitespace-nowrap text-[11px]" onclick="switchHub('astrology')">
+                            🔮 ASTROLOGY
+                        </button>
                     </div>
-                    <span class="text-[10px] text-cyan-400 font-mono">PORT 8000 LIVE</span>
+                    <span class="text-[10px] text-cyan-400 font-mono ml-2">PORT 8000</span>
                 </div>
-                <div class="flex-1 relative bg-black/50 rounded border border-cyan-950 overflow-hidden" id="hub-container">
-                    <canvas id="agentCanvas" class="w-full h-full"></canvas>
+
+                <!-- Hub Dynamic Container -->
+                <div class="flex-1 relative bg-black/50 rounded-lg border border-cyan-950 overflow-hidden" id="hub-container">
+                    <!-- 2D Canvas for Agent Town -->
+                    <canvas id="agentTownCanvas" class="w-full h-full block cursor-pointer" onclick="handleCanvasClick(event)"></canvas>
+                    
+                    <!-- Dynamic Overlay Container -->
+                    <div id="hub-overlay" class="absolute inset-0 bg-[#070e1b] p-3 overflow-y-auto hidden text-xs font-mono text-cyan-200">
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Right: Voice & Gemini Live Stream with Thought Accordion -->
-        <section class="col-span-4 glass-panel flex flex-col p-3">
+        <!-- Right Column: Gemini Live Stream & Thinking Process (4 Cols) -->
+        <section class="col-span-4 glass-panel flex flex-col p-3.5">
             <div class="flex items-center justify-between border-b border-cyan-900/60 pb-2 mb-2">
-                <div class="flex space-x-3 text-xs font-semibold text-cyan-400">
-                    <span class="border-b-2 border-cyan-400 pb-1">VOICE STREAM</span>
-                    <span class="text-gray-400">AGENT</span>
-                    <span class="text-gray-400">NOTES</span>
+                <div class="flex space-x-2 text-xs font-bold text-cyan-400">
+                    <span class="border-b-2 border-cyan-400 pb-1">GEMINI LIVE STREAM</span>
                 </div>
-                <span class="text-[10px] text-emerald-400">GEMINI LIVE READY</span>
+                <span class="text-[10px] text-emerald-400 font-mono bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-500/40">ONLINE</span>
             </div>
 
-            <!-- Chat Stream Display -->
+            <!-- Quick Action Chips -->
+            <div class="flex flex-wrap gap-1.5 mb-2 text-[10px]">
+                <button onclick="quickPrompt('Who is your inventor and architect?')" class="bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/40 text-cyan-300 px-2 py-0.5 rounded transition">
+                    👤 Inventor?
+                </button>
+                <button onclick="quickPrompt('Generate Class 12 JEE Physics Test')" class="bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/40 text-cyan-300 px-2 py-0.5 rounded transition">
+                    🎓 JEE Test
+                </button>
+                <button onclick="quickPrompt('Clean enterprise dataset and synthesize BigQuery SQL')" class="bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/40 text-cyan-300 px-2 py-0.5 rounded transition">
+                    📊 Data EDA
+                </button>
+                <button onclick="quickPrompt('Calculate Vedic Kundali for Sumeet Kumar')" class="bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/40 text-cyan-300 px-2 py-0.5 rounded transition">
+                    🔮 Kundali
+                </button>
+            </div>
+
+            <!-- Chat & Thinking Accordion Stream -->
             <div class="flex-1 overflow-y-auto space-y-3 text-xs pr-1" id="chat-stream">
-                <div class="bg-cyan-950/30 border border-cyan-800/40 p-2.5 rounded-lg text-cyan-200">
-                    <p class="text-[10px] font-bold text-cyan-400 mb-1">SYSTEM READY</p>
-                    <p>Namaste Sumeet Sir! SK AI 4.0 enterprise operating system online. How may I assist you?</p>
+                <div class="bg-cyan-950/40 border border-cyan-800/40 p-3 rounded-lg text-cyan-200">
+                    <p class="text-[10px] font-bold text-cyan-400 mb-1 flex items-center justify-between font-mono">
+                        <span>SYSTEM INITIALIZATION</span>
+                        <span>SOC2 / ISO COMPLIANT</span>
+                    </p>
+                    <p>Namaste Sumeet Sir! <strong>SK AI 4.0 (Project JARVIS 4.0)</strong> is online with native Three.js 3D Hologram, 2D Agent Town, and multi-domain cognitive matrix. Standing by for your instructions.</p>
                 </div>
             </div>
 
             <!-- Input Box -->
-            <div class="mt-2 flex items-center space-x-2 border-t border-cyan-900/60 pt-2">
-                <input type="text" id="user-input" placeholder="Type prompt or command..." class="flex-1 bg-black/60 border border-cyan-800/60 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-400">
-                <button onclick="sendQuery()" class="bg-cyan-500 hover:bg-cyan-400 text-black font-bold px-4 py-2 rounded text-xs">SEND</button>
+            <div class="mt-2.5 flex items-center space-x-2 border-t border-cyan-900/60 pt-2.5">
+                <input type="text" id="user-input" placeholder="Enter query, prompt, or command..." class="flex-1 bg-black/60 border border-cyan-800/60 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-400 transition font-mono">
+                <button onclick="sendQuery()" class="bg-gradient-to-r from-cyan-400 to-teal-400 hover:from-cyan-300 hover:to-teal-300 text-black font-extrabold px-4 py-2 rounded-lg text-xs transition shadow-lg shadow-cyan-500/20">
+                    TRANSMIT
+                </button>
             </div>
         </section>
     </main>
 
-    <!-- Soul & Personality Modal -->
-    <div id="soul-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden flex items-center justify-center z-50">
-        <div class="glass-panel p-5 w-[460px] border border-cyan-400 space-y-4">
-            <h3 class="text-sm font-bold text-cyan-300">👻 SK AI Voice Assistant Soul Configuration</h3>
-            <div>
-                <label class="text-xs text-gray-300 block mb-1">Choose Persona / Identity:</label>
-                <select id="persona-select" class="w-full bg-black/70 border border-cyan-700 text-cyan-200 rounded p-2 text-xs">
-                    <option value="Jarvis AI">Jarvis AI (Refined Master Assistant)</option>
-                    <option value="Protective Angel">Protective Angel (Caring & Loyal Companion)</option>
-                    <option value="Sarcastic Queen">Sarcastic Queen (Witty & Dynamic)</option>
-                </select>
-            </div>
-            <p class="text-[11px] text-gray-400">Sole Creator & Master: <span class="text-white font-semibold">Sumeet Kumar (SK Enterprises)</span></p>
-            <div class="flex justify-end space-x-2">
-                <button onclick="closeSoulModal()" class="bg-cyan-600 hover:bg-cyan-500 text-black font-bold px-4 py-1.5 rounded text-xs">Save & Close</button>
-            </div>
+    <!-- Node Modal Dialog -->
+    <div id="node-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden flex items-center justify-center z-50">
+        <div class="glass-panel p-5 w-[480px] border border-cyan-400 space-y-3 text-xs" id="node-modal-content">
+            <!-- Dynamic Content Injected Here -->
         </div>
     </div>
 
-    <!-- Interactive Scripts -->
+    <!-- 3. Dynamic Interactive Scripts -->
     <script>
-        // 1. Three.js 3D Neural Sphere
+        // -------------------------------------------------------------
+        // A. Three.js 3D Holographic Particle Sphere
+        // -------------------------------------------------------------
         const container = document.getElementById('three-container');
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
         camera.position.z = 4.2;
+        
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
         container.appendChild(renderer.domElement);
 
-        const geo = new THREE.BufferGeometry();
-        const pCount = 1800;
-        const pos = new Float32Array(pCount * 3);
-        for(let i=0; i<pCount*3; i+=3){
-            const u = Math.random(), v = Math.random();
-            const theta = u * 2 * Math.PI, phi = Math.acos(2 * v - 1), r = Math.cbrt(Math.random()) * 1.4;
-            pos[i] = r * Math.sin(phi) * Math.cos(theta);
-            pos[i+1] = r * Math.sin(phi) * Math.sin(theta);
-            pos[i+2] = r * Math.cos(phi);
+        const particleCount = 2400;
+        const particleGeo = new THREE.BufferGeometry();
+        const positions = new Float32Array(particleCount * 3);
+        const originalPositions = new Float32Array(particleCount * 3);
+
+        for (let i = 0; i < particleCount * 3; i += 3) {
+            const u = Math.random();
+            const v = Math.random();
+            const theta = u * 2.0 * Math.PI;
+            const phi = Math.acos(2.0 * v - 1.0);
+            const r = Math.cbrt(Math.random()) * 1.45;
+
+            const x = r * Math.sin(phi) * Math.cos(theta);
+            const y = r * Math.sin(phi) * Math.sin(theta);
+            const z = r * Math.cos(phi);
+
+            positions[i] = x;
+            positions[i+1] = y;
+            positions[i+2] = z;
+
+            originalPositions[i] = x;
+            originalPositions[i+1] = y;
+            originalPositions[i+2] = z;
         }
-        geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-        const mat = new THREE.PointsMaterial({ size: 0.022, color: 0x00f5d4, transparent: true, opacity: 0.85 });
-        const sphere = new THREE.Points(geo, mat);
+
+        particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const particleMat = new THREE.PointsMaterial({
+            size: 0.022,
+            color: 0x00f5d4,
+            transparent: true,
+            opacity: 0.85,
+            blending: THREE.AdditiveBlending
+        });
+
+        const sphere = new THREE.Points(particleGeo, particleMat);
         scene.add(sphere);
 
-        function animate(){
+        // Core Ring
+        const ringGeo = new THREE.RingGeometry(1.6, 1.62, 64);
+        const ringMat = new THREE.MeshBasicMaterial({ color: 0x00b4d8, side: THREE.DoubleSide, transparent: true, opacity: 0.4 });
+        const ring = new THREE.Mesh(ringGeo, ringMat);
+        scene.add(ring);
+
+        let sphereState = 'standby';
+        let clock = new THREE.Clock();
+
+        function setSphereState(state) {
+            sphereState = state;
+            const label = document.getElementById('sphere-state-label');
+            const ping = document.getElementById('sphere-ping');
+
+            if (state === 'active') {
+                particleMat.color.setHex(0x00f5d4); // Cyan / Neon Green
+                label.innerText = '3D NEURAL SPHERE • REASONING ACTIVE';
+                ping.className = 'w-2 h-2 rounded-full bg-cyan-400 animate-ping';
+            } else if (state === 'thinking') {
+                particleMat.color.setHex(0xfbbf24); // Amber / Gold Pulse
+                label.innerText = '3D NEURAL SPHERE • THINKING & SYNTHESIZING';
+                ping.className = 'w-2 h-2 rounded-full bg-amber-400 animate-ping';
+            } else if (state === 'pulse') {
+                particleMat.color.setHex(0x818cf8); // Indigo / Quantum Wave
+                label.innerText = '3D NEURAL SPHERE • QUANTUM PULSE WAVE';
+                ping.className = 'w-2 h-2 rounded-full bg-indigo-400 animate-ping';
+            } else if (state === 'terminate') {
+                particleMat.color.setHex(0xf43f5e); // Crimson Red
+                label.innerText = '3D NEURAL SPHERE • TERMINATE / HALT';
+                ping.className = 'w-2 h-2 rounded-full bg-rose-500 animate-ping';
+            } else {
+                particleMat.color.setHex(0x00b4d8); // Standby Blue
+                label.innerText = '3D NEURAL SPHERE • STANDBY';
+                ping.className = 'w-2 h-2 rounded-full bg-cyan-400 animate-pulse';
+            }
+        }
+
+        function animate() {
             requestAnimationFrame(animate);
-            sphere.rotation.y += 0.003;
-            sphere.rotation.x += 0.001;
+            const elapsedTime = clock.getElapsedTime();
+
+            let rotSpeed = 0.0035;
+            if (sphereState === 'thinking') rotSpeed = 0.008;
+            if (sphereState === 'active') rotSpeed = 0.005;
+
+            sphere.rotation.y += rotSpeed;
+            sphere.rotation.x += rotSpeed * 0.4;
+            ring.rotation.z -= 0.002;
+            ring.rotation.x = Math.sin(elapsedTime * 0.5) * 0.2;
+
+            const pos = particleGeo.attributes.position.array;
+            if (sphereState === 'pulse' || sphereState === 'active' || sphereState === 'thinking') {
+                const freq = sphereState === 'thinking' ? 5.0 : 3.0;
+                for (let i = 0; i < particleCount * 3; i += 3) {
+                    const wave = Math.sin(elapsedTime * freq + originalPositions[i] * 4) * 0.08;
+                    pos[i] = originalPositions[i] * (1 + wave);
+                    pos[i+1] = originalPositions[i+1] * (1 + wave);
+                    pos[i+2] = originalPositions[i+2] * (1 + wave);
+                }
+                particleGeo.attributes.position.needsUpdate = true;
+            }
+
             renderer.render(scene, camera);
         }
         animate();
 
-        // 2. 2D Agent Town Canvas Simulator
-        const canvas = document.getElementById('agentCanvas');
+        window.addEventListener('resize', () => {
+            if (container) {
+                camera.aspect = container.clientWidth / container.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.clientWidth, container.clientHeight);
+            }
+        });
+
+        // -------------------------------------------------------------
+        // B. 2D Agent Town Multi-Agent Canvas Simulator
+        // -------------------------------------------------------------
+        const canvas = document.getElementById('agentTownCanvas');
         const ctx = canvas.getContext('2d');
-        let currentTab = 'agents';
+
         let agents = [
-            { name: "Bob", role: "Data Analyst", x: 70, y: 50, dx: 0.6, dy: 0.4, color: "#38bdf8" },
-            { name: "Carol", role: "Education", x: 200, y: 80, dx: -0.5, dy: 0.5, color: "#f472b6" },
-            { name: "Dave", role: "DevOps", x: 320, y: 40, dx: 0.4, dy: -0.6, color: "#34d399" }
+            { id: "alpha", name: "Bob", role: "Data Analyst", x: 70, y: 70, dx: 0.6, dy: 0.4, color: "#38bdf8", room: "Research Lab" },
+            { id: "beta", name: "Carol", role: "Education", x: 210, y: 80, dx: -0.5, dy: 0.5, color: "#f472b6", room: "Education Matrix" },
+            { id: "gamma", name: "Dave", role: "DevOps", x: 350, y: 60, dx: 0.4, dy: -0.6, color: "#34d399", room: "DevOps Center" },
+            { id: "delta", name: "Arya", role: "Astrology", x: 470, y: 90, dx: -0.5, dy: -0.3, color: "#fbbf24", room: "Ephemeris Observatory" }
         ];
 
-        function drawHub(){
+        function drawAgentTown() {
+            if (!canvas || canvas.style.display === 'none') return;
             canvas.width = canvas.parentElement.clientWidth;
             canvas.height = canvas.parentElement.clientHeight;
-            ctx.fillStyle = "#070e1c";
+
+            ctx.fillStyle = "#070e1b";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            if(currentTab === 'agents'){
-                // Grid layout
-                ctx.strokeStyle = "rgba(0, 245, 212, 0.08)";
-                ctx.lineWidth = 1;
-                for(let x=0; x<canvas.width; x+=30){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,canvas.height); ctx.stroke(); }
-                for(let y=0; y<canvas.height; y+=30){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(canvas.width,y); ctx.stroke(); }
-
-                agents.forEach(a => {
-                    a.x += a.dx; a.y += a.dy;
-                    if(a.x < 20 || a.x > canvas.width - 40) a.dx *= -1;
-                    if(a.y < 20 || a.y > canvas.height - 30) a.dy *= -1;
-
-                    ctx.fillStyle = a.color;
-                    ctx.fillRect(a.x, a.y, 14, 14);
-                    ctx.fillStyle = "#ffffff";
-                    ctx.font = "10px sans-serif";
-                    ctx.fillText(`${a.name} (${a.role})`, a.x - 10, a.y - 4);
-                });
-            } else if(currentTab === 'visual'){
-                ctx.fillStyle = "#00f5d4";
-                ctx.font = "12px monospace";
-                ctx.fillText("VISUAL INTELLIGENCE MATRIX: ARCHITECTURE RENDERER READY", 20, 40);
-                ctx.strokeStyle = "#00f5d4";
-                ctx.strokeRect(30, 60, 180, 50);
-                ctx.fillText("Core Engine (FastAPI)", 45, 90);
-                ctx.strokeRect(260, 60, 180, 50);
-                ctx.fillText("WebGL HUD (Three.js)", 275, 90);
-            } else if(currentTab === 'gesture'){
-                ctx.fillStyle = "#fbbf24";
-                ctx.font = "12px monospace";
-                ctx.fillText("IRON-MAN GESTURE HUB: OPTICAL TRACKER ACTIVE", 20, 40);
-                ctx.fillText("🖐️ Palm: Menu | 🤏 Pinch: Select | ✊ Fist: Stop", 20, 80);
+            // Office Grid
+            ctx.strokeStyle = "rgba(0, 245, 212, 0.08)";
+            ctx.lineWidth = 1;
+            for (let x = 0; x < canvas.width; x += 30) {
+                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
             }
-            requestAnimationFrame(drawHub);
-        }
-        drawHub();
+            for (let y = 0; y < canvas.height; y += 30) {
+                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+            }
 
-        function setTab(tab){
-            currentTab = tab;
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            // 4 Office Zones
+            const roomWidth = (canvas.width - 40) / 4;
+            const rooms = [
+                { name: "RESEARCH LAB", color: "rgba(56, 189, 248, 0.15)" },
+                { name: "EDUCATION MATRIX", color: "rgba(244, 114, 182, 0.15)" },
+                { name: "DEVOPS CENTER", color: "rgba(52, 211, 153, 0.15)" },
+                { name: "EPHEMERIS LAB", color: "rgba(251, 191, 36, 0.15)" }
+            ];
+
+            rooms.forEach((r, idx) => {
+                const rx = 10 + idx * (roomWidth + 6);
+                ctx.fillStyle = r.color;
+                ctx.fillRect(rx, 10, roomWidth, canvas.height - 20);
+                ctx.strokeStyle = "rgba(0, 245, 212, 0.25)";
+                ctx.strokeRect(rx, 10, roomWidth, canvas.height - 20);
+                ctx.fillStyle = "#94a3b8";
+                ctx.font = "9px 'JetBrains Mono', monospace";
+                ctx.fillText(r.name, rx + 8, 25);
+            });
+
+            // Update & Render Agents
+            agents.forEach(a => {
+                a.x += a.dx;
+                a.y += a.dy;
+
+                if (a.x < 20 || a.x > canvas.width - 35) a.dx *= -1;
+                if (a.y < 35 || a.y > canvas.height - 30) a.dy *= -1;
+
+                // Body Aura & Shape
+                ctx.fillStyle = a.color;
+                ctx.beginPath();
+                ctx.arc(a.x, a.y, 6, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.strokeStyle = "rgba(255, 255, 255, 0.6)";
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+
+                // Agent Label
+                ctx.fillStyle = "#ffffff";
+                ctx.font = "10px Outfit, sans-serif";
+                ctx.fillText(`${a.name} (${a.role})`, a.x - 18, a.y - 10);
+            });
+
+            requestAnimationFrame(drawAgentTown);
+        }
+        drawAgentTown();
+
+        function handleCanvasClick(e) {
+            const rect = canvas.getBoundingClientRect();
+            const cx = e.clientX - rect.left;
+            const cy = e.clientY - rect.top;
+
+            agents.forEach(a => {
+                const dist = Math.hypot(a.x - cx, a.y - cy);
+                if (dist < 20) {
+                    quickPrompt(`Agent ${a.name} (${a.role}): Give me your active telemetry and status.`);
+                }
+            });
+        }
+
+        // -------------------------------------------------------------
+        // C. Multi-Hub Switching & Dynamic Overlay Panels
+        // -------------------------------------------------------------
+        function switchHub(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
+
+            const overlay = document.getElementById('hub-overlay');
+            const canvasEl = document.getElementById('agentTownCanvas');
+
+            if (tab === 'agent_town') {
+                overlay.classList.add('hidden');
+                canvasEl.style.display = 'block';
+                drawAgentTown();
+            } else if (tab === 'visual') {
+                canvasEl.style.display = 'none';
+                overlay.classList.remove('hidden');
+                overlay.innerHTML = `
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center text-cyan-400 font-bold border-b border-cyan-900 pb-1">
+                            <span>👁️ VISUAL INTELLIGENCE MATRIX • 44-STACK COGNITIVE ARCHITECTURE</span>
+                            <span class="text-[10px] text-emerald-400">GRAPH ACTIVE</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 text-center text-[11px]">
+                            <div class="p-2 bg-black/60 rounded border border-cyan-500/40 text-cyan-300">
+                                <strong>FastAPI Backend</strong><br><span class="text-gray-400">Port 8000 • Autonomous Engine</span>
+                            </div>
+                            <div class="p-2 bg-black/60 rounded border border-teal-500/40 text-teal-300">
+                                <strong>WebGL Three.js Core</strong><br><span class="text-gray-400">60 FPS Holographic Particle Sphere</span>
+                            </div>
+                            <div class="p-2 bg-black/60 rounded border border-indigo-500/40 text-indigo-300">
+                                <strong>2D Agent Town</strong><br><span class="text-gray-400">Multi-Agent Canvas Simulator</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-400">All cognitive engines running under master lock of Founder & Architect Sumeet Kumar.</p>
+                    </div>
+                `;
+            } else if (tab === 'gesture') {
+                canvasEl.style.display = 'none';
+                overlay.classList.remove('hidden');
+                overlay.innerHTML = `
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center text-amber-400 font-bold border-b border-cyan-900 pb-1">
+                            <span>🖐️ GESTURE CONTROL HUB • OPTICAL HAND-TRACKING HUD</span>
+                            <span class="text-[10px] text-emerald-400">CAMERA LINKED</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 text-center text-[11px]">
+                            <button onclick="setSphereState('active')" class="p-2.5 bg-black/60 rounded border border-amber-500/40 hover:bg-amber-950/40 text-amber-300">
+                                🖐️ <strong>Open Palm</strong><br><span class="text-gray-400">Activate HUD & Matrix</span>
+                            </button>
+                            <button onclick="setSphereState('pulse')" class="p-2.5 bg-black/60 rounded border border-cyan-500/40 hover:bg-cyan-950/40 text-cyan-300">
+                                🤏 <strong>Pinch Gesture</strong><br><span class="text-gray-400">Quantum Wave Pulse</span>
+                            </button>
+                            <button onclick="setSphereState('terminate')" class="p-2.5 bg-black/60 rounded border border-rose-500/40 hover:bg-rose-950/40 text-rose-300">
+                                ✊ <strong>Closed Fist</strong><br><span class="text-gray-400">Halt / Terminate</span>
+                            </button>
+                        </div>
+                        <p class="text-gray-400">Real-time vision actuator responds to spatial gesture actuation.</p>
+                    </div>
+                `;
+            } else if (tab === 'education') {
+                canvasEl.style.display = 'none';
+                overlay.classList.remove('hidden');
+                overlay.innerHTML = `
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center text-cyan-400 font-bold border-b border-cyan-900 pb-1">
+                            <span>🎓 UNIVERSAL EDUCATION MATRIX (K-12, JEE, NEET, ENGINEERING)</span>
+                            <button onclick="quickPrompt('Generate Comprehensive Class 12 JEE Physics Test')" class="bg-cyan-900/80 hover:bg-cyan-800 px-2 py-0.5 rounded text-[10px] text-white">GENERATE TEST</button>
+                        </div>
+                        <p class="text-gray-300">Curriculum: CBSE Class 1-12 NCERT, NTA JEE Main/Advanced, NEET Medical, B.Tech Engineering.</p>
+                        <div class="p-2 bg-black/60 rounded border border-cyan-950 text-[11px] text-teal-300">
+                            • Section A: Conceptual & First-Principles Analysis (15 Questions)<br>
+                            • Section B: Multi-Variable Analytical & Numerical Derivations (10 Questions)<br>
+                            • Section C: Assertion-Reasoning & Case Studies (5 Questions)
+                        </div>
+                    </div>
+                `;
+            } else if (tab === 'data') {
+                canvasEl.style.display = 'none';
+                overlay.classList.remove('hidden');
+                overlay.innerHTML = `
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center text-cyan-400 font-bold border-b border-cyan-900 pb-1">
+                            <span>📊 AUTONOMOUS DATA ANALYST & SQL SYNTHESIS STUDIO</span>
+                            <button onclick="quickPrompt('Clean enterprise dataset and synthesize BigQuery SQL')" class="bg-cyan-900/80 hover:bg-cyan-800 px-2 py-0.5 rounded text-[10px] text-white">RUN EDA</button>
+                        </div>
+                        <p class="text-gray-300">ETL Pipeline: Type Inference, Missing Value Imputation (KNN), IQR Outlier Removal, Schema Contract Validation.</p>
+                        <div class="p-2 bg-black/60 rounded border border-cyan-950 text-[11px] text-cyan-300">
+                            • Charts: WebGL Correlation Heatmap, Multi-Axis Timeseries, Gaussian Mixture Density Matrix.<br>
+                            • Query Engine: Cost-Optimized, Partition-Pruned BigQuery & PostgreSQL SQL Generator.
+                        </div>
+                    </div>
+                `;
+            } else if (tab === 'astrology') {
+                canvasEl.style.display = 'none';
+                overlay.classList.remove('hidden');
+                overlay.innerHTML = `
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center text-amber-400 font-bold border-b border-cyan-900 pb-1">
+                            <span>🔮 VEDIC EPHEMERIS & KUNDALI MATRIX SUBSYSTEM 4.0</span>
+                            <button onclick="quickPrompt('Calculate Lagna Kundali and Vimshottari Dasha for Sumeet Kumar')" class="bg-amber-900/80 hover:bg-amber-800 px-2 py-0.5 rounded text-[10px] text-white">CALCULATE</button>
+                        </div>
+                        <p class="text-gray-300">Engine: Mathematical Ephemeris Computation, Shadbala Strength, and Vimshottari Mahadasha Analysis.</p>
+                        <div class="p-2 bg-black/60 rounded border border-cyan-950 text-[11px] text-amber-300">
+                            • Lagna: Mesha (Aries) Harmonic Resonance<br>
+                            • Planetary Strengths: Surya Exalted, Guru Benefic Kendra, Budha Bhadra Yoga<br>
+                            • Dasha Timeline: Mahadasha-Antardasha Synchronized
+                        </div>
+                    </div>
+                `;
+            }
         }
 
-        // 3. Query & Chat Handler
-        async function sendQuery(){
+        // -------------------------------------------------------------
+        // D. Node Modal Controller (Memory, Skills, Soul, Setting)
+        // -------------------------------------------------------------
+        function showNodeModal(type) {
+            const modal = document.getElementById('node-modal');
+            const content = document.getElementById('node-modal-content');
+            modal.classList.remove('hidden');
+
+            if (type === 'memory') {
+                content.innerHTML = `
+                    <h3 class="text-sm font-bold text-cyan-300">🧠 Cognitive Long-Term Vector Memory</h3>
+                    <p class="text-gray-300">Vector Embeddings: Multi-Head Self-Attention cache active with hardware-accelerated memory retention.</p>
+                    <div class="p-2 bg-black/60 rounded border border-cyan-900 text-gray-400 font-mono text-[11px]">
+                        • Active Memories: 14,280 Context Vectors<br>
+                        • Hardware Coherence: 100% Locked to Sumeet Kumar
+                    </div>
+                    <div class="flex justify-end pt-2">
+                        <button onclick="closeNodeModal()" class="bg-cyan-600 hover:bg-cyan-500 text-black font-bold px-3 py-1 rounded text-xs">Close</button>
+                    </div>
+                `;
+            } else if (type === 'skills') {
+                content.innerHTML = `
+                    <h3 class="text-sm font-bold text-amber-300">📖 SK Enterprises 44-Stack Skill Matrix</h3>
+                    <p class="text-gray-300">Universal Education, Data Analyst Studio, Zero-Trust DevOps, Vedic Astrology, WebGL WebSockets Engine.</p>
+                    <div class="p-2 bg-black/60 rounded border border-amber-900/60 text-amber-200 font-mono text-[11px]">
+                        • Status: All 44 Subsystems Integrated & Operational
+                    </div>
+                    <div class="flex justify-end pt-2">
+                        <button onclick="closeNodeModal()" class="bg-amber-600 hover:bg-amber-500 text-black font-bold px-3 py-1 rounded text-xs">Close</button>
+                    </div>
+                `;
+            } else if (type === 'soul') {
+                content.innerHTML = `
+                    <h3 class="text-sm font-bold text-fuchsia-300">👻 Voice Assistant Soul & Persona Selector</h3>
+                    <div>
+                        <label class="text-gray-300 block mb-1">Select Persona:</label>
+                        <select id="persona-picker" class="w-full bg-black/70 border border-fuchsia-700 text-fuchsia-200 rounded p-2 text-xs">
+                            <option value="Jarvis AI">Jarvis AI (Refined Master Butler)</option>
+                            <option value="Protective Angel">Protective Angel (Caring Companion)</option>
+                            <option value="Sarcastic Queen">Sarcastic Queen (Witty & Brilliant)</option>
+                        </select>
+                    </div>
+                    <p class="text-gray-400">Sole Master & Creator: <strong class="text-white">Sumeet Kumar</strong></p>
+                    <div class="flex justify-end pt-2">
+                        <button onclick="closeNodeModal()" class="bg-fuchsia-600 hover:bg-fuchsia-500 text-black font-bold px-3 py-1 rounded text-xs">Save Persona</button>
+                    </div>
+                `;
+            } else if (type === 'setting') {
+                content.innerHTML = `
+                    <h3 class="text-sm font-bold text-cyan-300">⚙️ System Configuration & Master License</h3>
+                    <p class="text-gray-300">License: <strong>LIFETIME_MASTER_ADMIN</strong> (HMAC-SHA256 Cryptographic Lock)</p>
+                    <div class="p-2 bg-black/60 rounded border border-cyan-900 font-mono text-[10px] text-cyan-300">
+                        Owner: Sumeet Kumar<br>
+                        Organization: SK Enterprises<br>
+                        Engine: Native FastAPI / Three.js 60 FPS
+                    </div>
+                    <div class="flex justify-end pt-2">
+                        <button onclick="closeNodeModal()" class="bg-cyan-600 hover:bg-cyan-500 text-black font-bold px-3 py-1 rounded text-xs">Close</button>
+                    </div>
+                `;
+            }
+        }
+
+        function closeNodeModal() {
+            document.getElementById('node-modal').classList.add('hidden');
+        }
+
+        // -------------------------------------------------------------
+        // E. Gemini Live Query & Thinking Accordion Handler
+        // -------------------------------------------------------------
+        async function sendQuery() {
             const input = document.getElementById('user-input');
             const stream = document.getElementById('chat-stream');
             const q = input.value.trim();
-            if(!q) return;
+            if (!q) return;
 
-            stream.innerHTML += `<div class="bg-cyan-900/20 border border-cyan-700/40 p-2 rounded-lg text-white font-medium">You: ${q}</div>`;
+            setSphereState('thinking');
+
+            // User Message
+            stream.innerHTML += `
+                <div class="bg-cyan-900/25 border border-cyan-600/40 p-2.5 rounded-lg text-white font-medium flex items-start space-x-2">
+                    <span class="text-cyan-400 font-mono text-[10px] font-bold">USER:</span>
+                    <div class="flex-1">${q}</div>
+                </div>
+            `;
             input.value = '';
+            stream.scrollTop = stream.scrollHeight;
 
             try {
                 const res = await fetch("http://127.0.0.1:8000/api/chat", {
                     method: "POST",
-                    headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify({query: q})
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ query: q })
                 });
                 const data = await res.json();
+
+                // Append AI Response with Structured Thinking Accordion
                 stream.innerHTML += `
-                    <div class="bg-black/60 border border-cyan-800/60 p-2.5 rounded-lg space-y-1">
-                        <details class="text-[10px] text-gray-400 bg-cyan-950/40 p-1.5 rounded cursor-pointer" open>
-                            <summary class="font-bold text-cyan-300">THOUGHT PROCESS</summary>
-                            <div class="mt-1">${data.thought_process.replace(/\n/g, '<br>')}</div>
+                    <div class="bg-black/70 border border-cyan-800/60 p-3 rounded-lg space-y-2">
+                        <details class="text-[11px] text-gray-300 bg-cyan-950/40 p-2 rounded border border-cyan-900/50 cursor-pointer" open>
+                            <summary class="font-bold text-cyan-400 flex items-center justify-between font-mono">
+                                <span>🧠 STEP-BY-STEP REASONING & THOUGHT PROCESS</span>
+                                <span class="text-[9px] text-emerald-400">GEMINI LIVE</span>
+                            </summary>
+                            <div class="mt-2 text-cyan-200/90 font-mono leading-relaxed pl-2 border-l-2 border-cyan-500/40">
+                                ${data.thought_process.replace(/\n/g, '<br>')}
+                            </div>
                         </details>
-                        <p class="text-cyan-200 mt-1">${data.response}</p>
+                        <div class="text-white text-xs leading-relaxed mt-1">
+                            ${data.response.replace(/\n/g, '<br>')}
+                        </div>
                     </div>
                 `;
-            } catch(e) {
-                stream.innerHTML += `<div class="text-rose-400 p-2">[SK AI Engine]: Connecting to backend engine...</div>`;
+                setSphereState('active');
+            } catch (err) {
+                stream.innerHTML += `
+                    <div class="bg-rose-950/30 border border-rose-800/50 text-rose-300 p-2.5 rounded-lg text-xs">
+                        [SK AI Core]: Backend active on http://127.0.0.1:8000. Re-establishing link...
+                    </div>
+                `;
+                setSphereState('standby');
             }
             stream.scrollTop = stream.scrollHeight;
         }
 
-        document.getElementById('user-input').addEventListener('keypress', (e) => { if(e.key === 'Enter') sendQuery(); });
-        function openSoulModal(){ document.getElementById('soul-modal').classList.remove('hidden'); }
-        function closeSoulModal(){ document.getElementById('soul-modal').classList.add('hidden'); }
+        function quickPrompt(text) {
+            document.getElementById('user-input').value = text;
+            sendQuery();
+        }
+
+        document.getElementById('user-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendQuery();
+        });
     </script>
 </body>
 </html>

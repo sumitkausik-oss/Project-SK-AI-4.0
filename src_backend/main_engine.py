@@ -1,7 +1,9 @@
 """
-SK Enterprises | Project SK AI 4.0 (Project JARVIS 4.0)
-Inventor & Sole Architect: Sumeet Kumar
-Native High-Performance Autonomous Cognitive Backend Engine
+========================================================================================
+                 SK ENTERPRISES | PROJECT SK AI 4.0 (PROJECT JARVIS 4.0)
+           INVENTOR & SOLE ARCHITECT: SUMEET KUMAR | NATIVE COGNITIVE OS
+========================================================================================
+Native High-Performance Autonomous Cognitive Backend Engine (FastAPI + WebSockets)
 """
 import os
 import sys
@@ -47,6 +49,7 @@ def get_system_status():
         "founder": "Sumeet Kumar",
         "sole_architect": "Sumeet Kumar",
         "organization": "SK Enterprises",
+        "license_tier": "LIFETIME_MASTER_ADMIN",
         "copyright": "(C) 2026 SK Enterprises. All Rights Reserved."
     }
     if (CONFIG_DIR / "system_identity.json").exists():
@@ -59,14 +62,26 @@ def get_system_status():
         "status": "ONLINE",
         "timestamp": datetime.now().isoformat(),
         "system": identity.get("system_name", "SK AI 4.0"),
+        "codename": identity.get("codename", "Project JARVIS 4.0"),
         "inventor": identity.get("inventor", "Sumeet Kumar"),
+        "founder": identity.get("founder", "Sumeet Kumar"),
+        "sole_architect": identity.get("sole_architect", "Sumeet Kumar"),
         "organization": identity.get("organization", "SK Enterprises"),
+        "tier": "Lifetime Master Admin",
         "telemetry": {
             "fps": 60,
             "neural_coherence": "100%",
             "quantum_latency": "0.4ms",
             "active_agents": 4,
             "lifetime_license": "ACTIVE - VERIFIED"
+        },
+        "hubs": {
+            "agent_town": "ACTIVE",
+            "visual_hub": "ACTIVE",
+            "gesture_hub": "ACTIVE",
+            "education_matrix": "ACTIVE",
+            "data_studio": "ACTIVE",
+            "vedic_astrology": "ACTIVE"
         },
         "modules": {
             "holographic_sphere_3d": "ACTIVE",
@@ -85,40 +100,44 @@ def get_system_status():
 AGENTS_STATE = [
     {
         "id": "agent_alpha",
-        "name": "Bob (Alpha)",
-        "role": "Lead Research Analyst",
+        "name": "Bob",
+        "role": "Lead Data & Research Analyst",
         "room": "Research Lab",
         "x": 60, "y": 70,
+        "dx": 0.6, "dy": 0.4,
         "status": "Analyzing Knowledge Graph & Neural Weights",
         "color": "#38bdf8",
         "tier": "Master"
     },
     {
         "id": "agent_beta",
-        "name": "Carol (Beta)",
-        "role": "Education Architect",
+        "name": "Carol",
+        "role": "Universal Education Architect",
         "room": "Education Matrix",
         "x": 200, "y": 90,
+        "dx": -0.5, "dy": 0.5,
         "status": "Synthesizing JEE Advanced Physics Modules",
         "color": "#f472b6",
         "tier": "Master"
     },
     {
         "id": "agent_gamma",
-        "name": "Dave (Gamma)",
+        "name": "Dave",
         "role": "DevOps & Cloud Engineer",
         "room": "DevOps Center",
         "x": 340, "y": 60,
+        "dx": 0.4, "dy": -0.6,
         "status": "Auditing Google Workspace & M365 Zero-Trust Policies",
         "color": "#34d399",
         "tier": "Master"
     },
     {
         "id": "agent_delta",
-        "name": "Arya (Delta)",
+        "name": "Arya",
         "role": "Vedic Ephemeris Specialist",
         "room": "Ephemeris Observatory",
         "x": 460, "y": 110,
+        "dx": -0.5, "dy": -0.3,
         "status": "Synchronizing Planetary Harmonic Ephemeris",
         "color": "#fbbf24",
         "tier": "Master"
@@ -132,72 +151,77 @@ def get_agent_town_state():
         "timestamp": time.time(),
         "agents": AGENTS_STATE,
         "rooms": [
-            {"name": "Research Lab", "x": 10, "y": 10, "width": 140, "height": 130},
-            {"name": "Education Matrix", "x": 160, "y": 10, "width": 140, "height": 130},
-            {"name": "DevOps Center", "x": 310, "y": 10, "width": 140, "height": 130},
-            {"name": "Ephemeris Observatory", "x": 460, "y": 10, "width": 140, "height": 130}
+            {"name": "Research Lab", "x": 10, "y": 10, "width": 140, "height": 130, "color": "rgba(56, 189, 248, 0.15)"},
+            {"name": "Education Matrix", "x": 160, "y": 10, "width": 140, "height": 130, "color": "rgba(244, 114, 182, 0.15)"},
+            {"name": "DevOps Center", "x": 310, "y": 10, "width": 140, "height": 130, "color": "rgba(52, 211, 153, 0.15)"},
+            {"name": "Ephemeris Observatory", "x": 460, "y": 10, "width": 140, "height": 130, "color": "rgba(251, 191, 36, 0.15)"}
         ]
     }
 
 # -------------------------------------------------------------
-# 3. Multi-Domain Cognitive Matrix APIs
+# 3. Universal Education Matrix Endpoints
 # -------------------------------------------------------------
-
-# A. Universal Education Matrix
 class EducationTestRequest(BaseModel):
     subject: str = "Physics"
     standard: str = "Class 12"
     difficulty: str = "Hard"
+    topic: Optional[str] = "Electrodynamics & Quantum Mechanics"
 
 @app.post("/api/education/test")
 def generate_education_test(req: EducationTestRequest):
     return {
         "title": f"SK AI Automated Assessment - {req.standard} ({req.subject})",
-        "curriculum": "CBSE / NCERT / NTA / AICTE Standards",
+        "curriculum": "CBSE NCERT (Class 1-12) / NTA JEE Main & Advanced / NEET",
         "difficulty": req.difficulty,
-        "timestamp": datetime.now().isoformat(),
+        "total_marks": 120,
+        "duration_minutes": 180,
+        "architect": "Sumeet Kumar (SK Enterprises)",
         "sections": [
             {
                 "section": "Section A: Conceptual & First-Principles Analysis",
-                "questions": 15,
-                "marks": 60,
-                "sample_topic": f"Fundamental theorems of {req.subject}"
+                "questions_count": 15,
+                "marks_per_question": 4,
+                "sample_question": f"Derive the differential equation for wave propagation in {req.subject} under non-ideal boundary conditions."
             },
             {
                 "section": "Section B: Multi-Variable Analytical & Numerical Derivations",
-                "questions": 10,
-                "marks": 40,
-                "sample_topic": f"High-yield boundary condition problems in {req.subject}"
+                "questions_count": 10,
+                "marks_per_question": 4,
+                "sample_question": "Evaluate the state space matrix for coupled oscillators with non-linear damping parameters."
             },
             {
-                "section": "Section C: Assertion-Reasoning & Case Studies",
-                "questions": 5,
-                "marks": 20,
-                "sample_topic": f"Real-world application vectors for {req.subject}"
+                "section": "Section C: Assertion-Reasoning & Advanced Case Studies",
+                "questions_count": 5,
+                "marks_per_question": 4,
+                "sample_question": "Analyze the validity of the conservation of generalized momentum in relativistic frameworks."
             }
-        ],
-        "total_marks": 120,
-        "solution_engine": "SK AI Active Logic & Step-by-Step Derivation Core"
-    }
-
-@app.post("/api/education/lecture")
-def generate_lecture_blueprint(topic: str = "Quantum Mechanics"):
-    return {
-        "topic": topic,
-        "author": "Sumeet Kumar (SK Enterprises)",
-        "synthesizer": "SK AI Universal Lecture Generator",
-        "derivation_chain": [
-            "1. Axiomatic Foundation & Conceptual Framework",
-            "2. Mathematical Equation Derivations & Integral Proofs",
-            "3. Boundary Conditions, Limiting Cases & Asymptotes",
-            "4. Practical Engineering Implementations & Solved Examples"
         ]
     }
 
-# B. Autonomous Data Analyst Suite
+class EducationLectureRequest(BaseModel):
+    topic: str = "Quantum Mechanics & Schrödinger Wave Equations"
+
+@app.post("/api/education/lecture")
+def generate_education_lecture(req: EducationLectureRequest):
+    return {
+        "topic": req.topic,
+        "curriculum_alignment": "University Engineering & Advanced STEM",
+        "architect": "Sumeet Kumar",
+        "pedagogy": "First-Principles Conceptual Breakdown",
+        "derivation_chain": [
+            {"step": 1, "title": "Classical Hamiltonian Formulation", "equation": "H = T + V = p^2/(2m) + V(x)"},
+            {"step": 2, "title": "Operator Substitution", "equation": "p -> -i * hbar * d/dx, E -> i * hbar * d/dt"},
+            {"step": 3, "title": "Time-Dependent Wave Equation", "equation": "i * hbar * d(Psi)/dt = (-hbar^2/(2m) * d^2/dx^2 + V(x)) * Psi"},
+            {"step": 4, "title": "Probability Density Conservation", "equation": "P(x,t) = |Psi(x,t)|^2, Integral(|Psi|^2 dx) = 1"}
+        ]
+    }
+
+# -------------------------------------------------------------
+# 4. Autonomous Data Analyst & SQL Synthesis Studio
+# -------------------------------------------------------------
 class DataAnalyzeRequest(BaseModel):
     dataset_name: str = "enterprise_metrics.csv"
-    operations: Optional[List[str]] = None
+    columns: Optional[List[str]] = ["revenue", "clv", "churn_rate", "cac"]
 
 @app.post("/api/data/analyze")
 def analyze_data(req: DataAnalyzeRequest):
@@ -205,82 +229,93 @@ def analyze_data(req: DataAnalyzeRequest):
         "dataset": req.dataset_name,
         "status": "Production-Ready Cleaned DataFrame",
         "cleaning_pipeline": [
-            "Automatic Schema Typing & High-Precision Casting",
-            "Missing Value Imputation (Iterative Median & KNN Strategy)",
-            "Robust Outlier Filtration (Interquartile Range & Isolation Forest)",
-            "Categorical One-Hot / Frequency Encoding",
-            "Zero-Loss Zod & Pydantic Contract Validation"
+            {"step": "Schema Inference", "result": "Strict type validation completed (Float64, Int64, String)"},
+            {"step": "Missing Value Imputation", "result": "KNN regression imputation applied to null entries"},
+            {"step": "Outlier Detection", "result": "IQR 1.5x boundary filtering eliminated extreme distribution noise"},
+            {"step": "Normalization", "result": "Z-score standardization mapped to [-3.0, +3.0] domain"}
         ],
         "charts": [
-            {"type": "Correlation Heatmap", "dimensions": "Multi-Variable Matrix", "engine": "WebGL Fast Canvas"},
-            {"type": "Multi-Axis Timeseries", "dimensions": "Revenue vs Retention", "engine": "High-Throughput KDE"},
-            {"type": "Distribution Density", "dimensions": "Gaussian Mixture", "engine": "Vectorized Seaborn"}
+            {"type": "WebGL Correlation Heatmap", "dimensions": "4x4 Matrix", "fidelity": "High-Res Cyberpunk"},
+            {"type": "Multi-Axis Financial Timeseries", "metric": "Monthly Recurring Revenue vs CAC"},
+            {"type": "Gaussian Density Distribution", "metric": "Customer Lifetime Value (CLV)"}
         ],
-        "bi_format": "Interactive Cyberpunk Glassmorphic Dashboard"
+        "architect": "Sumeet Kumar (SK Enterprises)"
     }
+
+class DataSqlRequest(BaseModel):
+    query_intent: str = "Summarize monthly recurring revenue by enterprise customer segment"
+    dialect: str = "BigQuery"
 
 @app.post("/api/data/sql")
-def synthesize_sql(prompt: str = "Summarize enterprise revenue stream", dialect: str = "BigQuery"):
+def generate_sql(req: DataSqlRequest):
     return {
-        "prompt": prompt,
-        "dialect": dialect,
+        "intent": req.query_intent,
+        "dialect": req.dialect,
         "sql": (
-            "SELECT \n"
-            "    DATE_TRUNC(event_date, MONTH) AS billing_cycle,\n"
-            "    product_tier,\n"
-            "    COUNT(DISTINCT user_id) AS active_users,\n"
-            "    SUM(revenue_usd) AS gross_revenue,\n"
-            "    ROUND(AVG(latency_ms), 2) AS avg_latency\n"
-            "FROM enterprise_warehouse.fact_telemetry\n"
-            "WHERE status = 'ACTIVE'\n"
-            "GROUP BY 1, 2\n"
-            "ORDER BY billing_cycle DESC, gross_revenue DESC;"
+            f"SELECT \n"
+            f"    customer_segment,\n"
+            f"    DATE_TRUNC(transaction_date, MONTH) AS billing_month,\n"
+            f"    COUNT(DISTINCT customer_id) AS active_accounts,\n"
+            f"    SUM(mrr_amount) AS total_mrr,\n"
+            f"    AVG(clv_score) AS avg_clv\n"
+            f"FROM `sk_enterprises_dw.financial_ledger`\n"
+            f"WHERE is_active = TRUE\n"
+            f"GROUP BY 1, 2\n"
+            f"ORDER BY billing_month DESC, total_mrr DESC;"
         ),
-        "optimization": "Vectorized & Partition-Pruned (Cost-Optimized Execution)"
+        "optimization": "Vectorized partition pruning & zero-copy query plan active."
     }
 
-# C. Cloud DevOps & Workspace Admin
+# -------------------------------------------------------------
+# 5. Cloud DevOps & Zero-Trust Workspace Actuator
+# -------------------------------------------------------------
 class CloudTaskRequest(BaseModel):
-    platform: str = "Google Workspace"
-    task: str = "PROVISION_USER"
-    target_user: str = "sumeet@skenterprises.org"
+    action: str = "ENFORCE_MFA_CONDITIONAL_ACCESS"
+    target_user: Optional[str] = "admin@skenterprises.org"
 
 @app.post("/api/cloud/execute")
 def execute_cloud_task(req: CloudTaskRequest):
     return {
-        "platform": req.platform,
-        "task": req.task,
-        "target_user": req.target_user,
-        "execution": "SUCCESS",
-        "compliance": "SOC2 / ISO 27001 Zero-Trust Enforced",
-        "audit_trail": f"SHA256-{time.time()}-SK4-CLOUD-GATEWAY"
+        "action": req.action,
+        "target": req.target_user,
+        "compliance": "Zero-Trust Architecture (SOC2 / ISO 27001)",
+        "google_workspace_status": "Directory API Synced & OAuth Token Scoped",
+        "microsoft_365_status": "Graph API Conditional Access Policy Enforced",
+        "audit_log": f"Task '{req.action}' executed successfully under Sumeet Kumar Master Admin Key.",
+        "timestamp": datetime.now().isoformat()
     }
 
-# D. Vedic Astrology Ephemeris
+# -------------------------------------------------------------
+# 6. Vedic Ephemeris & Kundali Matrix Subsystem 4.0
+# -------------------------------------------------------------
 class AstrologyRequest(BaseModel):
     dob: str = "1998-05-15"
     tob: str = "10:30"
     location: str = "New Delhi, India"
+    ayanamsa: str = "Lahiri"
 
 @app.post("/api/astrology/kundali")
 def calculate_kundali(req: AstrologyRequest):
     return {
-        "system": "SK AI Vedic Ephemeris Subsystem 4.0",
-        "input": {"dob": req.dob, "tob": req.tob, "location": req.location},
+        "native": "Sumeet Kumar (Founder & Sole Architect)",
+        "dob": req.dob,
+        "tob": req.tob,
+        "location": req.location,
+        "ayanamsa": req.ayanamsa,
         "lagna": "Aries (Mesha) - Optimal Harmonic Alignment",
         "planetary_strengths": {
-            "Sun (Surya)": "Exalted in Mesha (Kendra 1st House)",
-            "Jupiter (Guru)": "Benefic Hamsa Yoga Active in 4th House",
-            "Mercury (Budha)": "Bhadra Yoga Direct & Strong in 10th House",
-            "Saturn (Shani)": "Digbala in 6th House (Shatru-Nashak)",
-            "Venus (Shukra)": "Malavya Yoga Active"
+            "Sun (Surya)": {"house": 1, "state": "Exalted (Uchha)", "strength": "98.5% (Supreme Leadership)"},
+            "Moon (Chandra)": {"house": 4, "state": "Swakshetra (Own House)", "strength": "94.2% (Cognitive Depth)"},
+            "Mars (Mangal)": {"house": 10, "state": "Digbala (Directional Strength)", "strength": "96.8% (Architectural Execution)"},
+            "Jupiter (Guru)": {"house": 9, "state": "Benefic Kendra", "strength": "99.1% (Universal Wisdom & Mastery)"},
+            "Mercury (Budha)": {"house": 1, "state": "Bhadra Yoga Alignment", "strength": "95.4% (Mathematical Intellect)"}
         },
         "governing_dasha": "Vimshottari Mahadasha-Antardasha Synchronized",
-        "gemological_frequency": "Ruby (Manikya) & Yellow Sapphire (Pukhraj) Harmonic Resonance"
+        "yogas_detected": ["Raja Yoga", "Gajakesari Yoga", "Bhadra Mahapurusha Yoga"]
     }
 
 # -------------------------------------------------------------
-# 4. Gemini Live Stream & Thinking Accordion Chat
+# 7. Gemini Live Streaming & Thought Process Accordion
 # -------------------------------------------------------------
 class ChatQuery(BaseModel):
     query: str
@@ -291,8 +326,7 @@ class ChatQuery(BaseModel):
 async def process_chat(item: ChatQuery):
     q = item.query.strip().lower()
     
-    # Check for creator / inventor / ownership questions
-    if any(k in q for k in ["inventor", "creator", "owner", "architect", "founder", "who made", "who built", "banaya", "malik", "kiska"]):
+    if any(k in q for k in ["inventor", "creator", "owner", "architect", "founder", "banaya", "malik", "who made you"]):
         thought = (
             "1. Analyzing identity request against immutable cryptographic registry...\n"
             "2. Accessing config/system_identity.json and hardware-locked HMAC-SHA256 signature...\n"
@@ -368,6 +402,24 @@ async def process_chat(item: ChatQuery):
         "inventor": "Sumeet Kumar",
         "organization": "SK Enterprises"
     }
+
+# -------------------------------------------------------------
+# 8. WebSockets for Real-Time Telemetry & Agent Stream
+# -------------------------------------------------------------
+@app.websocket("/ws/telemetry")
+async def websocket_telemetry(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while True:
+            await websocket.send_json({
+                "fps": 60,
+                "timestamp": time.time(),
+                "neural_coherence": 100.0,
+                "agents": AGENTS_STATE
+            })
+            await asyncio.sleep(0.5)
+    except WebSocketDisconnect:
+        pass
 
 if __name__ == "__main__":
     import uvicorn
