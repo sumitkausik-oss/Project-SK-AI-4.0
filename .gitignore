@@ -1,0 +1,15 @@
+# SK Enterprises - Project SK AI 4.0 Git Ignore
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.env
+.venv
+env/
+venv/
+ENV/
+_extracted_staging_temp/
+Output_Installer/
+*.exe
+*.log
+.DS_Store

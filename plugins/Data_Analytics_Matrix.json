@@ -1,0 +1,9 @@
+{
+  "status": "Active",
+  "capabilities": [
+    "EDA",
+    "Cleaning",
+    "BI_Visuals"
+  ],
+  "author": "Sumit Kumar"
+}
