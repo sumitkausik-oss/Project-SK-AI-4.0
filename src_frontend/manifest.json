@@ -1,0 +1,24 @@
+{
+  "name": "SK AI 4.0 (Project JARVIS 4.0)",
+  "short_name": "SK AI 4.0",
+  "description": "Proprietary Cognitive AI OS invented and architected by Sumeet Kumar (SK Enterprises)",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#040814",
+  "theme_color": "#00f5d4",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "../assets/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "../assets/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "author": "Sumeet Kumar (SK Enterprises)",
+  "platform_version": "Jarvis Platform V5.0"
+}
