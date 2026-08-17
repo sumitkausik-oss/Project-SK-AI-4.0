@@ -436,7 +436,7 @@ def main():
     print(f" -> Cloud Admin Actuator: Google Workspace & M365 Zero-Trust Enforced.")
     print(f" -> Vedic Astrology: Ephemeris & Kundali Engine Synchronized.")
 
-    print("\n[SYSTEM READY]: Project SK AI 4.0 Operational in Master Enterprise Mode.")
+    print("\\n[SYSTEM READY]: Project SK AI 4.0 Operational in Master Enterprise Mode.")
 
 if __name__ == "__main__":
     main()
