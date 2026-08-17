@@ -2,6 +2,7 @@ import unittest
 import json
 import base64
 import hashlib
+import asyncio
 from pathlib import Path
 
 from core.education_matrix import UniversalEducationMatrix
@@ -9,6 +10,19 @@ from core.data_analyst_engine import DataAnalystSuite
 from core.cloud_admin_engine import CloudAdminActuator
 from core.astrology_engine import VedicAstrologyCore
 from core.commercial_auth_rbac import CommercialAccessGate
+
+from src_backend.main_engine import (
+    get_system_status,
+    get_agent_town_state,
+    process_chat,
+    generate_education_test,
+    analyze_data,
+    calculate_kundali,
+    ChatQuery,
+    EducationTestRequest,
+    DataAnalyzeRequest,
+    AstrologyRequest
+)
 
 class TestProjectSKAI4Engines(unittest.TestCase):
     def setUp(self):
@@ -90,6 +104,39 @@ class TestProjectSKAI4Engines(unittest.TestCase):
         self.assertEqual(ident["inventor"], "Sumeet Kumar")
         self.assertEqual(ident["organization"], "SK Enterprises")
         self.assertEqual(ident["sole_architect"], "Sumeet Kumar")
+
+    # Native Backend Engine Direct Tests
+    def test_native_system_status(self):
+        status = get_system_status()
+        self.assertEqual(status["status"], "ONLINE")
+        self.assertEqual(status["inventor"], "Sumeet Kumar")
+        self.assertEqual(status["organization"], "SK Enterprises")
+
+    def test_native_agent_town_state(self):
+        state = get_agent_town_state()
+        self.assertGreaterEqual(len(state["agents"]), 4)
+        self.assertEqual(len(state["rooms"]), 4)
+
+    def test_native_chat_inventor_query(self):
+        res = asyncio.run(process_chat(ChatQuery(query="Who is your inventor?")))
+        self.assertIn("Sumeet Kumar", res["response"])
+        self.assertIn("SK Enterprises", res["response"])
+        self.assertIn("thought_process", res)
+
+    def test_native_education_endpoint(self):
+        res = generate_education_test(EducationTestRequest(subject="Physics", standard="Class 12", difficulty="Hard"))
+        self.assertEqual(res["total_marks"], 120)
+        self.assertIn("Section A", res["sections"][0]["section"])
+
+    def test_native_data_analyst_endpoint(self):
+        res = analyze_data(DataAnalyzeRequest(dataset_name="metrics.csv"))
+        self.assertEqual(res["status"], "Production-Ready Cleaned DataFrame")
+        self.assertEqual(len(res["charts"]), 3)
+
+    def test_native_astrology_endpoint(self):
+        res = calculate_kundali(AstrologyRequest(dob="1998-05-15", tob="10:30", location="New Delhi"))
+        self.assertIn("Aries", res["lagna"])
+        self.assertIn("Vimshottari", res["governing_dasha"])
 
 if __name__ == "__main__":
     unittest.main()

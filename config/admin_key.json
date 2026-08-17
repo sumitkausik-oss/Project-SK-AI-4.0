@@ -1,17 +1,8 @@
 {
-  "license_id": "SK4-ENTERPRISE-LIFETIME-MASTER-001",
+  "license_id": "SK4-ENTERPRISE-LIFETIME-MASTER-2026",
   "owner": "Sumeet Kumar",
   "organization": "SK Enterprises",
-  "system": "Project SK AI 4.0 (JARVIS 4.0)",
-  "tier": "ADMIN_LIFETIME (Permanent Unlimited Commercial Access)",
-  "unlocked_features": [
-    "EDUCATION",
-    "DATA_ANALYTICS",
-    "CLOUD_DEVOPS",
-    "ASTROLOGY",
-    "AUTONOMOUS_LEARNING",
-    "ALL_MODULES"
-  ],
-  "issued_at": "2026-08-17",
-  "expires_at": "LIFETIME_PERMANENT"
+  "system": "SK AI 4.0 (Project JARVIS 4.0)",
+  "tier": "ADMIN_LIFETIME",
+  "expires_at": "PERMANENT"
 }

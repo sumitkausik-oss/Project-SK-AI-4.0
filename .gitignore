@@ -3,6 +3,11 @@ __pycache__/
 *.py[cod]
 *$py.class
 *.so
+*.dll
+*.pdb
+*.bin
+*.asar
+*.node
 .env
 .venv
 env/
@@ -12,6 +17,10 @@ _extracted_staging_temp/
 Output_Installer/
 build/
 dist/
+SK_AI_4.0_App/
+raw_cpp_sources/
+vulkan-deps/
+runtime_engine/
 *.spec
 *.exe
 *.log
