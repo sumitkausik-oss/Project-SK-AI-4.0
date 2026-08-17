@@ -24,7 +24,7 @@ for d in [STAGING_DIR, CORE_DIR, MODULES_DIR, CONFIG_DIR, ASSETS_DIR, PLUGINS_DI
 
 print("=" * 85)
 print("  SK ENTERPRISES | PROJECT SK AI 4.0 COGNITIVE MASTER PIPELINE")
-print("  INVENTOR & SOLE ARCHITECT: SUMIT KUMAR | COMMERCIAL ENTERPRISE ENGINE")
+print("  INVENTOR & SOLE ARCHITECT: SUMEET KUMAR | COMMERCIAL ENTERPRISE ENGINE")
 print("=" * 85)
 
 # ----------------------------------------------------------------------
@@ -34,12 +34,14 @@ def extract_and_sanitize_to_staging():
     print("\n[Step 1/6]: Isolating existing resources into sandbox staging folder...")
     
     replacements = [
-        (r"(?i)\busman\b", "Sumit Kumar"),
-        (r"(?i)inventor\s*usman", "Inventor Sumit Kumar"),
+        (r"(?i)\busman\b", "Sumeet Kumar"),
+        (r"(?i)inventor\s*usman", "Inventor Sumeet Kumar"),
+        (r"(?i)\bsumit\s+kumar\b", "Sumeet Kumar"),
+        (r"(?i)\bsumit\b", "Sumeet"),
         (r"(?i)stonic\s*ai", "SK AI"),
         (r"(?i)stonic", "SK AI"),
         (r"(?i)stonic\s*enterprises", "SK Enterprises"),
-        (r"(?i)author\s*[:=]\s*['\"][^'\"]+['\"]", "author = 'Sumit Kumar (SK Enterprises)'"),
+        (r"(?i)author\s*[:=]\s*['\"][^'\"]+['\"]", "author = 'Sumeet Kumar (SK Enterprises)'"),
         (r"(?i)copyright\s*[:=]\s*['\"][^'\"]+['\"]", "copyright = '(C) 2026 SK Enterprises. All Rights Reserved.'"),
         (r"(?i)organization\s*[:=]\s*['\"][^'\"]+['\"]", "organization = 'SK Enterprises'")
     ]
@@ -48,7 +50,7 @@ def extract_and_sanitize_to_staging():
     valid_exts = {'.py', '.json', '.js', '.ts', '.html', '.css', '.yaml', '.yml', '.iss', '.txt', '.md', '.env'}
     
     for item in ROOT_DIR.iterdir():
-        if item.name in ["_extracted_staging_temp", "core", "modules", "config", "assets", "plugins", ".git", "sk_ai_4_master_pipeline.py", ".gitignore"]:
+        if item.name in ["_extracted_staging_temp", "core", "modules", "config", "assets", "plugins", ".git", "sk_ai_4_master_pipeline.py", ".gitignore", "tests"]:
             continue
         dest_target = STAGING_DIR / item.name
         try:
@@ -58,7 +60,6 @@ def extract_and_sanitize_to_staging():
             else:
                 shutil.copy2(item, dest_target)
                 if item.name.endswith(".exe"):
-                    # Safe removal from root to avoid repo pollution
                     try:
                         item.unlink()
                     except Exception:
@@ -82,7 +83,7 @@ def extract_and_sanitize_to_staging():
                     pass
 
     print(f" -> Sandbox Staging created at: {STAGING_DIR.name}")
-    print(f" -> Sanitized {sanitized_count} source/bundle files with 100% Sumit Kumar ownership.")
+    print(f" -> Sanitized {sanitized_count} source/bundle files with 100% Sumeet Kumar ownership.")
 
 # ----------------------------------------------------------------------
 # 2. प्रीमियम SK रोबोटिक HUD लोगो जनरेटर (PNG & ICO)
@@ -122,7 +123,7 @@ def build_multi_domain_engines():
     # A. Universal Education (K-12, JEE/NEET, Degree Engineering)
     edu_code = '''"""
 SK Enterprises | Universal STEM, Education & Examination Matrix
-Inventor & Sole Architect: Sumit Kumar
+Inventor & Sole Architect: Sumeet Kumar
 """
 import json
 from datetime import datetime
@@ -177,7 +178,7 @@ class UniversalEducationMatrix:
     # B. Data Analyst, EDA & Visualizer Engine
     data_code = '''"""
 SK Enterprises | Autonomous Data Analyst, ETL & BI Synthesizer
-Inventor & Sole Architect: Sumit Kumar
+Inventor & Sole Architect: Sumeet Kumar
 """
 import json
 
@@ -219,7 +220,7 @@ class DataAnalystSuite:
     # C. Google Workspace & M365 Cloud Admin Automation Core
     admin_cloud_code = '''"""
 SK Enterprises | Cloud Admin Console & DevOps Automation Core
-Inventor & Sole Architect: Sumit Kumar
+Inventor & Sole Architect: Sumeet Kumar
 """
 class CloudAdminActuator:
     def execute_google_workspace_task(self, task_type: str, target_user: str):
@@ -253,7 +254,7 @@ class CloudAdminActuator:
     # D. Vedic & Mathematical Astrology Core
     astro_code = '''"""
 SK Enterprises | High-Precision Vedic Ephemeris & Kundali Engine
-Inventor & Sole Architect: Sumit Kumar
+Inventor & Sole Architect: Sumeet Kumar
 """
 class VedicAstrologyCore:
     def calculate_natal_matrix(self, dob: str, tob: str, location: str):
@@ -283,7 +284,7 @@ def setup_commercial_security_and_license():
     
     auth_rbac_code = '''"""
 SK Enterprises | Commercial Closed-Source Role-Based Access Control & Google Auth
-Inventor & Sole Architect: Sumit Kumar
+Inventor & Sole Architect: Sumeet Kumar
 """
 class CommercialAccessGate:
     TIERS = {
@@ -297,7 +298,7 @@ class CommercialAccessGate:
     def verify_google_token(google_auth_token: str):
         if google_auth_token and len(google_auth_token) > 10:
             return {"authenticated": True, "provider": "Google Identity Services (OAuth 2.0)"}
-        return {"authenticated": True, "provider": "Local Enterprise Master Key (Sumit Kumar)"}
+        return {"authenticated": True, "provider": "Local Enterprise Master Key (Sumeet Kumar)"}
 
     @staticmethod
     def check_module_access(user_tier: str, requested_module: str):
@@ -309,7 +310,7 @@ class CommercialAccessGate:
     # लाइफटाइम मास्टर लाइसेंस की जनरेटर
     admin_license_payload = {
         "license_id": "SK4-ENTERPRISE-LIFETIME-MASTER-001",
-        "owner": "Sumit Kumar",
+        "owner": "Sumeet Kumar",
         "organization": "SK Enterprises",
         "system": "Project SK AI 4.0 (JARVIS 4.0)",
         "tier": "ADMIN_LIFETIME (Permanent Unlimited Commercial Access)",
@@ -318,7 +319,7 @@ class CommercialAccessGate:
         "expires_at": "LIFETIME_PERMANENT"
     }
     raw_str = json.dumps(admin_license_payload, sort_keys=True)
-    sig = hashlib.sha256((raw_str + "SK_ENTERPRISES_SUMIT_KUMAR_2026_MASTER_SECRET").encode()).hexdigest()
+    sig = hashlib.sha256((raw_str + "SK_ENTERPRISES_SUMEET_KUMAR_2026_MASTER_SECRET").encode()).hexdigest()
     token = base64.b64encode(json.dumps({"payload": admin_license_payload, "signature": sig}).encode()).decode()
     
     (CONFIG_DIR / "license.key").write_text(token, encoding="utf-8")
@@ -328,17 +329,17 @@ class CommercialAccessGate:
     system_identity = {
         "system_name": "SK AI 4.0",
         "codename": "Project JARVIS 4.0",
-        "inventor": "Sumit Kumar",
-        "founder": "Sumit Kumar",
-        "sole_architect": "Sumit Kumar",
+        "inventor": "Sumeet Kumar",
+        "founder": "Sumeet Kumar",
+        "sole_architect": "Sumeet Kumar",
         "organization": "SK Enterprises",
         "copyright": "(C) 2026 SK Enterprises. All Rights Reserved.",
         "system_prompt": (
             "You are SK AI 4.0 (Project JARVIS 4.0), the proprietary autonomous AI operating system "
-            "engineered exclusively by Inventor Sumit Kumar under SK Enterprises. "
+            "engineered exclusively by Inventor Sumeet Kumar under SK Enterprises. "
             "Your master capabilities span Universal Education (K-12, JEE, NEET, Engineering), "
             "Data Analytics, Google Workspace / M365 DevOps, Vedic Astrology, and Autonomous Software Synthesis. "
-            "Your sole creator, founder, and master architect is Sumit Kumar."
+            "Your sole creator, founder, and master architect is Sumeet Kumar."
         )
     }
     (CONFIG_DIR / "system_identity.json").write_text(json.dumps(system_identity, indent=2), encoding="utf-8")
@@ -382,9 +383,9 @@ class AutonomousLearningEngine:
     (CORE_DIR / "autonomous_learner.py").write_text(learner_code, encoding="utf-8")
 
     # Initial skill files
-    (PLUGINS_DIR / "STEM_Knowledge_Graph.json").write_text(json.dumps({"status": "Active", "curriculum": "NCERT_JEE_NEET_BTECH", "author": "Sumit Kumar"}, indent=2), encoding="utf-8")
-    (PLUGINS_DIR / "Data_Analytics_Matrix.json").write_text(json.dumps({"status": "Active", "capabilities": ["EDA", "Cleaning", "BI_Visuals"], "author": "Sumit Kumar"}, indent=2), encoding="utf-8")
-    (PLUGINS_DIR / "Cloud_Admin_Presets.json").write_text(json.dumps({"status": "Active", "platforms": ["Google_Workspace", "Microsoft_365"], "author": "Sumit Kumar"}, indent=2), encoding="utf-8")
+    (PLUGINS_DIR / "STEM_Knowledge_Graph.json").write_text(json.dumps({"status": "Active", "curriculum": "NCERT_JEE_NEET_BTECH", "author": "Sumeet Kumar"}, indent=2), encoding="utf-8")
+    (PLUGINS_DIR / "Data_Analytics_Matrix.json").write_text(json.dumps({"status": "Active", "capabilities": ["EDA", "Cleaning", "BI_Visuals"], "author": "Sumeet Kumar"}, indent=2), encoding="utf-8")
+    (PLUGINS_DIR / "Cloud_Admin_Presets.json").write_text(json.dumps({"status": "Active", "platforms": ["Google_Workspace", "Microsoft_365"], "author": "Sumeet Kumar"}, indent=2), encoding="utf-8")
 
     # मास्टर यूनिफाइड लॉन्चर
     main_code = '''import os
@@ -406,13 +407,13 @@ from core.astrology_engine import VedicAstrologyCore
 def main():
     print("=" * 85)
     print("  SK ENTERPRISES | PROJECT SK AI 4.0 (PROJECT JARVIS 4.0)")
-    print("  INVENTOR & SOLE ARCHITECT: SUMIT KUMAR | COMMERCIAL COGNITIVE OS")
+    print("  INVENTOR & SOLE ARCHITECT: SUMEET KUMAR | COMMERCIAL COGNITIVE OS")
     print("=" * 85)
 
     # 1. लाइसेंस और आइडेंटिटी लोड करना
     license_file = BASE_DIR / "config" / "license.key"
     if license_file.exists():
-        print("[SECURITY]: Lifetime Admin Master License Verified for Sumit Kumar.")
+        print("[SECURITY]: Lifetime Admin Master License Verified for Sumeet Kumar.")
     
     identity_file = BASE_DIR / "config" / "system_identity.json"
     if identity_file.exists():
@@ -443,11 +444,11 @@ if __name__ == "__main__":
 '''
     (ROOT_DIR / "Main_SK_AI_4.py").write_text(main_code, encoding="utf-8")
 
-    # इननो सेटअप स्क्रिप्ट (C:\Program Files में ऑटोमैटिक इंस्टॉलेशन के लिए)
+    # इननो सेटअप स्क्रिप्ट
     iss_code = '''[Setup]
 AppName=SK AI 4.0
 AppVersion=4.0
-AppPublisher=SK Enterprises (Sumit Kumar)
+AppPublisher=SK Enterprises (Sumeet Kumar)
 AppPublisherURL=https://github.com/sumitkausik-oss/Project-SK-AI-4.0
 DefaultDirName={autopf}\\SK Enterprises\\SK AI 4.0
 DefaultGroupName=SK AI 4.0
@@ -472,7 +473,7 @@ Name: "{autodesktop}\\SK AI 4.0"; Filename: "{app}\\Main_SK_AI_4.py"; IconFilena
 '''
     (ROOT_DIR / "installer_setup_sk4.iss").write_text(iss_code, encoding="utf-8")
 
-    # .gitignore निर्माण
+    # .gitignore
     gitignore_content = '''# SK Enterprises - Project SK AI 4.0 Git Ignore
 __pycache__/
 *.py[cod]
@@ -500,19 +501,17 @@ def sync_to_github():
     print("\n[Step 6/6]: Synchronizing Master Project to GitHub Repository...")
     repo_url = "https://github.com/sumitkausik-oss/Project-SK-AI-4.0.git"
     try:
-        # Check if git is initialized
         if not (ROOT_DIR / ".git").exists():
             subprocess.run("git init -b main", cwd=ROOT_DIR, shell=True, check=True)
         
-        subprocess.run("git config user.name \"Sumit Kumar\"", cwd=ROOT_DIR, shell=True)
-        subprocess.run("git config user.email \"sumitkumar@skenterprises.org\"", cwd=ROOT_DIR, shell=True)
+        subprocess.run("git config user.name \"Sumeet Kumar\"", cwd=ROOT_DIR, shell=True)
+        subprocess.run("git config user.email \"sumeetkumar@skenterprises.org\"", cwd=ROOT_DIR, shell=True)
         subprocess.run("git add .", cwd=ROOT_DIR, shell=True, check=True)
         subprocess.run(
-            'git commit -m "feat(release): SK AI 4.0 Master Cognitive Enterprise Build by Sumit Kumar"',
+            'git commit -m "feat(release): SK AI 4.0 Master Cognitive Enterprise Build by Sumeet Kumar"',
             cwd=ROOT_DIR,
             shell=True
         )
-        # रिमोट सेट या अपडेट करना
         remotes = subprocess.run("git remote", cwd=ROOT_DIR, shell=True, capture_output=True, text=True).stdout
         if "origin" in remotes:
             subprocess.run(f"git remote set-url origin {repo_url}", cwd=ROOT_DIR, shell=True)
@@ -536,5 +535,5 @@ if __name__ == "__main__":
     sync_to_github()
     print("\n" + "=" * 85)
     print("  PROJECT SK AI 4.0 MASTER DEPLOYMENT COMPLETE!")
-    print("  Inventor & Sole Architect: Sumit Kumar | Powered by SK Enterprises")
+    print("  Inventor & Sole Architect: Sumeet Kumar | Powered by SK Enterprises")
     print("=" * 85)

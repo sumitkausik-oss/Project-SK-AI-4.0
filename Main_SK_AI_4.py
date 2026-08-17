@@ -17,13 +17,13 @@ from core.astrology_engine import VedicAstrologyCore
 def main():
     print("=" * 85)
     print("  SK ENTERPRISES | PROJECT SK AI 4.0 (PROJECT JARVIS 4.0)")
-    print("  INVENTOR & SOLE ARCHITECT: SUMIT KUMAR | COMMERCIAL COGNITIVE OS")
+    print("  INVENTOR & SOLE ARCHITECT: SUMEET KUMAR | COMMERCIAL COGNITIVE OS")
     print("=" * 85)
 
     # 1. लाइसेंस और आइडेंटिटी लोड करना
     license_file = BASE_DIR / "config" / "license.key"
     if license_file.exists():
-        print("[SECURITY]: Lifetime Admin Master License Verified for Sumit Kumar.")
+        print("[SECURITY]: Lifetime Admin Master License Verified for Sumeet Kumar.")
     
     identity_file = BASE_DIR / "config" / "system_identity.json"
     if identity_file.exists():
@@ -46,6 +46,7 @@ def main():
     print(f" -> Data Analyst Suite: Ready (EDA, Cleaning, BI Visuals, SQL Gen).")
     print(f" -> Cloud Admin Actuator: Google Workspace & M365 Zero-Trust Enforced.")
     print(f" -> Vedic Astrology: Ephemeris & Kundali Engine Synchronized.")
+
     print("\n[SYSTEM READY]: Project SK AI 4.0 Operational in Master Enterprise Mode.")
 
 if __name__ == "__main__":

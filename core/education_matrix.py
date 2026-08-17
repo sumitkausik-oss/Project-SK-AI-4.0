@@ -1,6 +1,6 @@
 """
 SK Enterprises | Universal STEM, Education & Examination Matrix
-Inventor & Sole Architect: Sumit Kumar
+Inventor & Sole Architect: Sumeet Kumar
 """
 import json
 from datetime import datetime
