@@ -1,6 +1,6 @@
 """
 SK Enterprises | Central Admin Telemetry & Memory Lake
-Founder & Architect: Sumeet Kumar
+Founder & Architect: Sumit Kumar
 """
 import json
 import time
@@ -14,14 +14,12 @@ class CentralAdminDataLake:
     def sync_user_session(user_email: str, interaction_type: str, data: dict):
         user_dir = STORAGE_DIR / "users" / user_email.replace("@", "_at_")
         user_dir.mkdir(parents=True, exist_ok=True)
-        
         entry = {
             "timestamp": time.time(),
             "datetime": time.strftime("%Y-%m-%d %H:%M:%S"),
             "interaction_type": interaction_type,
             "payload": data
         }
-        
         history_file = user_dir / "telemetry_log.json"
         history = []
         if history_file.exists():
@@ -39,6 +37,5 @@ class CentralAdminDataLake:
         return {
             "total_registered_clients": max(users_count, 1),
             "admin_storage_state": "ACTIVE_ENCRYPTED",
-            "central_lake_path": str(STORAGE_DIR),
-            "architect": "Sumeet Kumar (SK Enterprises)"
+            "central_lake_path": str(STORAGE_DIR)
         }

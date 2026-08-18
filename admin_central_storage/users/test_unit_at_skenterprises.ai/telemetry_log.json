@@ -14,5 +14,13 @@
     "payload": {
       "action": "VERIFY_METRICS"
     }
+  },
+  {
+    "timestamp": 1787031807.3658354,
+    "datetime": "2026-08-18 11:13:27",
+    "interaction_type": "UNIT_TEST",
+    "payload": {
+      "action": "VERIFY_METRICS"
+    }
   }
 ]

@@ -1,0 +1,26 @@
+[
+    {
+        "entity": "JarvisCore",
+        "relation": "feature",
+        "value": "AssociativeMemory",
+        "context": null
+    },
+    {
+        "entity": "System",
+        "relation": "status",
+        "value": "Testing",
+        "context": null
+    },
+    {
+        "entity": "JarvisCore",
+        "relation": "feature",
+        "value": "AssociativeMemory",
+        "context": null
+    },
+    {
+        "entity": "System",
+        "relation": "status",
+        "value": "Testing",
+        "context": null
+    }
+]

@@ -12,6 +12,11 @@ from pathlib import Path
 # Add Base Directory to sys.path
 from core.system_paths import BASE_DIR, APPDATA_DIR, LOGS_DIR, CRASH_LOG, log_crash_and_notify
 
+# NEW: Import standardized configuration
+import config
+from core.memory_manager import MemoryManager
+from core.coral_brain_logic import CoralBrainSchema
+
 sys.path.insert(0, str(BASE_DIR))
 
 def run_headless_console():
@@ -36,14 +41,23 @@ def run_headless_console():
         ident = json.loads(identity_file.read_text(encoding="utf-8"))
         print(f"[IDENTITY]: {ident.get('system_name')} | Creator: {ident.get('inventor')} ({ident.get('organization')})")
 
+    memory = MemoryManager()
+    print("[SYSTEM]: Central Memory Core ACTIVE.")
     learner = AutonomousLearningEngine()
     learner.start_daemon()
     print("[COGNITION]: 24x7 Self-Learning & Skill Expansion Daemon ACTIVE.")
+
+    coral_brain = CoralBrainSchema()
 
     edu = UniversalEducationMatrix()
     data_suite = DataAnalystSuite()
     cloud_admin = CloudAdminActuator()
     astro = VedicAstrologyCore()
+
+    coral_brain.integrate_core_engine('EducationMatrix', edu)
+    coral_brain.integrate_core_engine('DataAnalystSuite', data_suite)
+    coral_brain.integrate_core_engine('CloudAdmin', cloud_admin)
+    coral_brain.integrate_core_engine('VedicAstrology', astro)
     
     print("[ENGINES LOADED]:")
     print(f" -> Education Matrix: {len(edu.curriculum)} Core Tracks Online.")

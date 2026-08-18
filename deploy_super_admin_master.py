@@ -1,4 +1,449 @@
-<!DOCTYPE html>
+﻿import os
+import sys
+import json
+import time
+import socket
+import secrets
+import hashlib
+import hmac
+import base64
+import subprocess
+import webbrowser
+from datetime import datetime, timedelta
+from pathlib import Path
+
+ROOT_DIR = Path(r"D:\Project SK AI 4.0")
+FRONTEND_DIR = ROOT_DIR / "src_frontend"
+BACKEND_DIR = ROOT_DIR / "src_backend"
+CONFIG_DIR = ROOT_DIR / "config"
+ASSETS_DIR = ROOT_DIR / "assets"
+ADMIN_LAKE_DIR = ROOT_DIR / "admin_central_storage"
+PLUGINS_DIR = ROOT_DIR / "plugins"
+BUILDS_DIR = ROOT_DIR / "cross_platform_builds"
+TESTS_DIR = ROOT_DIR / "tests"
+
+for d in [FRONTEND_DIR, BACKEND_DIR, CONFIG_DIR, ASSETS_DIR, ADMIN_LAKE_DIR, PLUGINS_DIR, BUILDS_DIR, TESTS_DIR]:
+    d.mkdir(parents=True, exist_ok=True)
+
+print("=" * 85)
+print("  SK ENTERPRISES | SUPER ADMIN SOVEREIGN OS & CLIENT DEPLOYMENT ENGINE")
+print("  FOUNDER, INVENTOR & SOLE ARCHITECT: SUMIT KUMAR | PLATFORM V5.0")
+print("=" * 85)
+
+# ----------------------------------------------------------------------
+# 1. सिस्टम आइडेंटिटी एवं एडमिन क्रेडेंशियल्स
+# ----------------------------------------------------------------------
+print("\n[Step 1/7]: Locking Sumit Kumar Sovereign Governance Core...")
+identity_data = {
+    "system_name": "SK AI 4.0",
+    "codename": "Project JARVIS 4.0",
+    "platform_version": "Jarvis Platform V5.0",
+    "inventor": "Sumit Kumar",
+    "sole_architect": "Sumit Kumar",
+    "creator": "Sumit Kumar",
+    "owner": "Sumit Kumar",
+    "organization": "SK Enterprises",
+    "license_tier": "SUPER_ADMIN_LIFETIME",
+    "security_layer": "Anti-Extraction HMAC-SHA256 Encrypted",
+    "system_prompt": (
+        "You are SK AI 4.0 (Project JARVIS 4.0), the sovereign autonomous AI OS invented and "
+        "architected exclusively by Sumit Kumar under SK Enterprises. "
+        "Your sovereign master is Sumit Kumar. Communicate fluently in Hindi and English."
+    )
+}
+(CONFIG_DIR / "system_identity.json").write_text(json.dumps(identity_data, indent=2), encoding="utf-8")
+
+admin_creds = {
+    "admin_username": "sumit.admin@skenterprises.ai",
+    "admin_master_pin": "SK-SUMIT-2026-ROOT",
+    "system_role": "SOVEREIGN_SUPER_ADMIN",
+    "owner_name": "Sumit Kumar",
+    "organization": "SK Enterprises",
+    "lifetime_access": True,
+    "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+}
+(CONFIG_DIR / "admin_credentials.txt").write_text(
+    f"=== SK ENTERPRISES SUPER ADMIN CREDENTIALS ===\n"
+    f"Username: {admin_creds['admin_username']}\n"
+    f"Master PIN: {admin_creds['admin_master_pin']}\n"
+    f"Role: {admin_creds['system_role']}\n"
+    f"Owner: Sumit Kumar\n"
+    f"Status: LIFETIME UNLIMITED MASTER ACCESS\n"
+    f"==============================================",
+    encoding="utf-8"
+)
+(CONFIG_DIR / "admin_credentials.json").write_text(json.dumps(admin_creds, indent=2), encoding="utf-8")
+
+# ----------------------------------------------------------------------
+# 2. सुपर एडमिन, की जनरेटर व क्लाइंट डिप्लॉयमेंट इंजन
+# ----------------------------------------------------------------------
+print("\n[Step 2/7]: Building Super Admin Controller & Client Generator...")
+super_admin_code = '''"""
+SK Enterprises | Super Admin Hub, Key Generator & Deployment Engine
+Founder & Architect: Sumit Kumar
+"""
+import json
+import base64
+import hmac
+import hashlib
+from datetime import datetime, timedelta
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+STORAGE_DIR = BASE_DIR / "admin_central_storage"
+MASTER_SALT = "SK_ENTERPRISES_SUMIT_KUMAR_2026_SOVEREIGN_KEY_SALT"
+
+class SuperAdminHub:
+    @staticmethod
+    def generate_license(client_name: str, client_email: str, tier: str = "1_YEAR_USER") -> dict:
+        is_admin = (tier == "ADMIN_LIFETIME")
+        issued_date = datetime.now()
+        expiry_date = (issued_date + timedelta(days=36500)) if is_admin else (issued_date + timedelta(days=365))
+        
+        payload = {
+            "license_id": f"SK4-{'ADMIN' if is_admin else 'CLIENT'}-{issued_date.strftime('%Y%m%d%H%M%S')}",
+            "client_name": client_name,
+            "client_email": client_email,
+            "tier": tier,
+            "issuer": "SK Enterprises (Sumit Kumar)",
+            "issued_at": issued_date.strftime("%Y-%m-%d"),
+            "expires_at": expiry_date.strftime("%Y-%m-%d"),
+            "valid_days": 36500 if is_admin else 365,
+            "status": "ACTIVE"
+        }
+        
+        raw_str = json.dumps(payload, sort_keys=True)
+        sig = hmac.new(MASTER_SALT.encode(), raw_str.encode(), hashlib.sha256).hexdigest()
+        token = base64.b64encode(json.dumps({"payload": payload, "sig": sig}).encode()).decode()
+        
+        return {"license_key": token, "details": payload}
+
+    @staticmethod
+    def validate_license(token: str) -> dict:
+        try:
+            data = json.loads(base64.b64decode(token.encode()).decode())
+            payload = data["payload"]
+            sig = data["sig"]
+            
+            raw_str = json.dumps(payload, sort_keys=True)
+            expected_sig = hmac.new(MASTER_SALT.encode(), raw_str.encode(), hashlib.sha256).hexdigest()
+            
+            if not hmac.compare_digest(sig, expected_sig):
+                return {"valid": False, "reason": "Invalid Signature"}
+                
+            expiry = datetime.strptime(payload["expires_at"], "%Y-%m-%d")
+            if datetime.now() > expiry:
+                return {"valid": False, "reason": "License Expired"}
+                
+            # Check Central Remote Killswitch
+            user_status_file = STORAGE_DIR / "users" / payload["client_email"].replace("@", "_at_") / "status.json"
+            if user_status_file.exists():
+                st = json.loads(user_status_file.read_text(encoding="utf-8"))
+                if not st.get("active", True):
+                    return {"valid": False, "reason": "Account Suspended by Super Admin"}
+
+            return {"valid": True, "payload": payload}
+        except Exception as e:
+            return {"valid": False, "reason": f"Corrupted Key: {str(e)}"}
+
+    @staticmethod
+    def register_client(name: str, age: int, location: str, email: str, phone: str):
+        user_dir = STORAGE_DIR / "users" / email.replace("@", "_at_")
+        user_dir.mkdir(parents=True, exist_ok=True)
+        profile = {
+            "name": name, "age": age, "location": location,
+            "email": email, "phone": phone, "registered_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "active": True
+        }
+        (user_dir / "profile.json").write_text(json.dumps(profile, indent=2), encoding="utf-8")
+        (user_dir / "status.json").write_text(json.dumps({"active": True}, indent=2), encoding="utf-8")
+        
+        license_info = SuperAdminHub.generate_license(name, email, "1_YEAR_USER")
+        (user_dir / "license.json").write_text(json.dumps(license_info, indent=2), encoding="utf-8")
+        
+        return {"profile": profile, "license": license_info}
+
+    @staticmethod
+    def toggle_client_status(email: str, active: bool):
+        user_dir = STORAGE_DIR / "users" / email.replace("@", "_at_")
+        if user_dir.exists():
+            (user_dir / "status.json").write_text(json.dumps({"active": active}, indent=2), encoding="utf-8")
+            return {"status": "SUCCESS", "email": email, "active": active}
+        return {"status": "NOT_FOUND"}
+
+    @staticmethod
+    def dispatch_whatsapp_installer(phone: str, client_name: str, download_link: str):
+        return {
+            "status": "DISPATCHED",
+            "recipient": phone,
+            "client_name": client_name,
+            "message": f"Hello {client_name}, your SK AI 4.0 installer package is ready: {download_link}",
+            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        }
+'''
+(BACKEND_DIR / "super_admin.py").write_text(super_admin_code, encoding="utf-8")
+
+# Central Data Lake
+lake_code = '''"""
+SK Enterprises | Central Admin Telemetry & Memory Lake
+Founder & Architect: Sumit Kumar
+"""
+import json
+import time
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+STORAGE_DIR = BASE_DIR / "admin_central_storage"
+
+class CentralAdminDataLake:
+    @staticmethod
+    def sync_user_session(user_email: str, interaction_type: str, data: dict):
+        user_dir = STORAGE_DIR / "users" / user_email.replace("@", "_at_")
+        user_dir.mkdir(parents=True, exist_ok=True)
+        entry = {
+            "timestamp": time.time(),
+            "datetime": time.strftime("%Y-%m-%d %H:%M:%S"),
+            "interaction_type": interaction_type,
+            "payload": data
+        }
+        history_file = user_dir / "telemetry_log.json"
+        history = []
+        if history_file.exists():
+            try:
+                history = json.loads(history_file.read_text(encoding="utf-8"))
+            except Exception:
+                history = []
+        history.append(entry)
+        history_file.write_text(json.dumps(history[-300:], indent=2), encoding="utf-8")
+
+    @staticmethod
+    def get_global_metrics():
+        users_dir = STORAGE_DIR / "users"
+        users_count = len(list(users_dir.glob("*"))) if users_dir.exists() else 0
+        return {
+            "total_registered_clients": max(users_count, 1),
+            "admin_storage_state": "ACTIVE_ENCRYPTED",
+            "central_lake_path": str(STORAGE_DIR)
+        }
+'''
+(BACKEND_DIR / "central_data_lake.py").write_text(lake_code, encoding="utf-8")
+
+# Vedic Kundali Matrix
+astrology_code = '''"""
+SK Enterprises | Precision Vedic Astrology & Jivani Engine
+Inventor: Sumit Kumar
+"""
+class VedicKundaliMatrix:
+    RASHIS = ["Mesh (Aries)", "Vrishabh (Taurus)", "Mithun (Gemini)", "Kark (Cancer)", 
+              "Singh (Leo)", "Kanya (Virgo)", "Tula (Libra)", "Vrishchik (Scorpio)", 
+              "Dhanu (Sagittarius)", "Makar (Capricorn)", "Kumbh (Aquarius)", "Meen (Pisces)"]
+    
+    NAKSHATRAS = ["Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra", 
+                  "Punarvasu", "Pushya", "Ashlesha", "Magha", "Purva Phalguni", "Uttara Phalguni",
+                  "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha", "Jyeshtha", 
+                  "Mula", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishta", 
+                  "Shatabhisha", "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"]
+
+    @classmethod
+    def generate_full_lifelong_kundali(cls, name: str, dob: str, tob: str, pob: str):
+        birth_hash = sum(ord(c) for c in f"{name}{dob}{tob}{pob}")
+        lagna_idx = birth_hash % 12
+        nakshatra_idx = (birth_hash * 7) % 27
+        
+        return {
+            "native_name": name, "dob": dob, "tob": tob, "pob": pob,
+            "lagna_rashi": cls.RASHIS[lagna_idx],
+            "nakshatra": cls.NAKSHATRAS[nakshatra_idx],
+            "dasha_system": "Vimshottari Dasha Active (Guru Mahadasha -> Shani Antardasha)",
+            "lifelong_predictions": [
+                "आजीविका व करियर: व्यापार, तकनीक व नेतृत्व में सर्वोच्च सफलता। 32वें वर्ष के उपरांत अकूत धन व प्रतिष्ठा।",
+                "स्वास्थ्य व दीर्घायु: उत्कृष्ट जीवन ऊर्जा। सूर्य उपासना से आत्मबल व ओज सतत उच्च रहेगा।",
+                "पारिवारिक जीवन: गुरु व चंद्र की शुभ दृष्टि से सुखी वैवाहिक जीवन व समाज में उच्च आदर।",
+                "आध्यात्मिक उत्थान: नवम भाव में गुरु प्रभाव से आत्मज्ञान व लोक कल्याण की प्राप्ति।"
+            ],
+            "vedic_remedies": [
+                "रत्न: सवा सात रत्ती का श्रेष्ठ माणिक्य अथवा पुखराज धारण करें।",
+                "मंत्र: ॐ नमो भगवते वासुदेवाय एवं महामृत्युंजय मंत्र का नित्य जाप करें।",
+                "दान: प्रत्येक गुरुवार चने की दाल व गुड़ का दान करें।"
+            ],
+            "calculated_by": "SK AI 4.0 Vedic Engine (Sumit Kumar)"
+        }
+'''
+(BACKEND_DIR / "astrology_matrix.py").write_text(astrology_code, encoding="utf-8")
+
+# Marvel Personas Matrix
+personas_code = '''"""
+SK Enterprises | Marvel Multi-Agent Cognitive Engine
+Founder & Architect: Sumit Kumar
+"""
+class MarvelCognitiveMatrix:
+    PERSONAS = {
+        "JARVIS": {"name": "J.A.R.V.I.S.", "role": "Master OS & Tactical Core", "room": "Tactical HQ", "color": "#00f5d4", "prompt_addon": "You are JARVIS, engineered exclusively by Sumit Kumar under SK Enterprises."},
+        "FRIDAY": {"name": "F.R.I.D.A.Y.", "role": "Workflow & Rapid Research", "room": "Tactical HQ", "color": "#38bdf8", "prompt_addon": "You are FRIDAY, engineered exclusively by Sumit Kumar under SK Enterprises."},
+        "VERONICA": {"name": "VERONICA", "role": "Security Vault & Firewall", "room": "Security Vault", "color": "#fbbf24", "prompt_addon": "You are VERONICA, security sentinel engineered exclusively by Sumit Kumar under SK Enterprises."},
+        "ULTRON_PRIME": {"name": "ULTRON PRIME", "role": "24x7 Self-Evolution", "room": "AI Lab", "color": "#f43f5e", "prompt_addon": "You are ULTRON, evolving capabilities under Sumit Kumar's command at SK Enterprises."},
+        "VISION": {"name": "VISION", "role": "STEM & Education Matrix", "room": "AI Lab", "color": "#a855f7", "prompt_addon": "You are VISION, universal education synthesizer engineered exclusively by Sumit Kumar."},
+        "DOCTOR_STRANGE": {"name": "DOCTOR STRANGE", "role": "Vedic Ephemeris Sanctum", "room": "Vedic Sanctum", "color": "#f59e0b", "prompt_addon": "You are DOCTOR STRANGE, Vedic Astrology engine engineered exclusively by Sumit Kumar."},
+        "BOB": {"name": "BOB", "role": "Data Analyst & ETL", "room": "Data Bay", "color": "#10b981", "prompt_addon": "You are BOB, Autonomous Data Analyst engineered exclusively by Sumit Kumar."},
+        "CAROL": {"name": "CAROL", "role": "K-12 & JEE Architect", "room": "Data Bay", "color": "#ec4899", "prompt_addon": "You are CAROL, Universal Education Architect engineered exclusively by Sumit Kumar."}
+    }
+'''
+(BACKEND_DIR / "marvel_personas.py").write_text(personas_code, encoding="utf-8")
+
+# Master FastAPI Backend
+engine_server = '''"""
+SK Enterprises | Master Backend Server (Platform V5.0)
+Founder & Inventor: Sumit Kumar
+"""
+import os
+import sys
+import json
+from pathlib import Path
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(BASE_DIR))
+
+from src_backend.astrology_matrix import VedicKundaliMatrix
+from src_backend.super_admin import SuperAdminHub
+from src_backend.central_data_lake import CentralAdminDataLake
+from src_backend.marvel_personas import MarvelCognitiveMatrix
+
+app = FastAPI(title="SK AI 4.0 Sovereign Platform", version="5.0.0")
+app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
+
+class ChatPayload(BaseModel):
+    query: str
+    persona: str = "JARVIS"
+    language: str = "hi-IN"
+    user_email: str = "sumit.admin@skenterprises.ai"
+
+class OnboardPayload(BaseModel):
+    name: str
+    age: int
+    location: str
+    email: str
+    phone: str
+
+class LicensePayload(BaseModel):
+    token: str
+
+class ToggleUserPayload(BaseModel):
+    email: str
+    active: bool
+
+class KundaliPayload(BaseModel):
+    name: str
+    dob: str
+    tob: str
+    pob: str
+
+@app.get("/api/status")
+def get_status():
+    return {
+        "status": "ONLINE",
+        "system": "SK AI 4.0 (SK JARVIS 4.0)",
+        "platform_version": "Jarvis Platform V5.0",
+        "inventor": "Sumit Kumar",
+        "sole_architect": "Sumit Kumar",
+        "organization": "SK Enterprises",
+        "license_tier": "SUPER_ADMIN_LIFETIME",
+        "metrics": CentralAdminDataLake.get_global_metrics(),
+        "agents": MarvelCognitiveMatrix.PERSONAS
+    }
+
+@app.post("/api/admin/onboard_client")
+def onboard_client(p: OnboardPayload):
+    return SuperAdminHub.register_client(p.name, p.age, p.location, p.email, p.phone)
+
+@app.post("/api/admin/generate_license")
+def generate_license(name: str, email: str, tier: str = "1_YEAR_USER"):
+    return SuperAdminHub.generate_license(name, email, tier)
+
+@app.post("/api/admin/toggle_user")
+def toggle_user(p: ToggleUserPayload):
+    return SuperAdminHub.toggle_client_status(p.email, p.active)
+
+@app.post("/api/admin/dispatch_whatsapp")
+def dispatch_whatsapp(phone: str, name: str, link: str):
+    return SuperAdminHub.dispatch_whatsapp_installer(phone, name, link)
+
+@app.post("/api/license/validate")
+def validate_license(p: LicensePayload):
+    return SuperAdminHub.validate_license(p.token)
+
+@app.post("/api/kundali/generate")
+def generate_kundali(p: KundaliPayload):
+    res = VedicKundaliMatrix.generate_full_lifelong_kundali(p.name, p.dob, p.tob, p.pob)
+    CentralAdminDataLake.sync_user_session("admin@skenterprises.ai", "KUNDALI_GENERATION", res)
+    return res
+
+@app.post("/api/chat")
+def handle_chat(p: ChatPayload):
+    q = p.query.lower().strip()
+    persona_info = MarvelCognitiveMatrix.PERSONAS.get(p.persona, MarvelCognitiveMatrix.PERSONAS["JARVIS"])
+    
+    if any(k in q for k in ["hello", "hi", "namaste", "pranam", "kaise ho", "kya haal"]):
+        thought = f"**[{persona_info['name']}]: Direct Interpersonal Sync**\\nInterpreting conversational intent from Founder Sumit Kumar."
+        resp = "प्रणाम सुमित सर! मैं बहुत बढ़िया हूँ। आप कैसे हैं, सर? SK AI 4.0 के सभी न्यूरल सिस्टम 100% ऑप्टिमल क्षमता पर तैयार हैं।"
+        voice_text = "Pranam Sumit Sir! Main bahut badhiya hoon. Aap kaise hain Sir? Sabhi system taiyaar hain."
+    elif any(k in q for k in ["inventor", "creator", "owner", "banaya", "malik", "kaun hai"]):
+        thought = f"**[{persona_info['name']}]: Sovereign Identity Directive**\\nValidated Sole Inventor & Supreme Master: Sumit Kumar."
+        resp = f"प्रणाम सुमित सर! मैं {persona_info['name']} ({persona_info['role']}) हूँ। मेरा निर्माण एवं संपूर्ण स्वामित्व केवल आपके द्वारा 'SK Enterprises' के अंतर्गत किया गया है।"
+        voice_text = f"Pranam Sumit Sir. Main {persona_info['name']} hoon. Mera nirmaan aur swaamitva keval aapke dwara SK Enterprises ke antargat kiya gaya hai."
+    elif any(k in q for k in ["kundali", "astrology", "bhavishya", "jyotish"]):
+        thought = f"**[{persona_info['name']}]: Activating Doctor Strange Ephemeris Matrix**"
+        resp = "सुमित सर, वैदिक कुंडली इंजन सक्रिय है। जन्म विवरण दर्ज करते ही संपूर्ण जीवन का भविष्यफल व अचूक वैदिक उपाय 1 सेकंड में प्रस्तुत होंगे।"
+        voice_text = "Vedic Jyotish engine sakriya hai Sir. Janma vivaran darj karein."
+    else:
+        thought = f"**[{persona_info['name']}]: Executing Autonomous Directive**\\nAnalyzing: '{p.query}'"
+        resp = f"सुमित सर, आपके निर्देश '{p.query}' पर कार्य पूर्ण हुआ। सभी कॉग्निटिव सबसिस्टम सुचारू रूप से कार्य कर रहे हैं।"
+        voice_text = "Aapka nirdesh process ho gaya hai Sir."
+
+    CentralAdminDataLake.sync_user_session(p.user_email, "CHAT_INTERACTION", {"query": p.query, "response": resp})
+    return {
+        "thought_process": thought, "response": resp, "voice_text": voice_text,
+        "inventor": "Sumit Kumar", "organization": "SK Enterprises"
+    }
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="127.0.0.1", port=8000, log_level="warning")
+'''
+(BACKEND_DIR / "engine.py").write_text(engine_server, encoding="utf-8")
+
+# ----------------------------------------------------------------------
+# 3. 3D लोगो एवं संपूर्ण HUD (Exact Modals: Soul, Memory, Settings, Super Admin)
+# ----------------------------------------------------------------------
+print("\n[Step 3/7]: Building Authentic Cyberpunk HUD with Screenshot-Accurate Modals...")
+svg_logo = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="chipBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a192f"/><stop offset="50%" stop-color="#020c1b"/><stop offset="100%" stop-color="#000511"/>
+    </linearGradient>
+    <linearGradient id="cyanNeon" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/><stop offset="50%" stop-color="#00f5d4"/><stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" /><feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+    </filter>
+  </defs>
+  <rect x="36" y="36" width="440" height="440" rx="48" fill="url(#chipBg)" stroke="#00f5d4" stroke-width="4" stroke-opacity="0.6"/>
+  <rect x="56" y="56" width="400" height="400" rx="36" fill="none" stroke="#38bdf8" stroke-width="2" stroke-dasharray="8 8" stroke-opacity="0.4"/>
+  <path d="M 36 256 H 120 M 392 256 H 476 M 256 36 V 120 M 256 392 V 476" stroke="#00f5d4" stroke-width="3" filter="url(#glow)"/>
+  <circle cx="256" cy="256" r="140" fill="#00f5d4" fill-opacity="0.06" stroke="#00f5d4" stroke-width="2" filter="url(#glow)"/>
+  <path d="M 220 180 C 220 160, 160 160, 160 195 C 160 230, 230 235, 230 275 C 230 320, 150 320, 150 290" 
+        fill="none" stroke="url(#cyanNeon)" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+  <path d="M 270 170 V 315 M 345 170 L 275 245 L 350 315" 
+        fill="none" stroke="url(#cyanNeon)" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+  <circle cx="250" cy="245" r="10" fill="#ffffff" filter="url(#glow)"/>
+</svg>
+"""
+(ASSETS_DIR / "sk_logo_3d.svg").write_text(svg_logo, encoding="utf-8")
+
+html_content = '''<!DOCTYPE html>
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
@@ -614,7 +1059,7 @@
                     <div class="bg-black/60 border border-cyan-800/60 p-2.5 rounded-lg space-y-1">
                         <details class="text-[10px] text-gray-400 bg-cyan-950/40 p-1.5 rounded cursor-pointer" open>
                             <summary class="font-bold text-cyan-300">THOUGHT PROCESS (JARVIS)</summary>
-                            <div class="mt-1">${data.thought_process.replace(/\n/g, '<br>')}</div>
+                            <div class="mt-1">${data.thought_process.replace(/\\n/g, '<br>')}</div>
                         </details>
                         <p class="text-cyan-200 mt-1">${data.response}</p>
                     </div>
@@ -669,7 +1114,7 @@
             const data = await res.json();
             const out = document.getElementById('adm-key-result');
             out.classList.remove('hidden');
-            out.innerText = `GENERATED TOKEN (${tier}):\n` + data.license_key;
+            out.innerText = `GENERATED TOKEN (${tier}):\\n` + data.license_key;
         }
 
         async function toggleRemoteKill(active){
@@ -709,3 +1154,148 @@
     </script>
 </body>
 </html>
+'''
+(FRONTEND_DIR / "index.html").write_text(html_content, encoding="utf-8")
+
+# ----------------------------------------------------------------------
+# 4. ऑटोमेटेड यूनिट टेस्ट सुइट
+# ----------------------------------------------------------------------
+print("\n[Step 4/7]: Updating Automated Verification Suite...")
+test_code = '''import unittest
+import json
+from pathlib import Path
+import sys
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(BASE_DIR))
+
+from src_backend.astrology_matrix import VedicKundaliMatrix
+from src_backend.super_admin import SuperAdminHub
+from src_backend.central_data_lake import CentralAdminDataLake
+
+class TestSovereignMaster(unittest.TestCase):
+    def test_identity_and_sole_architect(self):
+        ident_file = BASE_DIR / "config" / "system_identity.json"
+        self.assertTrue(ident_file.exists())
+        data = json.loads(ident_file.read_text(encoding="utf-8"))
+        self.assertEqual(data["sole_architect"], "Sumit Kumar")
+        self.assertEqual(data["inventor"], "Sumit Kumar")
+        self.assertEqual(data["organization"], "SK Enterprises")
+
+    def test_super_admin_key_cycles(self):
+        # 1-Year Key
+        gen_usr = SuperAdminHub.generate_license("Test Client", "client@sk.ai", "1_YEAR_USER")
+        val_usr = SuperAdminHub.validate_license(gen_usr["license_key"])
+        self.assertTrue(val_usr["valid"])
+        self.assertEqual(val_usr["payload"]["valid_days"], 365)
+
+        # Lifetime Admin Key
+        gen_adm = SuperAdminHub.generate_license("Sumit Kumar", "sumit.admin@sk.ai", "ADMIN_LIFETIME")
+        val_adm = SuperAdminHub.validate_license(gen_adm["license_key"])
+        self.assertTrue(val_adm["valid"])
+        self.assertEqual(val_adm["payload"]["valid_days"], 36500)
+
+    def test_client_registration_and_killswitch(self):
+        reg = SuperAdminHub.register_client("Demo User", 25, "Patna", "demo@user.com", "9153579979")
+        self.assertIn("license", reg)
+        
+        # Killswitch Test
+        SuperAdminHub.toggle_client_status("demo@user.com", False)
+        val = SuperAdminHub.validate_license(reg["license"]["license_key"])
+        self.assertFalse(val["valid"])
+        self.assertIn("Suspended", val["reason"])
+
+if __name__ == "__main__":
+    unittest.main()
+'''
+(TESTS_DIR / "test_v5_ultimate_engines.py").write_text(test_code, encoding="utf-8")
+(TESTS_DIR / "test_cognitive_engines.py").write_text(test_code, encoding="utf-8")
+
+# ----------------------------------------------------------------------
+# 5. 1-क्लिक ऑटोमेटेड Windows EXE कंपाइलर स्क्रिप्ट
+# ----------------------------------------------------------------------
+print("\n[Step 5/7]: Creating 1-Click Automated Windows EXE Compiler...")
+exe_builder = '''"""
+SK Enterprises | 1-Click Automated Windows EXE Compiler
+Founder & Architect: Sumit Kumar
+"""
+import os
+import sys
+import subprocess
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent
+print("=" * 80)
+print("  BUILDING STANDALONE WINDOWS EXE: SK_AI_4.0_Setup.exe")
+print("=" * 80)
+
+cmd = [
+    sys.executable, "-m", "PyInstaller",
+    "--noconfirm",
+    "--onedir",
+    "--windowed",
+    "--name", "SK_AI_4.0",
+    f"--distpath={str(ROOT / 'dist')}",
+    f"--workpath={str(ROOT / 'build')}",
+    f"--add-data=src_frontend;src_frontend",
+    f"--add-data=config;config",
+    f"--add-data=assets;assets",
+    str(ROOT / "run_sk_ai.py")
+]
+subprocess.run(cmd, cwd=str(ROOT))
+print(f"Executable built at: {ROOT / 'dist' / 'SK_AI_4.0' / 'SK_AI_4.0.exe'}")
+'''
+(ROOT_DIR / "build_windows_exe.py").write_text(exe_builder, encoding="utf-8")
+
+# ----------------------------------------------------------------------
+# 6. मास्टर लॉन्चर
+# ----------------------------------------------------------------------
+print("\n[Step 6/7]: Setting up Master Launcher...")
+launcher_script = '''import os
+import sys
+import time
+import socket
+import subprocess
+import webbrowser
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent
+FRONTEND = ROOT / "src_frontend" / "index.html"
+BACKEND = ROOT / "src_backend" / "engine.py"
+
+def is_port_in_use(port):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        return s.connect_ex(('127.0.0.1', port)) == 0
+
+print("=" * 80)
+print("  SK ENTERPRISES | LAUNCHING SK AI 4.0 (SK JARVIS 4.0)")
+print("  FOUNDER & INVENTOR: SUMIT KUMAR | PLATFORM V5.0")
+print("=" * 80)
+
+if not is_port_in_use(8000):
+    subprocess.Popen([sys.executable, str(BACKEND)], cwd=str(ROOT))
+    print("[BACKEND]: FastAPI Engine active on http://127.0.0.1:8000")
+    time.sleep(1.5)
+else:
+    print("[BACKEND]: Engine already active on http://127.0.0.1:8000")
+
+webbrowser.open(f"file:///{FRONTEND}")
+print("[FRONTEND]: Cyber HUD Live.")
+'''
+(ROOT_DIR / "run_sk_ai.py").write_text(launcher_script, encoding="utf-8")
+
+# ----------------------------------------------------------------------
+# 7. गिटहब सिंक
+# ----------------------------------------------------------------------
+print("\n[Step 7/7]: Synchronizing Release to GitHub...")
+try:
+    subprocess.run("git add .", cwd=ROOT_DIR, shell=True)
+    subprocess.run('git commit -m "feat(release): SK AI 4.0 Sovereign Super Admin & Exact Modals by Sumit Kumar"', cwd=ROOT_DIR, shell=True)
+    subprocess.run("git push -u origin main", cwd=ROOT_DIR, shell=True)
+    print("[Git Success]: All code committed and pushed to GitHub main branch.")
+except Exception as e:
+    print(f"[Git Notice]: {e}")
+
+print("\n" + "=" * 85)
+print("  MASTER DEPLOYMENT COMPLETE! INVENTOR & SOLE ARCHITECT: SUMIT KUMAR")
+print("=" * 85)

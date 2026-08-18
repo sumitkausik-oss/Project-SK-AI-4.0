@@ -113,6 +113,13 @@ class SKAIHUDApp:
 
         # 2. Data Analyst Suite Tab
         self.tab_data = ttk.Frame(self.notebook, style="Cyber.TFrame")
+        self.notebook.add(self.tab_data, text=" 📊 Data Analyst ")
+        self._setup_data_tab()
+
+        # 3. Coral Brain Visualizer Tab (NEW)
+        self.tab_coral = ttk.Frame(self.notebook, style="Cyber.TFrame")
+        self.notebook.add(self.tab_coral, text=" 🧠 Coral Brain ")
+        self._setup_coral_brain_tab()
         self.notebook.add(self.tab_data, text=" 📊 Data Analyst Suite ")
         self._setup_data_tab()
 
@@ -130,6 +137,22 @@ class SKAIHUDApp:
         self.tab_sec = ttk.Frame(self.notebook, style="Cyber.TFrame")
         self.notebook.add(self.tab_sec, text=" 🛡️ Security & Licensing ")
         self._setup_security_tab()
+
+    def _setup_coral_brain_tab(self):
+        # Neural Core Dynamic Dashboard
+        label = tk.Label(self.tab_coral, text="🧠 Neural Cortex Status Monitor", font=("Segoe UI", 12, "bold"), bg="#080E1C", fg="#00F5D4")
+        label.pack(pady=(15, 5))
+
+        # System Log Display for Evolution Tracking
+        self.log_display = tk.Text(self.tab_coral, height=15, width=80, bg="#0D1B2A", fg="#FFFFFF", font=("Consolas", 10), state="disabled")
+        self.log_display.pack(padx=10, pady=10)
+
+        # Update log placeholder
+        self.log_display.configure(state="normal")
+        self.log_display.insert("end", "[SYSTEM] Universal Mastery Schema Activated.\n")
+        self.log_display.insert("end", "[CORE] Evolution initialized. STEM Matrix linking...\n")
+        self.log_display.insert("end", "[DATA] Cognitive Data stream ready.\n")
+        self.log_display.configure(state="disabled")
 
     def _setup_education_tab(self):
         left = tk.Frame(self.tab_edu, bg="#0D1B2A", width=320, highlightbackground="#00B4D8", highlightthickness=1)

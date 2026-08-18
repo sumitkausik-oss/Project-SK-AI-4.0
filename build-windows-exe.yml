@@ -1,0 +1,37 @@
+name: Build Windows EXE
+
+# Produces the actual SK_AI_4.0.exe on a real Windows machine (GitHub's
+# hosted Windows runner) — this is the piece that can't be done from
+# a Linux sandbox. Push this repo to GitHub and this runs automatically.
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:   # lets you trigger it manually from the Actions tab
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build EXE
+        run: pyinstaller sk_ai.spec --noconfirm
+
+      - name: Upload EXE as a downloadable artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SK_AI_4.0-Windows-EXE
+          path: dist/SK_AI_4.0.exe

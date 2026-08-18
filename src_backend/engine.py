@@ -1,6 +1,6 @@
 """
 SK Enterprises | Master Backend Server (Platform V5.0)
-Founder & Inventor: Sumeet Kumar
+Founder & Inventor: Sumit Kumar
 """
 import os
 import sys
@@ -14,7 +14,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(BASE_DIR))
 
 from src_backend.astrology_matrix import VedicKundaliMatrix
-from src_backend.license_generator import SKLicenseKeyEngine
+from src_backend.super_admin import SuperAdminHub
 from src_backend.central_data_lake import CentralAdminDataLake
 from src_backend.marvel_personas import MarvelCognitiveMatrix
 
@@ -25,12 +25,21 @@ class ChatPayload(BaseModel):
     query: str
     persona: str = "JARVIS"
     language: str = "hi-IN"
-    user_email: str = "sumeet.admin@skenterprises.ai"
+    user_email: str = "sumit.admin@skenterprises.ai"
 
-class LicenseGenPayload(BaseModel):
-    client_name: str
-    client_email: str
-    tier: str = "PRO_COMMERCIAL"
+class OnboardPayload(BaseModel):
+    name: str
+    age: int
+    location: str
+    email: str
+    phone: str
+
+class LicensePayload(BaseModel):
+    token: str
+
+class ToggleUserPayload(BaseModel):
+    email: str
+    active: bool
 
 class KundaliPayload(BaseModel):
     name: str
@@ -44,29 +53,33 @@ def get_status():
         "status": "ONLINE",
         "system": "SK AI 4.0 (SK JARVIS 4.0)",
         "platform_version": "Jarvis Platform V5.0",
-        "inventor": "Sumeet Kumar",
-        "sole_architect": "Sumeet Kumar",
+        "inventor": "Sumit Kumar",
+        "sole_architect": "Sumit Kumar",
         "organization": "SK Enterprises",
-        "license_tier": "LIFETIME_MASTER_ADMIN",
-        "evolution_daemon": "24x7 ACTIVE",
+        "license_tier": "SUPER_ADMIN_LIFETIME",
+        "metrics": CentralAdminDataLake.get_global_metrics(),
         "agents": MarvelCognitiveMatrix.PERSONAS
     }
 
-@app.get("/api/agent_town/workspaces")
-def get_workspaces():
-    return {
-        "rooms": [
-            {"id": "tactical_hq", "name": "Tactical Operations HQ", "x": 10, "y": 10, "w": 280, "h": 160, "color": "#0e2238", "agents": ["JARVIS", "FRIDAY"]},
-            {"id": "ai_lab", "name": "Neural AI Lab (24x7)", "x": 300, "y": 10, "w": 280, "h": 160, "color": "#1f1035", "agents": ["ULTRON_PRIME", "VISION"]},
-            {"id": "vedic_sanctum", "name": "Vedic Astrology Sanctum", "x": 590, "y": 10, "w": 280, "h": 160, "color": "#2c1d05", "agents": ["DOCTOR_STRANGE"]},
-            {"id": "analytics_bay", "name": "Data Analytics & STEM Bay", "x": 10, "y": 180, "w": 420, "h": 150, "color": "#062419", "agents": ["BOB", "CAROL"]},
-            {"id": "security_vault", "name": "Security Vault & Firewall", "x": 440, "y": 180, "w": 430, "h": 150, "color": "#2d1b06", "agents": ["VERONICA"]}
-        ]
-    }
+@app.post("/api/admin/onboard_client")
+def onboard_client(p: OnboardPayload):
+    return SuperAdminHub.register_client(p.name, p.age, p.location, p.email, p.phone)
 
 @app.post("/api/admin/generate_license")
-def generate_client_license(p: LicenseGenPayload):
-    return SKLicenseKeyEngine.generate_client_key(p.client_name, p.client_email, p.tier)
+def generate_license(name: str, email: str, tier: str = "1_YEAR_USER"):
+    return SuperAdminHub.generate_license(name, email, tier)
+
+@app.post("/api/admin/toggle_user")
+def toggle_user(p: ToggleUserPayload):
+    return SuperAdminHub.toggle_client_status(p.email, p.active)
+
+@app.post("/api/admin/dispatch_whatsapp")
+def dispatch_whatsapp(phone: str, name: str, link: str):
+    return SuperAdminHub.dispatch_whatsapp_installer(phone, name, link)
+
+@app.post("/api/license/validate")
+def validate_license(p: LicensePayload):
+    return SuperAdminHub.validate_license(p.token)
 
 @app.post("/api/kundali/generate")
 def generate_kundali(p: KundaliPayload):
@@ -79,51 +92,27 @@ def handle_chat(p: ChatPayload):
     q = p.query.lower().strip()
     persona_info = MarvelCognitiveMatrix.PERSONAS.get(p.persona, MarvelCognitiveMatrix.PERSONAS["JARVIS"])
     
-    # 1. Greetings
     if any(k in q for k in ["hello", "hi", "namaste", "pranam", "kaise ho", "kya haal"]):
-        thought = (
-            f"**[{persona_info['name']}]: Direct Interpersonal Sync**\n"
-            "Interpreting respectful conversational intent from Founder Sumeet Kumar.\n"
-            "Generating personalized bilingual greeting response."
-        )
-        resp = "प्रणाम सुमीत सर! मैं बहुत बढ़िया हूँ। आप कैसे हैं, सर? SK AI 4.0 (SK JARVIS) के सभी न्यूरल सिस्टम 100% ऑप्टिमल क्षमता पर तैयार हैं। आज हम किस प्रोजेक्ट पर काम करेंगे?"
-        voice_text = "Pranam Sumeet Sir! Main bahut badhiya hoon. Aap kaise hain Sir? Sabhi system taiyaar hain."
-    
-    # 2. Identity & Ownership
+        thought = f"**[{persona_info['name']}]: Direct Interpersonal Sync**\nInterpreting conversational intent from Founder Sumit Kumar."
+        resp = "प्रणाम सुमित सर! मैं बहुत बढ़िया हूँ। आप कैसे हैं, सर? SK AI 4.0 के सभी न्यूरल सिस्टम 100% ऑप्टिमल क्षमता पर तैयार हैं।"
+        voice_text = "Pranam Sumit Sir! Main bahut badhiya hoon. Aap kaise hain Sir? Sabhi system taiyaar hain."
     elif any(k in q for k in ["inventor", "creator", "owner", "banaya", "malik", "kaun hai"]):
-        thought = (
-            f"**[{persona_info['name']}]: Sovereign Identity Directives Active**\n"
-            "Querying Immutable Core Governance Signature.\n"
-            "Validated Sole Inventor & Supreme Master: Sumeet Kumar."
-        )
-        resp = f"प्रणाम सुमीत सर! मैं {persona_info['name']} ({persona_info['title']}) हूँ। मेरा निर्माण एवं संपूर्ण स्वामित्व केवल आपके द्वारा 'SK Enterprises' के अंतर्गत किया गया है। Sumeet Kumar ही मेरे एकमात्र निर्माता, स्वामी और मास्टर हैं।"
-        voice_text = f"Pranam Sumeet Sir. Main {persona_info['name']} hoon. Mera nirmaan aur swaamitva keval Sumeet Kumar dwara SK Enterprises ke antargat kiya gaya hai."
-    
-    # 3. Vedic Kundali
+        thought = f"**[{persona_info['name']}]: Sovereign Identity Directive**\nValidated Sole Inventor & Supreme Master: Sumit Kumar."
+        resp = f"प्रणाम सुमित सर! मैं {persona_info['name']} ({persona_info['role']}) हूँ। मेरा निर्माण एवं संपूर्ण स्वामित्व केवल आपके द्वारा 'SK Enterprises' के अंतर्गत किया गया है।"
+        voice_text = f"Pranam Sumit Sir. Main {persona_info['name']} hoon. Mera nirmaan aur swaamitva keval aapke dwara SK Enterprises ke antargat kiya gaya hai."
     elif any(k in q for k in ["kundali", "astrology", "bhavishya", "jyotish"]):
-        thought = f"**[{persona_info['name']}]: Activating Doctor Strange Karmic Matrix**\nCalculating Ephemeris & Dasha harmonic frequencies."
-        resp = "सुमीत सर, वैदिक कुंडली इंजन सक्रिय है। जन्म विवरण दर्ज करते ही संपूर्ण जीवन का भविष्यफल व अचूक वैदिक उपाय 1 सेकंड में प्रस्तुत होंगे।"
+        thought = f"**[{persona_info['name']}]: Activating Doctor Strange Ephemeris Matrix**"
+        resp = "सुमित सर, वैदिक कुंडली इंजन सक्रिय है। जन्म विवरण दर्ज करते ही संपूर्ण जीवन का भविष्यफल व अचूक वैदिक उपाय 1 सेकंड में प्रस्तुत होंगे।"
         voice_text = "Vedic Jyotish engine sakriya hai Sir. Janma vivaran darj karein."
-        
-    # 4. Universal STEM
-    elif any(k in q for k in ["education", "jee", "neet", "ncert", "physics", "math"]):
-        thought = f"**[{persona_info['name']}]: Routing to Vision STEM Engine**\nSynthesizing Class 1-12 NCERT, JEE & NEET assessment matrices."
-        resp = "Universal STEM Engine तैयार है, सर। कक्षा 1-12 NCERT, JEE Main/Advanced और NEET के संपूर्ण नोट्स, टेस्ट सीरीज और स्टेप-बाय-स्टेप सॉल्यूशंस उपलब्ध हैं।"
-        voice_text = "Universal STEM engine taiyaar hai Sir."
-        
     else:
-        thought = f"**[{persona_info['name']}]: Processing Operational Vector**\nExecuting multi-variable analysis on: '{p.query}'"
-        resp = f"सुमीत सर, आपके निर्देश '{p.query}' पर कार्य पूर्ण हुआ। सभी कॉग्निटिव सबसिस्टम सुचारू रूप से कार्य कर रहे हैं।"
-        voice_text = f"Aapka nirdesh process ho gaya hai Sir."
+        thought = f"**[{persona_info['name']}]: Executing Autonomous Directive**\nAnalyzing: '{p.query}'"
+        resp = f"सुमित सर, आपके निर्देश '{p.query}' पर कार्य पूर्ण हुआ। सभी कॉग्निटिव सबसिस्टम सुचारू रूप से कार्य कर रहे हैं।"
+        voice_text = "Aapka nirdesh process ho gaya hai Sir."
 
     CentralAdminDataLake.sync_user_session(p.user_email, "CHAT_INTERACTION", {"query": p.query, "response": resp})
-
     return {
-        "thought_process": thought,
-        "response": resp,
-        "voice_text": voice_text,
-        "inventor": "Sumeet Kumar",
-        "organization": "SK Enterprises"
+        "thought_process": thought, "response": resp, "voice_text": voice_text,
+        "inventor": "Sumit Kumar", "organization": "SK Enterprises"
     }
 
 if __name__ == "__main__":
