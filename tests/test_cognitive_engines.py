@@ -9,6 +9,7 @@ sys.path.insert(0, str(BASE_DIR))
 from src_backend.astrology_matrix import VedicKundaliMatrix
 from src_backend.license_generator import SKLicenseKeyEngine
 from src_backend.marvel_personas import MarvelCognitiveMatrix
+from src_backend.central_data_lake import CentralAdminDataLake
 
 class TestSovereignSKAI4(unittest.TestCase):
     def test_identity_and_sole_architect(self):
@@ -33,9 +34,13 @@ class TestSovereignSKAI4(unittest.TestCase):
         self.assertTrue(len(k["vedic_remedies"]) >= 3)
 
     def test_marvel_matrix_personas(self):
-        self.assertIn("JARVIS", MarvelCognitiveMatrix.PERSONAS)
-        self.assertIn("ULTRON_PRIME", MarvelCognitiveMatrix.PERSONAS)
-        self.assertIn("DOCTOR_STRANGE", MarvelCognitiveMatrix.PERSONAS)
+        for p_key, p in MarvelCognitiveMatrix.PERSONAS.items():
+            self.assertIn("Sumeet Kumar", p["prompt_addon"])
+
+    def test_central_data_lake(self):
+        metrics = CentralAdminDataLake.get_global_metrics()
+        self.assertIn("total_registered_clients", metrics)
+        self.assertEqual(metrics["admin_storage_state"], "ACTIVE_ENCRYPTED")
 
 if __name__ == "__main__":
     unittest.main()

@@ -21,10 +21,10 @@ print("=" * 80)
 
 if not is_port_in_use(8000):
     subprocess.Popen([sys.executable, str(BACKEND)], cwd=str(ROOT))
-    print("[BACKEND]: FastAPI Engine spawned on http://127.0.0.1:8000")
+    print("[BACKEND]: FastAPI Engine active on http://127.0.0.1:8000")
     time.sleep(1.5)
 else:
     print("[BACKEND]: Engine already active on http://127.0.0.1:8000")
 
 webbrowser.open(f"file:///{FRONTEND}")
-print("[FRONTEND]: Cyber HUD & Bilingual Voice Stream LIVE.")
+print("[FRONTEND]: Cyber HUD & Multi-Room Agent Town LIVE.")

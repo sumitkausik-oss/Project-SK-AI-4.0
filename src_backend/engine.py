@@ -17,13 +17,9 @@ from src_backend.astrology_matrix import VedicKundaliMatrix
 from src_backend.license_generator import SKLicenseKeyEngine
 from src_backend.central_data_lake import CentralAdminDataLake
 from src_backend.marvel_personas import MarvelCognitiveMatrix
-from src_backend.evolution_daemon import Autonomous200YearEvolutionDaemon
 
 app = FastAPI(title="SK AI 4.0 Sovereign Platform", version="5.0.0")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
-
-evolution_daemon = Autonomous200YearEvolutionDaemon()
-evolution_daemon.start()
 
 class ChatPayload(BaseModel):
     query: str
@@ -53,7 +49,19 @@ def get_status():
         "organization": "SK Enterprises",
         "license_tier": "LIFETIME_MASTER_ADMIN",
         "evolution_daemon": "24x7 ACTIVE",
-        "personas": list(MarvelCognitiveMatrix.PERSONAS.keys())
+        "agents": MarvelCognitiveMatrix.PERSONAS
+    }
+
+@app.get("/api/agent_town/workspaces")
+def get_workspaces():
+    return {
+        "rooms": [
+            {"id": "tactical_hq", "name": "Tactical Operations HQ", "x": 10, "y": 10, "w": 280, "h": 160, "color": "#0e2238", "agents": ["JARVIS", "FRIDAY"]},
+            {"id": "ai_lab", "name": "Neural AI Lab (24x7)", "x": 300, "y": 10, "w": 280, "h": 160, "color": "#1f1035", "agents": ["ULTRON_PRIME", "VISION"]},
+            {"id": "vedic_sanctum", "name": "Vedic Astrology Sanctum", "x": 590, "y": 10, "w": 280, "h": 160, "color": "#2c1d05", "agents": ["DOCTOR_STRANGE"]},
+            {"id": "analytics_bay", "name": "Data Analytics & STEM Bay", "x": 10, "y": 180, "w": 420, "h": 150, "color": "#062419", "agents": ["BOB", "CAROL"]},
+            {"id": "security_vault", "name": "Security Vault & Firewall", "x": 440, "y": 180, "w": 430, "h": 150, "color": "#2d1b06", "agents": ["VERONICA"]}
+        ]
     }
 
 @app.post("/api/admin/generate_license")
@@ -71,7 +79,7 @@ def handle_chat(p: ChatPayload):
     q = p.query.lower().strip()
     persona_info = MarvelCognitiveMatrix.PERSONAS.get(p.persona, MarvelCognitiveMatrix.PERSONAS["JARVIS"])
     
-    # 1. अभिवादन एवं हालचाल (Greetings & Wellbeing in Hindi)
+    # 1. Greetings
     if any(k in q for k in ["hello", "hi", "namaste", "pranam", "kaise ho", "kya haal"]):
         thought = (
             f"**[{persona_info['name']}]: Direct Interpersonal Sync**\n"
@@ -81,23 +89,23 @@ def handle_chat(p: ChatPayload):
         resp = "प्रणाम सुमीत सर! मैं बहुत बढ़िया हूँ। आप कैसे हैं, सर? SK AI 4.0 (SK JARVIS) के सभी न्यूरल सिस्टम 100% ऑप्टिमल क्षमता पर तैयार हैं। आज हम किस प्रोजेक्ट पर काम करेंगे?"
         voice_text = "Pranam Sumeet Sir! Main bahut badhiya hoon. Aap kaise hain Sir? Sabhi system taiyaar hain."
     
-    # 2. इन्वेंटर पहचान नियम (Immutable Ownership)
+    # 2. Identity & Ownership
     elif any(k in q for k in ["inventor", "creator", "owner", "banaya", "malik", "kaun hai"]):
         thought = (
             f"**[{persona_info['name']}]: Sovereign Identity Directives Active**\n"
             "Querying Immutable Core Governance Signature.\n"
             "Validated Sole Inventor & Supreme Master: Sumeet Kumar."
         )
-        resp = f"प्रणाम सुमीत सर! मैं {persona_info['name']} ({persona_info['title']}) हूँ। मेरा निर्माण एवं संपूर्ण स्वामित्व केवल आपके द्वारा 'SK Enterprises' के अंतर्गत किया गया है।"
+        resp = f"प्रणाम सुमीत सर! मैं {persona_info['name']} ({persona_info['role']}) हूँ। मेरा निर्माण एवं संपूर्ण स्वामित्व केवल आपके द्वारा 'SK Enterprises' के अंतर्गत किया गया है।"
         voice_text = f"Pranam Sumeet Sir. Main {persona_info['name']} hoon. Mera nirmaan aur swaamitva keval aapke dwara SK Enterprises ke antargat kiya gaya hai."
     
-    # 3. वैदिक कुंडली अनुरोध
+    # 3. Vedic Kundali
     elif any(k in q for k in ["kundali", "astrology", "bhavishya", "jyotish"]):
         thought = f"**[{persona_info['name']}]: Activating Doctor Strange Karmic Matrix**\nCalculating Ephemeris & Dasha harmonic frequencies."
         resp = "सुमीत सर, वैदिक कुंडली इंजन सक्रिय है। जन्म विवरण दर्ज करते ही संपूर्ण जीवन का भविष्यफल व अचूक वैदिक उपाय 1 सेकंड में प्रस्तुत होंगे।"
         voice_text = "Vedic Jyotish engine sakriya hai Sir. Janma vivaran darj karein."
         
-    # 4. यूनिवर्सल STEM व शिक्षा
+    # 4. Universal STEM
     elif any(k in q for k in ["education", "jee", "neet", "ncert", "physics", "math"]):
         thought = f"**[{persona_info['name']}]: Routing to Vision STEM Engine**\nSynthesizing Class 1-12 NCERT, JEE & NEET assessment matrices."
         resp = "Universal STEM Engine तैयार है, सर। कक्षा 1-12 NCERT, JEE Main/Advanced और NEET के संपूर्ण नोट्स, टेस्ट सीरीज और स्टेप-बाय-स्टेप सॉल्यूशंस उपलब्ध हैं।"

@@ -1,6 +1,6 @@
 """
 SK Enterprises | Central Admin Telemetry & Memory Lake
-Founder, Inventor & Sole Architect: Sumeet Kumar
+Founder & Architect: Sumeet Kumar
 """
 import json
 import time
@@ -34,10 +34,10 @@ class CentralAdminDataLake:
 
     @staticmethod
     def get_global_metrics():
-        users_count = len(list((STORAGE_DIR / "users").glob("*"))) if (STORAGE_DIR / "users").exists() else 0
+        users_dir = STORAGE_DIR / "users"
+        users_count = len(list(users_dir.glob("*"))) if users_dir.exists() else 0
         return {
             "total_registered_clients": max(users_count, 1),
             "admin_storage_state": "ACTIVE_ENCRYPTED",
-            "central_lake_path": str(STORAGE_DIR),
-            "architect": "Sumeet Kumar (SK Enterprises)"
+            "central_lake_path": str(STORAGE_DIR)
         }
