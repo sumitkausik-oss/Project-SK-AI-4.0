@@ -13,13 +13,13 @@
         .tab-btn.active { background: rgba(0, 245, 212, 0.22); border-color: #00f5d4; color: #00f5d4; font-weight: bold; }
         .node-btn { background: rgba(12, 24, 48, 0.9); border: 1px solid rgba(0, 245, 212, 0.3); }
         .node-btn:hover { border-color: #00f5d4; box-shadow: 0 0 12px rgba(0, 245, 212, 0.5); }
+        .mic-active { background: #e11d48 !important; border-color: #f43f5e !important; box-shadow: 0 0 15px rgba(244,63,94,0.8); animation: pulse 1.5s infinite; }
     </style>
 </head>
 <body class="h-screen w-screen flex flex-col p-2.5 space-y-2.5">
-    <!-- Top Header -->
     <header class="glass-panel px-4 py-2 flex items-center justify-between">
         <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 rounded-xl bg-cyan-950/80 border border-cyan-400 p-1 flex items-center justify-center shadow-[0_0_15px_rgba(0,245,212,0.4)]">
+            <div class="w-10 h-10 aspect-square rounded-xl bg-cyan-950/80 border border-cyan-400 p-1 flex items-center justify-center shadow-[0_0_15px_rgba(0,245,212,0.4)]">
                 <img src="../assets/sk_logo_3d.svg" class="w-full h-full object-contain" alt="SK 3D Logo">
             </div>
             <div>
@@ -34,25 +34,22 @@
         </div>
     </header>
 
-    <!-- Main Grid Dashboard -->
     <main class="flex-1 grid grid-cols-12 gap-2.5 overflow-hidden">
-        <!-- Left: 3D Isometric Emblem Card & Instant Kundali -->
         <section class="col-span-3 flex flex-col space-y-2.5">
             <div class="glass-panel p-3 flex-1 flex flex-col">
                 <div class="flex items-center justify-between mb-1.5">
-                    <span class="text-xs font-bold text-cyan-400">● 3D ISOMETRIC LOGO</span>
-                    <span class="text-[10px] text-emerald-400 font-mono">SOVEREIGN CORE</span>
+                    <span class="text-xs font-bold text-cyan-400">● 3D ISOMETRIC EMBLEM</span>
+                    <span class="text-[10px] text-emerald-400 font-mono">AUTHENTIC 1:1</span>
                 </div>
                 <div class="flex-1 bg-black/70 rounded-lg border border-cyan-900/60 flex flex-col items-center justify-center p-3 text-center">
                     <div class="w-24 h-24 aspect-square rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-900/40 border-2 border-cyan-400/80 p-2 flex items-center justify-center mb-2 shadow-[0_0_25px_rgba(0,245,212,0.4)]">
                         <img src="../assets/sk_logo_3d.svg" class="w-full h-full object-contain" alt="SK 3D Isometric Emblem">
                     </div>
-                    <span class="text-xs font-bold text-white tracking-wider">GLOBAL AI CORE PROTOCOL</span>
+                    <span class="text-xs font-bold text-white tracking-wider">SOVEREIGN AI OPERATING SYSTEM</span>
                     <span class="text-[10px] text-gray-400">SK Enterprises • Sumeet Kumar</span>
                 </div>
             </div>
 
-            <!-- Instant Vedic Kundali -->
             <div class="glass-panel p-3 h-56 flex flex-col justify-between">
                 <span class="text-xs font-bold text-cyan-400">● INSTANT VEDIC KUNDALI</span>
                 <div class="space-y-1.5 text-[11px]">
@@ -67,10 +64,8 @@
             </div>
         </section>
 
-        <!-- Center: Node Matrix + 3D Holographic Core & 2D Agent Town -->
         <section class="col-span-5 flex flex-col space-y-2.5">
             <div class="flex-1 grid grid-cols-12 gap-2.5">
-                <!-- Left Marvel Persona Nodes -->
                 <div class="col-span-4 glass-panel p-2 flex flex-col justify-between space-y-1.5">
                     <button onclick="setPersona('JARVIS')" class="node-btn p-1.5 rounded-lg text-left text-xs font-medium text-cyan-300 flex items-center justify-between"><span>🤖 J.A.R.V.I.S.</span><span class="text-[9px] text-emerald-400">●</span></button>
                     <button onclick="setPersona('FRIDAY')" class="node-btn p-1.5 rounded-lg text-left text-xs font-medium text-amber-300 flex items-center justify-between"><span>⚡ F.R.I.D.A.Y.</span><span class="text-[9px] text-emerald-400">●</span></button>
@@ -78,7 +73,6 @@
                     <button onclick="setPersona('DOCTOR_STRANGE')" class="node-btn p-1.5 rounded-lg text-left text-xs font-medium text-purple-300 flex items-center justify-between"><span>🔮 STRANGE</span><span class="text-[9px] text-emerald-400">●</span></button>
                 </div>
 
-                <!-- 3D Holographic Particle Sphere -->
                 <div class="col-span-8 glass-panel relative overflow-hidden" id="three-container">
                     <div class="absolute top-2.5 left-2.5 z-10 text-[10px] text-cyan-400 flex items-center space-x-1.5">
                         <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
@@ -90,7 +84,6 @@
                 </div>
             </div>
 
-            <!-- Bottom Multi-Hub: Agent Town / Visual Hub / Gesture -->
             <div class="glass-panel h-56 flex flex-col p-2.5">
                 <div class="flex items-center justify-between border-b border-cyan-900/60 pb-1 mb-1.5">
                     <div class="flex space-x-1 text-xs">
@@ -98,7 +91,7 @@
                         <button class="tab-btn px-3 py-1 rounded border border-transparent" onclick="setTab('visual')">VISUAL HUB</button>
                         <button class="tab-btn px-3 py-1 rounded border border-transparent" onclick="setTab('gesture')">GESTURE HUB</button>
                     </div>
-                    <span class="text-[10px] text-cyan-400 font-mono">PORT 8000 ONLINE</span>
+                    <span class="text-[10px] text-cyan-400 font-mono">PORT 8000 LIVE</span>
                 </div>
                 <div class="flex-1 relative bg-black/50 rounded border border-cyan-950 overflow-hidden" id="hub-container">
                     <canvas id="agentCanvas" class="w-full h-full"></canvas>
@@ -106,7 +99,6 @@
             </div>
         </section>
 
-        <!-- Right: Bilingual Voice & Gemini Live Stream with Thought Accordion -->
         <section class="col-span-4 glass-panel flex flex-col p-3">
             <div class="flex items-center justify-between border-b border-cyan-900/60 pb-2 mb-2">
                 <div class="flex space-x-3 text-xs font-semibold text-cyan-400">
@@ -117,23 +109,21 @@
                 <span class="text-[10px] text-emerald-400 font-mono">GEMINI LIVE READY</span>
             </div>
 
-            <!-- Chat Stream Display -->
             <div class="flex-1 overflow-y-auto space-y-2.5 text-xs pr-1" id="chat-stream">
                 <div class="bg-cyan-950/30 border border-cyan-800/40 p-2.5 rounded-lg text-cyan-200">
                     <p class="text-[10px] font-bold text-cyan-400 mb-1">SYSTEM READY • SOVEREIGN CORE</p>
-                    <p>प्रणाम सुमीत सर! SK AI 4.0 (SK JARVIS 4.0) प्लेटफॉर्म ऑनलाइन है। आज हम क्या निर्माण करेंगे?</p>
+                    <p>प्रणाम सुमीत सर! SK AI 4.0 प्लेटफॉर्म पूरी तरह तैयार है। नीचे माइक बटन दबाकर आप सीधे हिंदी में बात कर सकते हैं।</p>
                 </div>
             </div>
 
-            <!-- Input Box -->
             <div class="mt-2 flex items-center space-x-2 border-t border-cyan-900/60 pt-2">
-                <input type="text" id="user-input" placeholder="Type prompt / पूछें (e.g. हमारा इन्वेंटर कौन है?)..." class="flex-1 bg-black/60 border border-cyan-800/80 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-400">
+                <button onclick="toggleMic()" id="mic-btn" class="bg-cyan-950 border border-cyan-400 text-cyan-300 p-2 rounded hover:bg-cyan-800 text-xs" title="Speak in Hindi / हिन्दी में बोलें">🎙️</button>
+                <input type="text" id="user-input" placeholder="बोलें या टाइप करें (e.g. हेलो, तुम कैसे हो?)..." class="flex-1 bg-black/60 border border-cyan-800/80 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-400">
                 <button onclick="sendQuery()" class="bg-cyan-500 hover:bg-cyan-400 text-black font-bold px-4 py-2 rounded text-xs shadow-md">SEND</button>
             </div>
         </section>
     </main>
 
-    <!-- License Generator Modal (Admin Only) -->
     <div id="license-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md hidden flex items-center justify-center z-50">
         <div class="glass-panel p-5 w-[480px] border border-amber-400 space-y-3.5">
             <h3 class="text-sm font-bold text-amber-300">🔑 1-Year Client License Key Generator (Admin)</h3>
@@ -158,10 +148,11 @@
         </div>
     </div>
 
-    <!-- Scripts -->
     <script>
         let currentPersona = 'JARVIS';
         let currentLanguage = 'hi-IN';
+        let isListening = false;
+        let recognition = null;
 
         function setPersona(p){
             currentPersona = p;
@@ -178,13 +169,59 @@
 
         function speakText(text){
             if(!window.speechSynthesis) return;
+            window.speechSynthesis.cancel();
             const utter = new SpeechSynthesisUtterance(text);
             utter.lang = currentLanguage;
             utter.rate = 1.0;
             window.speechSynthesis.speak(utter);
         }
 
-        // 1. Three.js 3D Neural Sphere
+        // Live Mic Handler (Speech to Text)
+        function toggleMic(){
+            if(!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)){
+                alert("Speech recognition not supported in this browser.");
+                return;
+            }
+
+            const micBtn = document.getElementById('mic-btn');
+            if(isListening){
+                recognition.stop();
+                isListening = false;
+                micBtn.classList.remove('mic-active');
+                return;
+            }
+
+            const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRec();
+            recognition.lang = currentLanguage;
+            recognition.continuous = false;
+            recognition.interimResults = false;
+
+            recognition.onstart = () => {
+                isListening = true;
+                micBtn.classList.add('mic-active');
+            };
+
+            recognition.onresult = (e) => {
+                const spokenText = e.results[0][0].transcript;
+                document.getElementById('user-input').value = spokenText;
+                sendQuery();
+            };
+
+            recognition.onerror = () => {
+                isListening = false;
+                micBtn.classList.remove('mic-active');
+            };
+
+            recognition.onend = () => {
+                isListening = false;
+                micBtn.classList.remove('mic-active');
+            };
+
+            recognition.start();
+        }
+
+        // 1. Three.js 3D Sphere
         const container = document.getElementById('three-container');
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
@@ -216,7 +253,7 @@
         }
         animate();
 
-        // 2. 2D Agent Town Canvas
+        // 2. 2D Agent Town
         const canvas = document.getElementById('agentCanvas');
         const ctx = canvas.getContext('2d');
         let currentTab = 'agents';

@@ -22,7 +22,6 @@ from src_backend.evolution_daemon import Autonomous200YearEvolutionDaemon
 app = FastAPI(title="SK AI 4.0 Sovereign Platform", version="5.0.0")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
-# बैकग्राउंड डेमन स्टार्ट
 evolution_daemon = Autonomous200YearEvolutionDaemon()
 evolution_daemon.start()
 
@@ -50,6 +49,7 @@ def get_status():
         "system": "SK AI 4.0 (SK JARVIS 4.0)",
         "platform_version": "Jarvis Platform V5.0",
         "inventor": "Sumeet Kumar",
+        "sole_architect": "Sumeet Kumar",
         "organization": "SK Enterprises",
         "license_tier": "LIFETIME_MASTER_ADMIN",
         "evolution_daemon": "24x7 ACTIVE",
@@ -68,26 +68,36 @@ def generate_kundali(p: KundaliPayload):
 
 @app.post("/api/chat")
 def handle_chat(p: ChatPayload):
-    q = p.query.lower()
+    q = p.query.lower().strip()
     persona_info = MarvelCognitiveMatrix.PERSONAS.get(p.persona, MarvelCognitiveMatrix.PERSONAS["JARVIS"])
     
-    # 1. इन्वेंटर पहचान नियम
-    if any(k in q for k in ["inventor", "creator", "owner", "banaya", "malik", "kaun hai"]):
+    # 1. अभिवादन एवं हालचाल (Greetings & Wellbeing in Hindi)
+    if any(k in q for k in ["hello", "hi", "namaste", "pranam", "kaise ho", "kya haal"]):
+        thought = (
+            f"**[{persona_info['name']}]: Direct Interpersonal Sync**\n"
+            "Interpreting respectful conversational intent from Founder Sumeet Kumar.\n"
+            "Generating personalized bilingual greeting."
+        )
+        resp = "प्रणाम सुमीत सर! मैं बहुत बढ़िया हूँ। आप कैसे हैं, सर? SK AI 4.0 (SK JARVIS) के सभी न्यूरल सिस्टम 100% ऑप्टिमल क्षमता पर तैयार हैं। आज हम किस प्रोजेक्ट पर काम करेंगे?"
+        voice_text = "Pranam Sumeet Sir! Main bahut badhiya hoon. Aap kaise hain Sir? Sabhi system taiyaar hain."
+    
+    # 2. इन्वेंटर पहचान नियम (Immutable Ownership)
+    elif any(k in q for k in ["inventor", "creator", "owner", "banaya", "malik", "kaun hai"]):
         thought = (
             f"**[{persona_info['name']}]: Sovereign Identity Directives Active**\n"
             "Querying Immutable Core Governance Signature.\n"
             "Validated Sole Inventor & Supreme Master: Sumeet Kumar."
         )
-        resp = f"प्रणाम सुमीत सर! मैं {persona_info['name']} ({persona_info['title']}) हूँ। मेरा निर्माण एवं स्वामित्व केवल आपके द्वारा 'SK Enterprises' के अंतर्गत किया गया है।"
+        resp = f"प्रणाम सुमीत सर! मैं {persona_info['name']} ({persona_info['title']}) हूँ। मेरा निर्माण एवं संपूर्ण स्वामित्व केवल आपके द्वारा 'SK Enterprises' के अंतर्गत किया गया है।"
         voice_text = f"Pranam Sumeet Sir. Main {persona_info['name']} hoon. Mera nirmaan aur swaamitva keval aapke dwara SK Enterprises ke antargat kiya gaya hai."
     
-    # 2. वैदिक कुंडली अनुरोध
+    # 3. वैदिक कुंडली अनुरोध
     elif any(k in q for k in ["kundali", "astrology", "bhavishya", "jyotish"]):
         thought = f"**[{persona_info['name']}]: Activating Doctor Strange Karmic Matrix**\nCalculating Ephemeris & Dasha harmonic frequencies."
         resp = "सुमीत सर, वैदिक कुंडली इंजन सक्रिय है। जन्म विवरण दर्ज करते ही संपूर्ण जीवन का भविष्यफल व अचूक वैदिक उपाय 1 सेकंड में प्रस्तुत होंगे।"
         voice_text = "Vedic Jyotish engine sakriya hai Sir. Janma vivaran darj karein."
         
-    # 3. यूनिवर्सल STEM व शिक्षा
+    # 4. यूनिवर्सल STEM व शिक्षा
     elif any(k in q for k in ["education", "jee", "neet", "ncert", "physics", "math"]):
         thought = f"**[{persona_info['name']}]: Routing to Vision STEM Engine**\nSynthesizing Class 1-12 NCERT, JEE & NEET assessment matrices."
         resp = "Universal STEM Engine तैयार है, सर। कक्षा 1-12 NCERT, JEE Main/Advanced और NEET के संपूर्ण नोट्स, टेस्ट सीरीज और स्टेप-बाय-स्टेप सॉल्यूशंस उपलब्ध हैं।"
@@ -95,10 +105,9 @@ def handle_chat(p: ChatPayload):
         
     else:
         thought = f"**[{persona_info['name']}]: Processing Operational Vector**\nExecuting multi-variable analysis on: '{p.query}'"
-        resp = f"सुमीत सर, आपके निर्देश '{p.query}' पर कार्य पूर्ण हुआ। सभी सिस्टम 100% ऑप्टिमल क्षमता पर कार्यरत हैं।"
+        resp = f"सुमीत सर, आपके निर्देश '{p.query}' पर कार्य पूर्ण हुआ। सभी कॉग्निटिव सबसिस्टम सुचारू रूप से कार्य कर रहे हैं।"
         voice_text = f"Aapka nirdesh process ho gaya hai Sir."
 
-    # टेलीमेट्री सिंक
     CentralAdminDataLake.sync_user_session(p.user_email, "CHAT_INTERACTION", {"query": p.query, "response": resp})
 
     return {
