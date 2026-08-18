@@ -1,6 +1,6 @@
 """
 SK Enterprises | 1-Year Client Cryptographic License Engine
-Founder & Architect: Sumeet Kumar
+Founder & Architect: Sumit Kumar
 """
 import json
 import base64
@@ -8,7 +8,7 @@ import hmac
 import hashlib
 from datetime import datetime, timedelta
 
-MASTER_SALT = "SK_ENTERPRISES_SUMEET_KUMAR_2026_SOVEREIGN_SECRET"
+MASTER_SALT = "SK_ENTERPRISES_SUMIT_KUMAR_2026_SOVEREIGN_SECRET"
 
 class SKLicenseKeyEngine:
     @staticmethod
@@ -21,7 +21,7 @@ class SKLicenseKeyEngine:
             "client_name": client_name,
             "client_email": client_email,
             "tier": tier,
-            "issuer": "SK Enterprises (Sumeet Kumar)",
+            "issuer": "SK Enterprises (Sumit Kumar)",
             "issued_at": issued_date.strftime("%Y-%m-%d"),
             "expires_at": expiry_date.strftime("%Y-%m-%d"),
             "valid_days": 365

@@ -1,6 +1,6 @@
 """
 SK Enterprises | System Paths & Crash Interception Infrastructure
-Inventor & Sole Architect: Sumeet Kumar
+Inventor & Sole Architect: Sumit Kumar
 """
 import os
 import sys
@@ -63,6 +63,6 @@ def log_crash_and_notify(title: str, exc: Exception):
         f"A critical exception occurred in SK AI 4.0:\n\n"
         f"{str(exc)}\n\n"
         f"Full crash logs have been saved to:\n{CRASH_LOG}\n\n"
-        f"Inventor: Sumeet Kumar (SK Enterprises)"
+        f"Inventor: Sumit Kumar (SK Enterprises)"
     )
     show_native_error_dialog(title, msg)

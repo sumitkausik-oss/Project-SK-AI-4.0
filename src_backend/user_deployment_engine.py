@@ -1,6 +1,6 @@
 """
 SK Enterprises | User Deployment Engine & WhatsApp Dispatcher
-Founder, Inventor & Sole Architect: Sumeet Kumar
+Founder, Inventor & Sole Architect: Sumit Kumar
 Platform V5.0 — Multi-Platform Deployment & Distribution Hub
 
 Functions:
@@ -46,7 +46,7 @@ class UserDeploymentEngine:
             "license_key": license_key,
             "license_tier": "PRO_COMMERCIAL_1YR",
             "issuer": "SK Enterprises",
-            "founder": "Sumeet Kumar",
+            "founder": "Sumit Kumar",
             "anti_extraction_locked": True,
             "auto_sync_enabled": True
         }
@@ -59,7 +59,7 @@ class UserDeploymentEngine:
 title SK AI 4.0 - Licensed to {user_name}
 echo ===============================================================================
 echo   SK ENTERPRISES ^| SK AI 4.0 (PROJECT JARVIS 4.0)
-echo   SOLE INVENTOR ^& ARCHITECT: SUMEET KUMAR
+echo   SOLE INVENTOR ^& ARCHITECT: SUMIT KUMAR
 echo   LICENSED TO: {user_name} ({user_email})
 echo ===============================================================================
 echo Starting Secure Sovereign Runtime...
@@ -96,7 +96,7 @@ pause
             "phone": user_phone,
             "license": license_key[:20] + "...",
             "target_os": "Android 10+",
-            "certified_by": "SK Enterprises (Sumeet Kumar)",
+            "certified_by": "SK Enterprises (Sumit Kumar)",
             "play_store_certified": True
         }
         
@@ -124,7 +124,7 @@ pause
             
         message = (
             f"👑 *SK ENTERPRISES | SK AI 4.0 (Project JARVIS 4.0)*\n"
-            f"Founder & Inventor: *Sumeet Kumar*\n\n"
+            f"Founder & Inventor: *Sumit Kumar*\n\n"
             f"नमस्ते {user_name} जी!\n"
             f"आपका SK AI 4.0 सॉवरेन इंटेलिजेंस पैकेज तैयार है।\n\n"
             f"📥 *Download Installer Link:* {download_link}\n"

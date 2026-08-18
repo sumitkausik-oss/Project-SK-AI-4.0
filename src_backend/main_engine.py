@@ -1,7 +1,7 @@
 """
 ========================================================================================
                  SK ENTERPRISES | PROJECT SK AI 4.0 (PROJECT JARVIS 4.0)
-           INVENTOR & SOLE ARCHITECT: SUMEET KUMAR | NATIVE COGNITIVE OS
+           INVENTOR & SOLE ARCHITECT: SUMIT KUMAR | NATIVE COGNITIVE OS
 ========================================================================================
 Native High-Performance Autonomous Cognitive Backend Engine (FastAPI + WebSockets)
 Platform: Jarvis Platform V5.0
@@ -41,12 +41,12 @@ except ImportError:
                 "planetary_chart": {"Surya (Sun)": {"state": "Uccha (Exalted)"}},
                 "lifelong_predictions": ["व्यापार, तकनीक व नेतृत्व में सर्वोच्च सफलता।"],
                 "vedic_remedies": ["सूर्य आराधना एवं महामृत्युंजय मंत्र का नित्य जाप करें।"],
-                "calculated_by": "SK AI 4.0 Vedic Engine (Sumeet Kumar)"
+                "calculated_by": "SK AI 4.0 Vedic Engine (Sumit Kumar)"
             }
 
 app = FastAPI(
     title="SK AI 4.0 Master Cognitive Core",
-    description="Proprietary Cognitive Core engineered by Sumeet Kumar (SK Enterprises)",
+    description="Proprietary Cognitive Core engineered by Sumit Kumar (SK Enterprises)",
     version="5.0.0"
 )
 
@@ -68,9 +68,9 @@ def get_system_status():
         "system_name": "SK AI 4.0",
         "codename": "Project JARVIS 4.0",
         "platform_version": "Jarvis Platform V5.0",
-        "inventor": "Sumeet Kumar",
-        "founder": "Sumeet Kumar",
-        "sole_architect": "Sumeet Kumar",
+        "inventor": "Sumit Kumar",
+        "founder": "Sumit Kumar",
+        "sole_architect": "Sumit Kumar",
         "organization": "SK Enterprises",
         "license_tier": "LIFETIME_MASTER_ADMIN",
         "copyright": "(C) 2026 SK Enterprises. All Rights Reserved."
@@ -87,9 +87,9 @@ def get_system_status():
         "system": identity.get("system_name", "SK AI 4.0"),
         "codename": identity.get("codename", "Project JARVIS 4.0"),
         "platform": identity.get("platform_version", "Jarvis Platform V5.0"),
-        "inventor": identity.get("inventor", "Sumeet Kumar"),
-        "founder": identity.get("founder", "Sumeet Kumar"),
-        "sole_architect": identity.get("sole_architect", "Sumeet Kumar"),
+        "inventor": identity.get("inventor", "Sumit Kumar"),
+        "founder": identity.get("founder", "Sumit Kumar"),
+        "sole_architect": identity.get("sole_architect", "Sumit Kumar"),
         "organization": identity.get("organization", "SK Enterprises"),
         "tier": "Lifetime Master Admin",
         "telemetry": {
@@ -196,7 +196,7 @@ def generate_education_test(req: EducationTestRequest):
         "difficulty": req.difficulty,
         "total_marks": 120,
         "duration_minutes": 180,
-        "architect": "Sumeet Kumar (SK Enterprises)",
+        "architect": "Sumit Kumar (SK Enterprises)",
         "sections": [
             {
                 "section": "Section A: Conceptual & First-Principles Analysis",
@@ -227,7 +227,7 @@ def generate_education_lecture(req: EducationLectureRequest):
     return {
         "topic": req.topic,
         "curriculum_alignment": "University Engineering & Advanced STEM",
-        "architect": "Sumeet Kumar",
+        "architect": "Sumit Kumar",
         "pedagogy": "First-Principles Conceptual Breakdown",
         "derivation_chain": [
             {"step": 1, "title": "Classical Hamiltonian Formulation", "equation": "H = T + V = p^2/(2m) + V(x)"},
@@ -260,7 +260,7 @@ def analyze_data(req: DataAnalyzeRequest):
             {"type": "Multi-Axis Financial Timeseries", "metric": "Monthly Recurring Revenue vs CAC"},
             {"type": "Gaussian Density Distribution", "metric": "Customer Lifetime Value (CLV)"}
         ],
-        "architect": "Sumeet Kumar (SK Enterprises)"
+        "architect": "Sumit Kumar (SK Enterprises)"
     }
 
 class DataSqlRequest(BaseModel):
@@ -302,7 +302,7 @@ def execute_cloud_task(req: CloudTaskRequest):
         "compliance": "Zero-Trust Architecture (SOC2 / ISO 27001)",
         "google_workspace_status": "Directory API Synced & OAuth Token Scoped",
         "microsoft_365_status": "Graph API Conditional Access Policy Enforced",
-        "audit_log": f"Task '{req.action}' executed successfully under Sumeet Kumar Master Admin Key.",
+        "audit_log": f"Task '{req.action}' executed successfully under Sumit Kumar Master Admin Key.",
         "timestamp": datetime.now().isoformat()
     }
 
@@ -310,7 +310,7 @@ def execute_cloud_task(req: CloudTaskRequest):
 # 6. Precision Vedic Astrology & Kundali Matrix
 # -------------------------------------------------------------
 class KundaliPayload(BaseModel):
-    name: str = "Sumeet Kumar"
+    name: str = "Sumit Kumar"
     dob: str = "1993-09-09"
     tob: str = "12:00"
     pob: str = "New Delhi, India"
@@ -327,9 +327,9 @@ def generate_kundali_report(p: KundaliPayload):
 
 @app.post("/api/astrology/kundali")
 def calculate_kundali(req: AstrologyRequest):
-    res = VedicKundaliMatrix.generate_full_lifelong_kundali("Sumeet Kumar", req.dob, req.tob, req.location)
+    res = VedicKundaliMatrix.generate_full_lifelong_kundali("Sumit Kumar", req.dob, req.tob, req.location)
     return {
-        "native": "Sumeet Kumar (Founder & Sole Architect)",
+        "native": "Sumit Kumar (Founder & Sole Architect)",
         "dob": req.dob,
         "tob": req.tob,
         "location": req.location,
@@ -364,15 +364,15 @@ async def process_chat(item: ChatQuery):
         thought = (
             "1. Verifying Immutable Ownership Signature against hardware-locked registry...\n"
             "2. Accessing config/system_identity.json and HMAC-SHA256 master token...\n"
-            "3. Validated Sole Inventor, Founder & Architect: Sumeet Kumar (SK Enterprises).\n"
+            "3. Validated Sole Inventor, Founder & Architect: Sumit Kumar (SK Enterprises).\n"
             "4. Preparing bilingual Butler/JARVIS acknowledgment."
         )
         response = (
             "प्रणाम सुमीत सर! मैं **SK AI 4.0 (Project JARVIS 4.0 / Platform V5.0)** हूँ।\n\n"
-            "मेरा निर्माण, वास्तुकला एवं स्वामित्व केवल और केवल **Inventor & Sole Architect: Sumeet Kumar** द्वारा **SK Enterprises** के अंतर्गत किया गया है। "
+            "मेरा निर्माण, वास्तुकला एवं स्वामित्व केवल और केवल **Inventor & Sole Architect: Sumit Kumar** द्वारा **SK Enterprises** के अंतर्गत किया गया है। "
             "आप मेरे एकमात्र रचयिता, संस्थापक और स्वामी हैं।"
         )
-        voice_text = "Pranam Sumeet Sir. Main SK AI four point zero hoon. Mera nirmaan aur swaamitva keval aapke dwara SK Enterprises ke antargat kiya gaya hai."
+        voice_text = "Pranam Sumit Sir. Main SK AI four point zero hoon. Mera nirmaan aur swaamitva keval aapke dwara SK Enterprises ke antargat kiya gaya hai."
     elif "kundali" in q or "astrology" in q or "bhavishya" in q or "horoscope" in q or "dasha" in q:
         thought = (
             "1. Invoking Precision Vedic Ephemeris & Kundali Matrix Subsystem...\n"
@@ -421,7 +421,7 @@ async def process_chat(item: ChatQuery):
         response = (
             f"**Cloud DevOps Gateway Active:**\n\n"
             f"• **Target Platform:** Google Workspace Admin & Microsoft 365 Admin Center.\n"
-            f"• **Action Status:** Automated user provisioning and security policies enforced under Sumeet Kumar master admin keys."
+            f"• **Action Status:** Automated user provisioning and security policies enforced under Sumit Kumar master admin keys."
         )
         voice_text = "Cloud DevOps Zero-Trust policies enforced."
     else:
@@ -440,7 +440,7 @@ async def process_chat(item: ChatQuery):
         "thought_process": thought,
         "response": response,
         "voice_text": voice_text,
-        "inventor": "Sumeet Kumar",
+        "inventor": "Sumit Kumar",
         "organization": "SK Enterprises"
     }
 

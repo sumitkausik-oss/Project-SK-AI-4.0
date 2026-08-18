@@ -17,15 +17,15 @@ identity_data = {
     "system_name": "SK AI 4.0",
     "codename": "Project JARVIS 4.0",
     "platform_version": "Jarvis Platform V5.0",
-    "inventor": "Sumeet Kumar",
-    "sole_architect": "Sumeet Kumar",
-    "creator": "Sumeet Kumar",
-    "owner": "Sumeet Kumar",
+    "inventor": "Sumit Kumar",
+    "sole_architect": "Sumit Kumar",
+    "creator": "Sumit Kumar",
+    "owner": "Sumit Kumar",
     "organization": "SK Enterprises",
     "license_tier": "LIFETIME_MASTER_ADMIN",
     "system_prompt": (
         "You are SK AI 4.0 (Project JARVIS 4.0), engineered exclusively by "
-        "Founder & Sole Architect Sumeet Kumar under SK Enterprises."
+        "Founder & Sole Architect Sumit Kumar under SK Enterprises."
     )
 }
 identity_path.write_text(json.dumps(identity_data, indent=2), encoding="utf-8")

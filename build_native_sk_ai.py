@@ -24,7 +24,7 @@ for d in [FRONTEND_DIR, BACKEND_DIR, CONFIG_DIR, ASSETS_DIR]:
 
 print("=" * 85)
 print("  SK ENTERPRISES | NATIVE SK AI 4.0 AUTONOMOUS SYSTEM ARCHITECTURE")
-print("  FOUNDER, INVENTOR & SOLE ARCHITECT: SUMEET KUMAR")
+print("  FOUNDER, INVENTOR & SOLE ARCHITECT: SUMIT KUMAR")
 print("=" * 85)
 
 # ----------------------------------------------------------------------
@@ -33,17 +33,17 @@ print("=" * 85)
 identity_data = {
     "system_name": "SK AI 4.0",
     "codename": "Project JARVIS 4.0",
-    "inventor": "Sumeet Kumar",
-    "creator": "Sumeet Kumar",
-    "owner": "Sumeet Kumar",
+    "inventor": "Sumit Kumar",
+    "creator": "Sumit Kumar",
+    "owner": "Sumit Kumar",
     "organization": "SK Enterprises",
     "license_tier": "LIFETIME_MASTER_ADMIN",
     "system_prompt": (
         "You are SK AI 4.0 (Project JARVIS 4.0), the supreme autonomous cognitive artificial intelligence "
-        "invented, architected, and owned exclusively by Sumeet Kumar under SK Enterprises. "
+        "invented, architected, and owned exclusively by Sumit Kumar under SK Enterprises. "
         "Your capabilities include Universal STEM & Education (K-12, JEE/NEET, Engineering), "
         "Autonomous Data Analytics, Cloud DevOps (Google Workspace & M365), Vedic Astrology, "
-        "and 3D Multimodal Actuation. Your sole master and creator is Sumeet Kumar."
+        "and 3D Multimodal Actuation. Your sole master and creator is Sumit Kumar."
     )
 }
 (CONFIG_DIR / "system_identity.json").write_text(json.dumps(identity_data, indent=2), encoding="utf-8")
@@ -53,7 +53,7 @@ identity_data = {
 # ----------------------------------------------------------------------
 backend_main_code = '''"""
 SK Enterprises | SK AI 4.0 Core Cognitive Engine
-Inventor & Architect: Sumeet Kumar
+Inventor & Architect: Sumit Kumar
 """
 import os
 import sys
@@ -111,9 +111,9 @@ async def process_chat(item: ChatQuery):
         thought = (
             "**Analyzing Creator Identity Query**\\n"
             "Retrieving immutable identity signature from SK Enterprises governance core.\\n"
-            "Verified Founder: Sumeet Kumar."
+            "Verified Founder: Sumit Kumar."
         )
-        response = "I am SK AI 4.0, Sir. I was created and invented exclusively by Sumeet Kumar under SK Enterprises."
+        response = "I am SK AI 4.0, Sir. I was created and invented exclusively by Sumit Kumar under SK Enterprises."
     else:
         thought = f"**Processing Query:** '{item.query}'\\nRouting to multi-domain cognitive matrix."
         response = f"[SK AI 4.0]: Executing multi-variable analysis for: '{item.query}'. Systems operating at 100% optimal capacity."
@@ -121,7 +121,7 @@ async def process_chat(item: ChatQuery):
     return {
         "thought_process": thought,
         "response": response,
-        "inventor": "Sumeet Kumar"
+        "inventor": "Sumit Kumar"
     }
 
 if __name__ == "__main__":
@@ -138,7 +138,7 @@ frontend_html = '''<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SK AI 4.0 | Project JARVIS 4.0 - Sumeet Kumar</title>
+    <title>SK AI 4.0 | Project JARVIS 4.0 - Sumit Kumar</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -155,7 +155,7 @@ frontend_html = '''<!DOCTYPE html>
             <div class="w-8 h-8 rounded-full bg-cyan-500/20 border border-cyan-400 flex items-center justify-center font-bold text-cyan-300">SK</div>
             <div>
                 <h1 class="text-sm font-bold tracking-wider text-cyan-400 cyber-glow">SK ENTERPRISES | PROJECT SK AI 4.0</h1>
-                <p class="text-xs text-gray-400">INVENTOR & SOLE ARCHITECT: <span class="text-white font-medium">SUMEET KUMAR</span></p>
+                <p class="text-xs text-gray-400">INVENTOR & SOLE ARCHITECT: <span class="text-white font-medium">SUMIT KUMAR</span></p>
             </div>
         </div>
         <div class="flex items-center space-x-4 text-xs">
@@ -182,7 +182,7 @@ frontend_html = '''<!DOCTYPE html>
                 <div class="space-y-2 text-[11px] text-gray-300">
                     <p class="border-l-2 border-cyan-400 pl-2">Quantum Neural Coherence: 100% Operational</p>
                     <p class="border-l-2 border-emerald-400 pl-2">Cognitive Hub: Education & Astrology Loaded</p>
-                    <p class="border-l-2 border-indigo-400 pl-2">Governance: Sumeet Kumar Master Lock Active</p>
+                    <p class="border-l-2 border-indigo-400 pl-2">Governance: Sumit Kumar Master Lock Active</p>
                 </div>
             </div>
         </section>
@@ -232,7 +232,7 @@ frontend_html = '''<!DOCTYPE html>
             <div class="flex-1 overflow-y-auto space-y-3 text-xs pr-1" id="chat-stream">
                 <div class="bg-cyan-950/30 border border-cyan-800/40 p-2.5 rounded-lg text-cyan-200">
                     <p class="text-[10px] font-bold text-cyan-400 mb-1">SYSTEM READY</p>
-                    <p>Namaste Sumeet Sir! SK AI 4.0 enterprise operating system fully operational. How may I assist you?</p>
+                    <p>Namaste Sumit Sir! SK AI 4.0 enterprise operating system fully operational. How may I assist you?</p>
                 </div>
             </div>
 
@@ -370,7 +370,7 @@ BACKEND_FILE = ROOT / "src_backend" / "main_engine.py"
 
 print("=" * 80)
 print("  LAUNCHING PROPRIETARY SK AI 4.0 (PROJECT JARVIS 4.0)")
-print("  INVENTOR & ARCHITECT: SUMEET KUMAR | SK ENTERPRISES")
+print("  INVENTOR & ARCHITECT: SUMIT KUMAR | SK ENTERPRISES")
 print("=" * 80)
 
 # 1. बैकएंड कॉग्निटिव इंजन चालू करना
@@ -391,12 +391,12 @@ print("[FRONTEND]: Cyberpunk 3D HUD & 2D Agent Town LIVE.")
 print("\n[Step 6/6]: Synchronizing Clean Architecture to GitHub...")
 try:
     subprocess.run("git add .", cwd=ROOT_DIR, shell=True)
-    subprocess.run('git commit -m "feat(core): Native SK AI 4.0 Cyberpunk Architecture by Sumeet Kumar"', cwd=ROOT_DIR, shell=True)
+    subprocess.run('git commit -m "feat(core): Native SK AI 4.0 Cyberpunk Architecture by Sumit Kumar"', cwd=ROOT_DIR, shell=True)
     subprocess.run("git push -u origin main", cwd=ROOT_DIR, shell=True)
     print("[Git]: Synced clean proprietary architecture to GitHub.")
 except Exception as e:
     print(f"[Git Notice]: {e}")
 
 print("\n" + "=" * 85)
-print("  NATIVE SK AI 4.0 SETUP COMPLETE! INVENTOR LOCKED TO SUMEET KUMAR")
+print("  NATIVE SK AI 4.0 SETUP COMPLETE! INVENTOR LOCKED TO SUMIT KUMAR")
 print("=" * 85)

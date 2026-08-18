@@ -1,0 +1,14 @@
+{
+  "license_key": "eyJwYXlsb2FkIjogeyJsaWNlbnNlX2lkIjogIlNLNC1DTElFTlQtMjAyNjA4MTgyMzMzMTIiLCAiY2xpZW50X25hbWUiOiAiRGVtbyBVc2VyIiwgImNsaWVudF9lbWFpbCI6ICJkZW1vQHVzZXIuY29tIiwgInRpZXIiOiAiMV9ZRUFSX1VTRVIiLCAiaXNzdWVyIjogIlNLIEVudGVycHJpc2VzIChTdW1pdCBLdW1hcikiLCAiaXNzdWVkX2F0IjogIjIwMjYtMDgtMTgiLCAiZXhwaXJlc19hdCI6ICIyMDI3LTA4LTE4IiwgInZhbGlkX2RheXMiOiAzNjUsICJzdGF0dXMiOiAiQUNUSVZFIn0sICJzaWciOiAiOTVmNGRjMzgxOWZhM2Y4NGVkNTk0MzRkMjEyZTM1MDQ5MDFhMGI2ZjMwMmZmZDIzYWNmODlmMjkzYjUxMDhjNCJ9",
+  "details": {
+    "license_id": "SK4-CLIENT-20260818233312",
+    "client_name": "Demo User",
+    "client_email": "demo@user.com",
+    "tier": "1_YEAR_USER",
+    "issuer": "SK Enterprises (Sumit Kumar)",
+    "issued_at": "2026-08-18",
+    "expires_at": "2027-08-18",
+    "valid_days": 365,
+    "status": "ACTIVE"
+  }
+}

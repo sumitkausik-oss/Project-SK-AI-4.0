@@ -1,6 +1,6 @@
 """
 SK Enterprises | Cloud DevOps & Workspace Admin Actuator
-Founder, Inventor & Sole Architect: Sumeet Kumar
+Founder, Inventor & Sole Architect: Sumit Kumar
 Platform V5.0 — Domain Hub: Cloud Admin Engine
 Stub-based with real API hook injection points ready.
 """
@@ -14,7 +14,7 @@ class GoogleWorkspaceActuator:
     """
     Google Workspace Admin SDK bridge.
     Real credential injection via config/admin_credentials.json.
-    Inventor: Sumeet Kumar (SK Enterprises)
+    Inventor: Sumit Kumar (SK Enterprises)
     """
 
     @staticmethod
@@ -24,7 +24,7 @@ class GoogleWorkspaceActuator:
             "provider": "Google Workspace",
             "domain": domain,
             "status": "CONNECTED_STUB",
-            "admin_email": "sumeet.admin@skenterprises.ai",
+            "admin_email": "sumit.admin@skenterprises.ai",
             "active_users": 1,
             "suspended_users": 0,
             "total_storage_gb": 1000,
@@ -33,7 +33,7 @@ class GoogleWorkspaceActuator:
             "last_audit": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "api_ready": True,
             "inject_point": "google.oauth2.service_account + googleapiclient.discovery",
-            "architect": "Sumeet Kumar (SK Enterprises)"
+            "architect": "Sumit Kumar (SK Enterprises)"
         }
 
     @staticmethod
@@ -42,12 +42,12 @@ class GoogleWorkspaceActuator:
             "provider": "Google Workspace",
             "domain": domain,
             "users": [
-                {"email": "sumeet.admin@skenterprises.ai", "name": "Sumeet Kumar",
+                {"email": "sumit.admin@skenterprises.ai", "name": "Sumit Kumar",
                  "role": "SOVEREIGN_SUPER_ADMIN", "status": "ACTIVE"},
             ],
             "total_returned": 1,
             "max_results": max_results,
-            "architect": "Sumeet Kumar (SK Enterprises)"
+            "architect": "Sumit Kumar (SK Enterprises)"
         }
 
     @staticmethod
@@ -61,7 +61,7 @@ class GoogleWorkspaceActuator:
             "temp_password": "SKTemp@2026!",
             "force_password_change": True,
             "status": "STUB_SUCCESS",
-            "architect": "Sumeet Kumar (SK Enterprises)"
+            "architect": "Sumit Kumar (SK Enterprises)"
         }
 
     @staticmethod
@@ -71,7 +71,7 @@ class GoogleWorkspaceActuator:
             "domain": domain,
             "policy": "MANDATORY_FOR_ALL_USERS",
             "status": "STUB_ENFORCED",
-            "architect": "Sumeet Kumar (SK Enterprises)"
+            "architect": "Sumit Kumar (SK Enterprises)"
         }
 
 
@@ -82,7 +82,7 @@ class Microsoft365Actuator:
     """
     Microsoft 365 Graph API bridge.
     Real credential injection via config/m365_credentials.json.
-    Inventor: Sumeet Kumar (SK Enterprises)
+    Inventor: Sumit Kumar (SK Enterprises)
     """
 
     @staticmethod
@@ -91,7 +91,7 @@ class Microsoft365Actuator:
             "provider": "Microsoft 365",
             "tenant_id": tenant_id,
             "status": "CONNECTED_STUB",
-            "admin_email": "sumeet.admin@skenterprises.onmicrosoft.com",
+            "admin_email": "sumit.admin@skenterprises.onmicrosoft.com",
             "licensed_users": 1,
             "teams_enabled": True,
             "sharepoint_enabled": True,
@@ -100,7 +100,7 @@ class Microsoft365Actuator:
             "last_audit": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "api_ready": True,
             "inject_point": "msal + msgraph-core Python SDK",
-            "architect": "Sumeet Kumar (SK Enterprises)"
+            "architect": "Sumit Kumar (SK Enterprises)"
         }
 
     @staticmethod
@@ -110,7 +110,7 @@ class Microsoft365Actuator:
             "provider": "Microsoft 365",
             "policy": policy_name,
             "status": "STUB_ENFORCED",
-            "architect": "Sumeet Kumar (SK Enterprises)"
+            "architect": "Sumit Kumar (SK Enterprises)"
         }
 
 
@@ -120,7 +120,7 @@ class Microsoft365Actuator:
 class DevOpsActuator:
     """
     CI/CD Pipeline and server health monitoring bridge.
-    Inventor: Sumeet Kumar (SK Enterprises)
+    Inventor: Sumit Kumar (SK Enterprises)
     """
 
     @staticmethod
@@ -141,7 +141,7 @@ class DevOpsActuator:
             "python_version": platform.python_version(),
             "backend_port": 8000,
             "sk_ai_version": "5.0.0",
-            "architect": "Sumeet Kumar (SK Enterprises)"
+            "architect": "Sumit Kumar (SK Enterprises)"
         }
 
     @staticmethod
@@ -157,7 +157,7 @@ class DevOpsActuator:
             "action": action,
             "result": msg,
             "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            "architect": "Sumeet Kumar (SK Enterprises)"
+            "architect": "Sumit Kumar (SK Enterprises)"
         }
 
 
@@ -167,7 +167,7 @@ class DevOpsActuator:
 class CloudAdminEngine:
     """
     Unified gateway exposing Google Workspace, M365, and DevOps actuators.
-    Inventor: Sumeet Kumar (SK Enterprises)
+    Inventor: Sumit Kumar (SK Enterprises)
     """
     gws = GoogleWorkspaceActuator
     m365 = Microsoft365Actuator
@@ -179,6 +179,6 @@ class CloudAdminEngine:
             "google_workspace": GoogleWorkspaceActuator.get_org_status(),
             "microsoft_365": Microsoft365Actuator.get_tenant_status(),
             "devops": DevOpsActuator.get_server_health(),
-            "admin": "Sumeet Kumar (SK Enterprises) — SOVEREIGN SUPER ADMIN",
+            "admin": "Sumit Kumar (SK Enterprises) — SOVEREIGN SUPER ADMIN",
             "platform": "SK AI 4.0 Platform V5.0"
         }

@@ -1,6 +1,6 @@
 """
 SK Enterprises | Universal STEM & Higher Education Cognitive Engine
-Founder, Inventor & Sole Architect: Sumeet Kumar
+Founder, Inventor & Sole Architect: Sumit Kumar
 Platform V5.0 — Domain Hub: Education Matrix
 """
 import random
@@ -114,7 +114,7 @@ class UniversalSTEMMatrix:
     """
     SK Enterprises — Universal STEM Engine
     Serves NCERT, JEE, NEET, B.Tech queries.
-    Inventor: Sumeet Kumar
+    Inventor: Sumit Kumar
     """
 
     @staticmethod
@@ -139,7 +139,7 @@ class UniversalSTEMMatrix:
             "level": level,
             "question_count": count,
             "questions": sampled,
-            "generated_by": "Universal STEM Matrix — Sumeet Kumar (SK Enterprises)"
+            "generated_by": "Universal STEM Matrix — Sumit Kumar (SK Enterprises)"
         }
 
     @staticmethod
@@ -151,7 +151,7 @@ class UniversalSTEMMatrix:
             "subject": subject,
             "question_count": count,
             "questions": sampled,
-            "generated_by": "Universal STEM Matrix — Sumeet Kumar (SK Enterprises)"
+            "generated_by": "Universal STEM Matrix — Sumit Kumar (SK Enterprises)"
         }
 
     @staticmethod
@@ -162,7 +162,7 @@ class UniversalSTEMMatrix:
         return {
             "branch": branch,
             "core_subjects": branch_data,
-            "generated_by": "Universal STEM Matrix — Sumeet Kumar (SK Enterprises)"
+            "generated_by": "Universal STEM Matrix — Sumit Kumar (SK Enterprises)"
         }
 
     @staticmethod
@@ -178,5 +178,5 @@ class UniversalSTEMMatrix:
             "percentage": pct,
             "grade": grade,
             "recommendation": f"Focus on weak topics. Current performance: {grade}",
-            "generated_by": "Universal STEM Matrix — Sumeet Kumar (SK Enterprises)"
+            "generated_by": "Universal STEM Matrix — Sumit Kumar (SK Enterprises)"
         }

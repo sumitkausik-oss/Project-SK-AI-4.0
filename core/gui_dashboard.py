@@ -1,6 +1,6 @@
 """
 SK Enterprises | Cybernetic HUD GUI Dashboard for Project SK AI 4.0
-Inventor & Sole Architect: Sumeet Kumar
+Inventor & Sole Architect: Sumit Kumar
 """
 import os
 import sys
@@ -20,7 +20,7 @@ from core.autonomous_learner import AutonomousLearningEngine
 class SKAIHUDApp:
     def __init__(self, root: tk.Tk):
         self.root = root
-        self.root.title("Project SK AI 4.0 | JARVIS 4.0 - SK Enterprises (Sumeet Kumar)")
+        self.root.title("Project SK AI 4.0 | JARVIS 4.0 - SK Enterprises (Sumit Kumar)")
         self.root.geometry("1100x720")
         self.root.minsize(900, 600)
         self.root.configure(bg="#080E1C")
@@ -84,7 +84,7 @@ class SKAIHUDApp:
 
         sub_lbl = tk.Label(
             header_frame, 
-            text="INVENTOR & SOLE ARCHITECT: SUMEET KUMAR | COMMERCIAL ENTERPRISE COGNITIVE OS", 
+            text="INVENTOR & SOLE ARCHITECT: SUMIT KUMAR | COMMERCIAL ENTERPRISE COGNITIVE OS", 
             font=("Segoe UI", 9, "bold"), 
             bg="#0D1B2A", 
             fg="#90E0EF"
@@ -220,7 +220,7 @@ class SKAIHUDApp:
 
         tk.Label(left, text="Target User Email:", bg="#0D1B2A", fg="#FFFFFF", font=("Segoe UI", 9)).pack(anchor="w", padx=12, pady=(6, 2))
         self.cloud_user_entry = tk.Entry(left, bg="#1B263B", fg="#FFFFFF", insertbackground="#00F5D4", relief="flat", font=("Segoe UI", 10))
-        self.cloud_user_entry.insert(0, "sumeet@skenterprises.org")
+        self.cloud_user_entry.insert(0, "sumit@skenterprises.org")
         self.cloud_user_entry.pack(fill="x", padx=12, pady=(0, 12))
 
         btn_gw = tk.Button(left, text="🚀 Google Workspace Provision", bg="#00B4D8", fg="#080E1C", font=("Segoe UI", 10, "bold"), relief="flat", command=self._action_google_workspace)
@@ -298,7 +298,7 @@ class SKAIHUDApp:
                  SK ENTERPRISES | MASTER SECURITY & IDENTITY LOCK
 ========================================================================================
 • SYSTEM: {ident_data.get('system_name', 'SK AI 4.0')} ({ident_data.get('codename', 'Project JARVIS 4.0')})
-• INVENTOR & SOLE ARCHITECT: {ident_data.get('inventor', 'Sumeet Kumar')}
+• INVENTOR & SOLE ARCHITECT: {ident_data.get('inventor', 'Sumit Kumar')}
 • ORGANIZATION: {ident_data.get('organization', 'SK Enterprises')}
 • COPYRIGHT: {ident_data.get('copyright', '(C) 2026 SK Enterprises')}
 
@@ -354,7 +354,7 @@ class SKAIHUDApp:
 
     def _action_google_workspace(self):
         user = self.cloud_user_entry.get()
-        res = self.cloud_engine.provision_enterprise_user("Sumeet Kumar", user, "ADMIN_OWNER")
+        res = self.cloud_engine.provision_enterprise_user("Sumit Kumar", user, "ADMIN_OWNER")
         self.cloud_output.delete("1.0", tk.END)
         self.cloud_output.insert("1.0", json.dumps(res, indent=2))
 

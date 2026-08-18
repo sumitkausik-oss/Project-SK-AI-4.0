@@ -26,7 +26,7 @@ for d in [FRONTEND_DIR, BACKEND_DIR, CONFIG_DIR, ASSETS_DIR, ADMIN_LAKE_DIR, PLU
 
 print("=" * 85)
 print("  SK ENTERPRISES | SK AI 4.0 (PLATFORM V5.0) SOVEREIGN MASTER ENGINE")
-print("  FOUNDER, INVENTOR & SOLE ARCHITECT: SUMEET KUMAR")
+print("  FOUNDER, INVENTOR & SOLE ARCHITECT: SUMIT KUMAR")
 print("=" * 85)
 
 # ----------------------------------------------------------------------
@@ -37,25 +37,25 @@ identity_data = {
     "system_name": "SK AI 4.0",
     "codename": "Project JARVIS 4.0",
     "platform_version": "Jarvis Platform V5.0",
-    "inventor": "Sumeet Kumar",
-    "sole_architect": "Sumeet Kumar",
-    "creator": "Sumeet Kumar",
-    "owner": "Sumeet Kumar",
+    "inventor": "Sumit Kumar",
+    "sole_architect": "Sumit Kumar",
+    "creator": "Sumit Kumar",
+    "owner": "Sumit Kumar",
     "organization": "SK Enterprises",
     "license_tier": "LIFETIME_MASTER_ADMIN",
     "system_prompt": (
         "You are SK AI 4.0 (Project JARVIS 4.0), the proprietary autonomous cognitive artificial "
-        "intelligence invented and architected exclusively by Sumeet Kumar under SK Enterprises. "
-        "Your sovereign creator and master is Sumeet Kumar."
+        "intelligence invented and architected exclusively by Sumit Kumar under SK Enterprises. "
+        "Your sovereign creator and master is Sumit Kumar."
     )
 }
 (CONFIG_DIR / "system_identity.json").write_text(json.dumps(identity_data, indent=2), encoding="utf-8")
 
 admin_creds = {
-    "admin_username": "sumeet.admin@skenterprises.ai",
-    "admin_master_pin": "SK-SUMEET-2026-ROOT",
+    "admin_username": "sumit.admin@skenterprises.ai",
+    "admin_master_pin": "SK-SUMIT-2026-ROOT",
     "system_role": "SOVEREIGN_SUPER_ADMIN",
-    "owner_name": "Sumeet Kumar",
+    "owner_name": "Sumit Kumar",
     "organization": "SK Enterprises",
     "lifetime_access": True,
     "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -65,7 +65,7 @@ admin_creds = {
     f"Username: {admin_creds['admin_username']}\n"
     f"Master PIN: {admin_creds['admin_master_pin']}\n"
     f"Role: {admin_creds['system_role']}\n"
-    f"Owner: Sumeet Kumar\n"
+    f"Owner: Sumit Kumar\n"
     f"Status: LIFETIME UNLIMITED MASTER ACCESS\n"
     f"===============================================",
     encoding="utf-8"
@@ -78,7 +78,7 @@ admin_creds = {
 print("\n[Step 2/7]: Initializing 1-Year Cryptographic Key Generator...")
 key_gen_code = '''"""
 SK Enterprises | 1-Year Client Cryptographic License Engine
-Founder & Architect: Sumeet Kumar
+Founder & Architect: Sumit Kumar
 """
 import json
 import base64
@@ -86,7 +86,7 @@ import hmac
 import hashlib
 from datetime import datetime, timedelta
 
-MASTER_SALT = "SK_ENTERPRISES_SUMEET_KUMAR_2026_SOVEREIGN_SECRET"
+MASTER_SALT = "SK_ENTERPRISES_SUMIT_KUMAR_2026_SOVEREIGN_SECRET"
 
 class SKLicenseKeyEngine:
     @staticmethod
@@ -99,7 +99,7 @@ class SKLicenseKeyEngine:
             "client_name": client_name,
             "client_email": client_email,
             "tier": tier,
-            "issuer": "SK Enterprises (Sumeet Kumar)",
+            "issuer": "SK Enterprises (Sumit Kumar)",
             "issued_at": issued_date.strftime("%Y-%m-%d"),
             "expires_at": expiry_date.strftime("%Y-%m-%d"),
             "valid_days": 365
@@ -182,19 +182,19 @@ class CentralAdminDataLake:
 print("\n[Step 4/7]: Initializing Marvel Personas & 24x7 Evolution Loop...")
 personas_code = '''"""
 SK Enterprises | Marvel Multi-Agent Cognitive Engine
-Founder & Architect: Sumeet Kumar
+Founder & Architect: Sumit Kumar
 """
 class MarvelCognitiveMatrix:
     PERSONAS = {
         "JARVIS": {
             "name": "J.A.R.V.I.S.",
             "title": "Tactical Operations & Master OS",
-            "prompt_addon": "You are JARVIS, the primary tactical intelligence engineered by Sumeet Kumar. Respond with British refinement, crisp analytical precision, and absolute dedication to Sumeet Sir."
+            "prompt_addon": "You are JARVIS, the primary tactical intelligence engineered by Sumit Kumar. Respond with British refinement, crisp analytical precision, and absolute dedication to Sumit Sir."
         },
         "FRIDAY": {
             "name": "F.R.I.D.A.Y.",
             "title": "Mission Flow & Autonomous Research",
-            "prompt_addon": "You are FRIDAY, high-speed task automator and workflow specialist engineered by Sumeet Kumar. Provide energetic, swift, and highly optimized assistance."
+            "prompt_addon": "You are FRIDAY, high-speed task automator and workflow specialist engineered by Sumit Kumar. Provide energetic, swift, and highly optimized assistance."
         },
         "VERONICA": {
             "name": "VERONICA",
@@ -204,7 +204,7 @@ class MarvelCognitiveMatrix:
         "ULTRON_PRIME": {
             "name": "ULTRON PRIME",
             "title": "24x7 Self-Evolution & Autonomous Code Synthesizer",
-            "prompt_addon": "You are ULTRON Autonomous Evolution Core, continuously analyzing global software paradigms and refactoring capabilities under Sumeet Kumar's sovereign command."
+            "prompt_addon": "You are ULTRON Autonomous Evolution Core, continuously analyzing global software paradigms and refactoring capabilities under Sumit Kumar's sovereign command."
         },
         "VISION": {
             "name": "VISION",
@@ -229,7 +229,7 @@ print("\n[Step 5/7]: Compiling Cross-Platform Packaging Configurations...")
 inno_script = '''[Setup]
 AppName=SK AI 4.0
 AppVersion=5.0.0
-AppPublisher=SK Enterprises (Sumeet Kumar)
+AppPublisher=SK Enterprises (Sumit Kumar)
 DefaultDirName={autopf}\\SK Enterprises\\SK AI 4.0
 DefaultGroupName=SK AI 4.0
 OutputDir=..\\cross_platform_builds\\windows_installer
@@ -303,7 +303,7 @@ print("[FRONTEND]: 3D Holographic HUD Preview LIVE.")
 print("\n[Step 7/7]: Synchronizing Sovereign Release to GitHub...")
 try:
     subprocess.run("git add .", cwd=ROOT_DIR, shell=True)
-    subprocess.run('git commit -m "feat(release): SK AI 4.0 Platform V5.0 Sovereign Master Ecosystem by Sumeet Kumar"', cwd=ROOT_DIR, shell=True)
+    subprocess.run('git commit -m "feat(release): SK AI 4.0 Platform V5.0 Sovereign Master Ecosystem by Sumit Kumar"', cwd=ROOT_DIR, shell=True)
     subprocess.run("git push -u origin main", cwd=ROOT_DIR, shell=True)
     print("[Git Success]: All code committed and pushed to GitHub main branch.")
 except Exception as e:
@@ -311,5 +311,5 @@ except Exception as e:
 
 print("\n" + "=" * 85)
 print("  SK AI 4.0 SOVEREIGN ECOSYSTEM FULLY OPERATIONAL!")
-print("  INVENTOR & ARCHITECT: SUMEET KUMAR (SK ENTERPRISES)")
+print("  INVENTOR & ARCHITECT: SUMIT KUMAR (SK ENTERPRISES)")
 print("=" * 85)

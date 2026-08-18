@@ -1,6 +1,6 @@
 """
 SK Enterprises | Master Key Generator Unit
-Founder, Inventor & Sole Architect: Sumeet Kumar
+Founder, Inventor & Sole Architect: Sumit Kumar
 Platform V5.0 — Sovereign Cryptographic Licensing Suite
 
 Provides:
@@ -16,8 +16,8 @@ import time
 from datetime import datetime, timedelta
 from typing import Dict, Any
 
-ADMIN_MASTER_SECRET = "SK_ENTERPRISES_SUMEET_KUMAR_2026_MASTER_SUPER_ADMIN_KEY"
-USER_LICENSE_SECRET = "SK_ENTERPRISES_SUMEET_KUMAR_2026_USER_LICENSE_SALT"
+ADMIN_MASTER_SECRET = "SK_ENTERPRISES_SUMIT_KUMAR_2026_MASTER_SUPER_ADMIN_KEY"
+USER_LICENSE_SECRET = "SK_ENTERPRISES_SUMIT_KUMAR_2026_USER_LICENSE_SALT"
 
 class MasterKeyGenerator:
     """
@@ -25,7 +25,7 @@ class MasterKeyGenerator:
     """
 
     @classmethod
-    def generate_admin_lifetime_key(cls, admin_name: str = "Sumeet Kumar", admin_email: str = "sumeet.admin@skenterprises.ai") -> Dict[str, Any]:
+    def generate_admin_lifetime_key(cls, admin_name: str = "Sumit Kumar", admin_email: str = "sumit.admin@skenterprises.ai") -> Dict[str, Any]:
         """
         Generates an immutable Lifetime Super Admin Sovereign Key.
         """
@@ -37,7 +37,7 @@ class MasterKeyGenerator:
             "admin_email": admin_email,
             "role": "SOVEREIGN_SUPER_ADMIN",
             "organization": "SK Enterprises",
-            "founder": "Sumeet Kumar",
+            "founder": "Sumit Kumar",
             "issued_at": issued_date.strftime("%Y-%m-%d %H:%M:%S"),
             "expires_at": "LIFETIME_NEVER_EXPIRES",
             "lifetime_access": True,
@@ -74,7 +74,7 @@ class MasterKeyGenerator:
             "phone": phone,
             "tier": tier,
             "organization": "SK Enterprises",
-            "inventor": "Sumeet Kumar",
+            "inventor": "Sumit Kumar",
             "issued_at": issued_date.strftime("%Y-%m-%d"),
             "expires_at": expiry_date.strftime("%Y-%m-%d"),
             "valid_days": 365,

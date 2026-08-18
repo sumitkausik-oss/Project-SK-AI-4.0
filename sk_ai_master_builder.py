@@ -21,7 +21,7 @@ for d in [APP_CORE, CONFIG_DIR, PLUGINS_DIR]:
 
 print("=" * 80)
 print("  SK ENTERPRISES | PROJECT SK AI 4.0 MASTER COGNITIVE DEPLOYER")
-print("  INVENTOR & SOLE ARCHITECT: SUMEET KUMAR | LIFETIME ENTERPRISE")
+print("  INVENTOR & SOLE ARCHITECT: SUMIT KUMAR | LIFETIME ENTERPRISE")
 print("=" * 80)
 
 # -------------------------------------------------------------
@@ -41,15 +41,15 @@ else:
     print(f"[Warning]: Source path {SOURCE_SETUP} not found, working with existing files.")
 
 # -------------------------------------------------------------
-# 2. डीप आइडेंटिटी पैचिंग (Usman -> Sumeet Kumar, Stonic -> SK AI 4.0)
+# 2. डीप आइडेंटिटी पैचिंग (Usman -> Sumit Kumar, Stonic -> SK AI 4.0)
 # -------------------------------------------------------------
 print("\n[Step 2/5]: Deep-patching AI System Prompts & Identity...")
 REPLACEMENTS = [
-    (b"Inventor Usman", b"Inventor Sumeet Kumar"),
-    (b"inventor usman", b"inventor sumeet kumar"),
-    (b"INVENTOR USMAN", b"INVENTOR SUMEET KUMAR"),
-    (b"Usman", b"Sumeet Kumar"),
-    (b"usman", b"Sumeet Kumar"),
+    (b"Inventor Usman", b"Inventor Sumit Kumar"),
+    (b"inventor usman", b"inventor sumit kumar"),
+    (b"INVENTOR USMAN", b"INVENTOR SUMIT KUMAR"),
+    (b"Usman", b"Sumit Kumar"),
+    (b"usman", b"Sumit Kumar"),
     (b"Stonic AI Team", b"SK Enterprises Team"),
     (b"Stonic AI", b"SK AI 4.0"),
     (b"stonic ai", b"sk ai 4.0"),
@@ -113,7 +113,7 @@ def health():
     return {
         "status": "ONLINE",
         "system": "SK AI 4.0 (Project JARVIS 4.0)",
-        "inventor": "Sumeet Kumar",
+        "inventor": "Sumit Kumar",
         "organization": "SK Enterprises",
         "tier": "Lifetime Admin",
         "domains": ["Universal Education", "Data Analyst Suite", "Cloud DevOps", "Vedic Astrology"]
@@ -141,7 +141,7 @@ if __name__ == "__main__":
 print("\n[Step 5/5]: Generating Lifetime Admin Key & Wiping Cache...")
 payload = {
     "license_id": "SK4-ENTERPRISE-LIFETIME-MASTER-2026",
-    "owner": "Sumeet Kumar",
+    "owner": "Sumit Kumar",
     "organization": "SK Enterprises",
     "system": "SK AI 4.0 (Project JARVIS 4.0)",
     "tier": "ADMIN_LIFETIME",

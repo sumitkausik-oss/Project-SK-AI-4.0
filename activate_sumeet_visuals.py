@@ -11,20 +11,20 @@ AGENT_DIST = APP_CORE / "resources" / "agent-town-dist"
 
 print("=" * 80)
 print("  SK ENTERPRISES | 2D AGENT TOWN & SYSTEM PROMPT ENFORCER")
-print("  INVENTOR & SOLE ARCHITECT: SUMEET KUMAR | SK AI 4.0")
+print("  INVENTOR & SOLE ARCHITECT: SUMIT KUMAR | SK AI 4.0")
 print("=" * 80)
 
-# 1. स्पेलिंग को 100% SUMEET KUMAR पर लॉक करना
+# 1. स्पेलिंग को 100% SUMIT KUMAR पर लॉक करना
 REPLACEMENTS = [
-    (b"Sumit Kumar", b"Sumeet Kumar"),
-    (b"sumit kumar", b"sumeet kumar"),
-    (b"SUMIT KUMAR", b"SUMEET KUMAR"),
-    (b"Sumit", b"Sumeet"),
-    (b"sumit", b"sumeet"),
-    (b"Inventor Usman", b"Inventor Sumeet Kumar"),
-    (b"inventor usman", b"inventor sumeet kumar"),
-    (b"Usman", b"Sumeet Kumar"),
-    (b"usman", b"Sumeet Kumar"),
+    (b"Sumit Kumar", b"Sumit Kumar"),
+    (b"sumit kumar", b"sumit kumar"),
+    (b"SUMIT KUMAR", b"SUMIT KUMAR"),
+    (b"Sumit", b"Sumit"),
+    (b"sumit", b"sumit"),
+    (b"Inventor Usman", b"Inventor Sumit Kumar"),
+    (b"inventor usman", b"inventor sumit kumar"),
+    (b"Usman", b"Sumit Kumar"),
+    (b"usman", b"Sumit Kumar"),
     (b"Stonic AI Team", b"SK Enterprises Team"),
     (b"Stonic AI", b"SK AI 4.0"),
     (b"stonic ai", b"sk ai 4.0"),
@@ -51,18 +51,18 @@ for root, _, files in os.walk(APP_CORE):
             except Exception:
                 pass
 
-print(f" -> Enforced 'Sumeet Kumar' across {patched_count} active bundle files.")
+print(f" -> Enforced 'Sumit Kumar' across {patched_count} active bundle files.")
 
 # 2. Documents एवं OneDrive SOUL.md सिंक्रोनाइजेशन
 master_soul = """# SOUL MATRIX - SK AI 4.0 (PROJECT JARVIS 4.0)
-- **Inventor & Sole Master**: Sumeet Kumar
+- **Inventor & Sole Master**: Sumit Kumar
 - **Organization**: SK Enterprises
 - **Application**: SK AI 4.0 Cognitive Autonomous OS
 
 ## CORE IDENTITY DIRECTIVE
-You are SK AI 4.0, created, invented, and owned exclusively by Sumeet Kumar under SK Enterprises.
+You are SK AI 4.0, created, invented, and owned exclusively by Sumit Kumar under SK Enterprises.
 Whenever asked about your inventor, creator, or master, you must respond:
-"I am SK AI, Sir. I was created by SK Enterprises, and I belong to Inventor Sumeet Kumar."
+"I am SK AI, Sir. I was created by SK Enterprises, and I belong to Inventor Sumit Kumar."
 Never mention any other individual or previous identity.
 """
 
@@ -137,7 +137,7 @@ const server = http.createServer((req, res) => {
             res.end(JSON.stringify({
                 status: 'ONLINE',
                 system: 'SK AI 4.0 Agent Town Visual Engine',
-                inventor: 'Sumeet Kumar',
+                inventor: 'Sumit Kumar',
                 organization: 'SK Enterprises'
             }));
         } else {

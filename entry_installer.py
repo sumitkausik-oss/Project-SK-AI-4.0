@@ -1,6 +1,6 @@
 """
 SK Enterprises | Interactive Windows Setup Installer Runner
-Founder, Inventor & Sole Architect: Sumeet Kumar
+Founder, Inventor & Sole Architect: Sumit Kumar
 Platform V5.0 — Windows Setup Wizard
 """
 import sys
@@ -15,7 +15,7 @@ from src_backend.installer_wizard_app import SetupInstallerWizard
 def run_interactive_installer():
     print("=" * 80)
     print("  👑 SK ENTERPRISES | SK AI 4.0 (PROJECT JARVIS 4.0) INSTALLER WIZARD")
-    print("  SOLE INVENTOR, FOUNDER & ARCHITECT: SUMEET KUMAR")
+    print("  SOLE INVENTOR, FOUNDER & ARCHITECT: SUMIT KUMAR")
     print("=" * 80)
     
     # STEP 1: License Agreement
@@ -31,7 +31,7 @@ def run_interactive_installer():
     print("-" * 60)
     print("  STEP 2: USER IDENTIFICATION")
     print("-" * 60)
-    name = input("Enter Your Full Name: ").strip() or "Sumeet Kumar"
+    name = input("Enter Your Full Name: ").strip() or "Sumit Kumar"
     age_str = input("Enter Your Age: ").strip() or "30"
     age = int(age_str) if age_str.isdigit() else 30
     place = input("Enter Your Place / City: ").strip() or "Patna, Bihar"

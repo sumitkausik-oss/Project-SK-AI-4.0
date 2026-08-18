@@ -1,6 +1,6 @@
 """
 SK Enterprises | Autonomous Data Analyst Suite
-Founder, Inventor & Sole Architect: Sumeet Kumar
+Founder, Inventor & Sole Architect: Sumit Kumar
 Platform V5.0 — Domain Hub: Data Intelligence Engine
 Zero external dependencies (stdlib + optional pandas fallback)
 """
@@ -31,7 +31,7 @@ class DataAnalystEngine:
     """
     SK Enterprises — Autonomous Data Analyst Suite
     Stdlib-first with pandas fallback for richer EDA.
-    Inventor: Sumeet Kumar
+    Inventor: Sumit Kumar
     """
 
     @staticmethod
@@ -108,7 +108,7 @@ class DataAnalystEngine:
             "column_count": len(columns),
             "profile": profile,
             "pandas_available": _PANDAS_AVAILABLE,
-            "generated_by": "Data Analyst Engine — Sumeet Kumar (SK Enterprises)"
+            "generated_by": "Data Analyst Engine — Sumit Kumar (SK Enterprises)"
         }
 
     @staticmethod
@@ -150,7 +150,7 @@ class DataAnalystEngine:
             "columns": col_names,
             "correlation_matrix": matrix,
             "interpretation": "Values close to 1 = strong positive, -1 = strong negative, 0 = no correlation",
-            "generated_by": "Data Analyst Engine — Sumeet Kumar (SK Enterprises)"
+            "generated_by": "Data Analyst Engine — Sumit Kumar (SK Enterprises)"
         }
 
     @staticmethod
@@ -175,7 +175,7 @@ class DataAnalystEngine:
             "outlier_count": len(outliers),
             "outlier_bounds": {"lower": round(lower, 4), "upper": round(upper, 4)},
             "outliers": [{"row_index": r, "value": v} for r, v in outliers[:20]],
-            "generated_by": "Data Analyst Engine — Sumeet Kumar (SK Enterprises)"
+            "generated_by": "Data Analyst Engine — Sumit Kumar (SK Enterprises)"
         }
 
     @staticmethod
@@ -225,7 +225,7 @@ class DataAnalystEngine:
                 "x_column": x,
                 "y_column": y,
                 "row_count": parsed["row_count"],
-                "generated_by": "Data Analyst Engine — Sumeet Kumar (SK Enterprises)"
+                "generated_by": "Data Analyst Engine — Sumit Kumar (SK Enterprises)"
             }
         }
         return spec
@@ -251,5 +251,5 @@ class DataAnalystEngine:
             },
             "column_profile": profile.get("profile"),
             "correlation_matrix": corr.get("correlation_matrix"),
-            "generated_by": "Data Analyst Engine — Sumeet Kumar (SK Enterprises)"
+            "generated_by": "Data Analyst Engine — Sumit Kumar (SK Enterprises)"
         }

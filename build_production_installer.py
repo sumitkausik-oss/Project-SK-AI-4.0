@@ -1,6 +1,6 @@
 """
 SK Enterprises | Production Build & Inno Setup Packaging Script
-Inventor & Sole Architect: Sumeet Kumar
+Inventor & Sole Architect: Sumit Kumar
 """
 import os
 import sys
@@ -87,7 +87,7 @@ if __name__ == "__main__":
         compile_inno_setup()
         print("\n" + "=" * 80)
         print("  SK AI 4.0 PRODUCTION BUILD & PACKAGING COMPLETE!")
-        print("  Inventor & Sole Architect: Sumeet Kumar | SK Enterprises")
+        print("  Inventor & Sole Architect: Sumit Kumar | SK Enterprises")
         print("=" * 80)
     except Exception as e:
         print(f"\n[BUILD ERROR]: {e}", file=sys.stderr)

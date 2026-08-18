@@ -1,6 +1,6 @@
 """
 SK Enterprises | Super Admin Master Control Hub CLI
-Founder, Inventor & Sole Architect: Sumeet Kumar
+Founder, Inventor & Sole Architect: Sumit Kumar
 Platform V5.0 — Master Administration Suite
 """
 import sys
@@ -15,7 +15,7 @@ from src_backend.super_admin_hub import SuperAdminHub
 def run_super_admin_console():
     print("=" * 80)
     print("  👑 SK ENTERPRISES | SUPER ADMIN SOVEREIGN CONTROL HUB")
-    print("  SOLE INVENTOR, FOUNDER & ARCHITECT: SUMEET KUMAR")
+    print("  SOLE INVENTOR, FOUNDER & ARCHITECT: SUMIT KUMAR")
     print("=" * 80)
     
     while True:

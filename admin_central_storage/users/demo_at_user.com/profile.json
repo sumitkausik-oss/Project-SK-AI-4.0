@@ -1,0 +1,9 @@
+{
+  "name": "Demo User",
+  "age": 25,
+  "location": "Patna",
+  "email": "demo@user.com",
+  "phone": "9153579979",
+  "registered_at": "2026-08-18 23:33:12",
+  "active": true
+}

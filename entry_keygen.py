@@ -1,6 +1,6 @@
 """
 SK Enterprises | Master Key Generator Tool
-Founder, Inventor & Sole Architect: Sumeet Kumar
+Founder, Inventor & Sole Architect: Sumit Kumar
 Platform V5.0 — Cryptographic Key Generator (Lifetime Admin & 1-Year User Keys)
 """
 import sys
@@ -15,9 +15,9 @@ from src_backend.key_generator_master import MasterKeyGenerator
 def cli_keygen():
     print("=" * 75)
     print("  👑 SK ENTERPRISES | MASTER KEY GENERATOR UNIT")
-    print("  SOLE INVENTOR, FOUNDER & ARCHITECT: SUMEET KUMAR")
+    print("  SOLE INVENTOR, FOUNDER & ARCHITECT: SUMIT KUMAR")
     print("=" * 75)
-    print("1. Generate Lifetime Sovereign Admin Key (Super Admin - Sumeet Kumar)")
+    print("1. Generate Lifetime Sovereign Admin Key (Super Admin - Sumit Kumar)")
     print("2. Generate 1-Year Commercial User License Key (365 Days)")
     print("3. Validate Any License Key")
     print("=" * 75)
@@ -25,8 +25,8 @@ def cli_keygen():
     choice = input("Select option (1/2/3) [Default: 2]: ").strip() or "2"
     
     if choice == "1":
-        name = input("Admin Name [Default: Sumeet Kumar]: ").strip() or "Sumeet Kumar"
-        email = input("Admin Email [Default: sumeet.admin@skenterprises.ai]: ").strip() or "sumeet.admin@skenterprises.ai"
+        name = input("Admin Name [Default: Sumit Kumar]: ").strip() or "Sumit Kumar"
+        email = input("Admin Email [Default: sumit.admin@skenterprises.ai]: ").strip() or "sumit.admin@skenterprises.ai"
         res = MasterKeyGenerator.generate_admin_lifetime_key(name, email)
         print("\n" + "⭐" * 35)
         print(f"LIFETIME SUPER ADMIN KEY GENERATED FOR: {name}")

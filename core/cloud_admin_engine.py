@@ -1,6 +1,6 @@
 """
 SK Enterprises | Cloud Admin Console & DevOps Automation Core
-Inventor & Sole Architect: Sumeet Kumar
+Inventor & Sole Architect: Sumit Kumar
 """
 class CloudAdminActuator:
     def execute_google_workspace_task(self, task_type: str, target_user: str):

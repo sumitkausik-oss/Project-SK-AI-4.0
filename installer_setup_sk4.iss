@@ -1,7 +1,7 @@
 [Setup]
 AppName=SK AI 4.0
 AppVersion=4.0.0
-AppPublisher=SK Enterprises (Sumeet Kumar)
+AppPublisher=SK Enterprises (Sumit Kumar)
 AppPublisherURL=https://github.com/sumitkausik-oss/Project-SK-AI-4.0
 DefaultDirName={autopf}\SK Enterprises\SK AI 4.0
 DefaultGroupName=SK AI 4.0
