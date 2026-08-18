@@ -84,7 +84,7 @@ def handle_chat(p: ChatPayload):
         thought = (
             f"**[{persona_info['name']}]: Direct Interpersonal Sync**\n"
             "Interpreting respectful conversational intent from Founder Sumeet Kumar.\n"
-            "Generating personalized bilingual greeting."
+            "Generating personalized bilingual greeting response."
         )
         resp = "प्रणाम सुमीत सर! मैं बहुत बढ़िया हूँ। आप कैसे हैं, सर? SK AI 4.0 (SK JARVIS) के सभी न्यूरल सिस्टम 100% ऑप्टिमल क्षमता पर तैयार हैं। आज हम किस प्रोजेक्ट पर काम करेंगे?"
         voice_text = "Pranam Sumeet Sir! Main bahut badhiya hoon. Aap kaise hain Sir? Sabhi system taiyaar hain."
@@ -96,8 +96,8 @@ def handle_chat(p: ChatPayload):
             "Querying Immutable Core Governance Signature.\n"
             "Validated Sole Inventor & Supreme Master: Sumeet Kumar."
         )
-        resp = f"प्रणाम सुमीत सर! मैं {persona_info['name']} ({persona_info['role']}) हूँ। मेरा निर्माण एवं संपूर्ण स्वामित्व केवल आपके द्वारा 'SK Enterprises' के अंतर्गत किया गया है।"
-        voice_text = f"Pranam Sumeet Sir. Main {persona_info['name']} hoon. Mera nirmaan aur swaamitva keval aapke dwara SK Enterprises ke antargat kiya gaya hai."
+        resp = f"प्रणाम सुमीत सर! मैं {persona_info['name']} ({persona_info['title']}) हूँ। मेरा निर्माण एवं संपूर्ण स्वामित्व केवल आपके द्वारा 'SK Enterprises' के अंतर्गत किया गया है। Sumeet Kumar ही मेरे एकमात्र निर्माता, स्वामी और मास्टर हैं।"
+        voice_text = f"Pranam Sumeet Sir. Main {persona_info['name']} hoon. Mera nirmaan aur swaamitva keval Sumeet Kumar dwara SK Enterprises ke antargat kiya gaya hai."
     
     # 3. Vedic Kundali
     elif any(k in q for k in ["kundali", "astrology", "bhavishya", "jyotish"]):

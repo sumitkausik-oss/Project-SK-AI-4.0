@@ -39,5 +39,6 @@ class CentralAdminDataLake:
         return {
             "total_registered_clients": max(users_count, 1),
             "admin_storage_state": "ACTIVE_ENCRYPTED",
-            "central_lake_path": str(STORAGE_DIR)
+            "central_lake_path": str(STORAGE_DIR),
+            "architect": "Sumeet Kumar (SK Enterprises)"
         }
