@@ -1,6 +1,6 @@
 """
 SK Enterprises | Commercial Closed-Source Role-Based Access Control & Google Auth
-Inventor & Sole Architect: Sumit Kumar
+Inventor & Sole Architect: Sumeet Kumar
 """
 class CommercialAccessGate:
     TIERS = {
@@ -14,7 +14,7 @@ class CommercialAccessGate:
     def verify_google_token(google_auth_token: str):
         if google_auth_token and len(google_auth_token) > 10:
             return {"authenticated": True, "provider": "Google Identity Services (OAuth 2.0)"}
-        return {"authenticated": True, "provider": "Local Enterprise Master Key (Sumit Kumar)"}
+        return {"authenticated": True, "provider": "Local Enterprise Master Key (Sumeet Kumar)"}
 
     @staticmethod
     def check_module_access(user_tier: str, requested_module: str):

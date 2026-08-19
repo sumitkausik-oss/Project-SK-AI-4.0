@@ -1,6 +1,6 @@
 """
 SK Enterprises | Interactive Windows Setup Installer Wizard
-Founder, Inventor & Sole Architect: Sumit Kumar
+Founder, Inventor & Sole Architect: Sumeet Kumar
 Platform V5.0 — Sovereign Step-by-Step Installation Experience
 
 Steps:
@@ -36,12 +36,12 @@ class SetupInstallerWizard:
           SK ENTERPRISES | SK AI 4.0 (PROJECT JARVIS 4.0)
              SOVEREIGN END-USER LICENSE AGREEMENT (EULA)
 ================================================================================
-SOLE INVENTOR, FOUNDER & ARCHITECT: SUMIT KUMAR
+SOLE INVENTOR, FOUNDER & ARCHITECT: Sumeet Kumar
 ORGANIZATION: SK ENTERPRISES
 
 1. PROPRIETARY RIGHTS & OWNERSHIP:
    The software 'SK AI 4.0 / Project JARVIS 4.0' is the 100% exclusive intellectual
-   property and sovereign creation of Sumit Kumar (SK Enterprises). 
+   property and sovereign creation of Sumeet Kumar (SK Enterprises). 
    All rights reserved globally.
 
 2. ANTI-EXTRACTION & ANTI-REVERSE ENGINEERING:
@@ -51,7 +51,7 @@ ORGANIZATION: SK ENTERPRISES
 
 3. LICENSE DURATION & VALIDITY:
    - Commercial User Key: Valid for exactly 365 Days (1 Year) from issuance.
-   - Super Admin Key: Lifetime Sovereign Authorization (Sumit Kumar).
+   - Super Admin Key: Lifetime Sovereign Authorization (Sumeet Kumar).
    - Upon expiration, access terminates automatically until renewal.
 
 4. USER CONSENT:
@@ -137,7 +137,7 @@ ORGANIZATION: SK ENTERPRISES
             "license_key": session_data.get("product_key"),
             "license_type": session_data.get("key_type", "USER_ANNUAL"),
             "anti_extraction_locked": True,
-            "sovereign_owner": "Sumit Kumar",
+            "sovereign_owner": "Sumeet Kumar",
             "organization": "SK Enterprises"
         }
         

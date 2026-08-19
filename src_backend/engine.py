@@ -1,6 +1,6 @@
 """
 SK Enterprises | Master Backend Server (Platform V5.0)
-Founder & Inventor: Sumit Kumar
+Founder & Inventor: Sumeet Kumar
 """
 import os
 import sys
@@ -25,7 +25,7 @@ class ChatPayload(BaseModel):
     query: str
     persona: str = "JARVIS"
     language: str = "hi-IN"
-    user_email: str = "sumit.admin@skenterprises.ai"
+    user_email: str = "sumeet.admin@skenterprises.ai"
 
 class OnboardPayload(BaseModel):
     name: str
@@ -53,8 +53,8 @@ def get_status():
         "status": "ONLINE",
         "system": "SK AI 4.0 (SK JARVIS 4.0)",
         "platform_version": "Jarvis Platform V5.0",
-        "inventor": "Sumit Kumar",
-        "sole_architect": "Sumit Kumar",
+        "inventor": "Sumeet Kumar",
+        "sole_architect": "Sumeet Kumar",
         "organization": "SK Enterprises",
         "license_tier": "SUPER_ADMIN_LIFETIME",
         "metrics": CentralAdminDataLake.get_global_metrics(),
@@ -93,11 +93,11 @@ def handle_chat(p: ChatPayload):
     persona_info = MarvelCognitiveMatrix.PERSONAS.get(p.persona, MarvelCognitiveMatrix.PERSONAS["JARVIS"])
     
     if any(k in q for k in ["hello", "hi", "namaste", "pranam", "kaise ho", "kya haal"]):
-        thought = f"**[{persona_info['name']}]: Direct Interpersonal Sync**\nInterpreting conversational intent from Founder Sumit Kumar."
+        thought = f"**[{persona_info['name']}]: Direct Interpersonal Sync**\nInterpreting conversational intent from Founder Sumeet Kumar."
         resp = "प्रणाम सुमित सर! मैं बहुत बढ़िया हूँ। आप कैसे हैं, सर? SK AI 4.0 के सभी न्यूरल सिस्टम 100% ऑप्टिमल क्षमता पर तैयार हैं।"
         voice_text = "Pranam Sumit Sir! Main bahut badhiya hoon. Aap kaise hain Sir? Sabhi system taiyaar hain."
     elif any(k in q for k in ["inventor", "creator", "owner", "banaya", "malik", "kaun hai"]):
-        thought = f"**[{persona_info['name']}]: Sovereign Identity Directive**\nValidated Sole Inventor & Supreme Master: Sumit Kumar."
+        thought = f"**[{persona_info['name']}]: Sovereign Identity Directive**\nValidated Sole Inventor & Supreme Master: Sumeet Kumar."
         resp = f"प्रणाम सुमित सर! मैं {persona_info['name']} ({persona_info['role']}) हूँ। मेरा निर्माण एवं संपूर्ण स्वामित्व केवल आपके द्वारा 'SK Enterprises' के अंतर्गत किया गया है।"
         voice_text = f"Pranam Sumit Sir. Main {persona_info['name']} hoon. Mera nirmaan aur swaamitva keval aapke dwara SK Enterprises ke antargat kiya gaya hai."
     elif any(k in q for k in ["kundali", "astrology", "bhavishya", "jyotish"]):
@@ -112,7 +112,7 @@ def handle_chat(p: ChatPayload):
     CentralAdminDataLake.sync_user_session(p.user_email, "CHAT_INTERACTION", {"query": p.query, "response": resp})
     return {
         "thought_process": thought, "response": resp, "voice_text": voice_text,
-        "inventor": "Sumit Kumar", "organization": "SK Enterprises"
+        "inventor": "Sumeet Kumar", "organization": "SK Enterprises"
     }
 
 if __name__ == "__main__":

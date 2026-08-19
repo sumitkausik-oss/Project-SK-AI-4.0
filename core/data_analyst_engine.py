@@ -1,6 +1,6 @@
 """
 SK Enterprises | Autonomous Data Analyst, ETL & BI Synthesizer
-Inventor & Sole Architect: Sumit Kumar
+Inventor & Sole Architect: Sumeet Kumar
 """
 import json
 

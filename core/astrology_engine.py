@@ -1,6 +1,6 @@
 """
 SK Enterprises | High-Precision Vedic Ephemeris & Kundali Engine
-Inventor & Sole Architect: Sumit Kumar
+Inventor & Sole Architect: Sumeet Kumar
 """
 class VedicAstrologyCore:
     def calculate_natal_matrix(self, dob: str, tob: str, location: str):

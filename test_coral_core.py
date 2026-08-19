@@ -15,7 +15,7 @@ def run_test():
     # Test Storing Memory
     print("\n[TEST]: Storing test memories...")
     brain.store_memory("project jarvis status", "Working on Visual Hub v2", ["jarvis", "visuals", "status"])
-    brain.store_memory("owner preference", "Inventor Usman prefers Hindi for voice chat.", ["preference", "owner", "language"])
+    brain.store_memory("owner preference", "Inventor Sumeet Kumar prefers Hindi for voice chat.", ["preference", "owner", "language"])
 
     # Test Task Processing with Recall
     print("\n[TEST]: Processing task that should recall memory...")

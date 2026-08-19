@@ -18,7 +18,7 @@ for d in [FRONTEND_DIR, BACKEND_DIR, CONFIG_DIR, ASSETS_DIR, BUILD_DIR]:
 
 print("=" * 85)
 print("  SK ENTERPRISES | SK AI 4.0 (JARVIS PLATFORM V5.0) MASTER ENGINE")
-print("  FOUNDER, INVENTOR & SOLE ARCHITECT: SUMIT KUMAR")
+print("  FOUNDER, INVENTOR & SOLE ARCHITECT: Sumeet Kumar")
 print("=" * 85)
 
 # ----------------------------------------------------------------------
@@ -33,13 +33,13 @@ print(f"\n[Step 1/6]: Verifying Port 8000 state: {'Occupied (Will clear)' if is_
 # ----------------------------------------------------------------------
 # 2. सिस्टम आइडेंटिटी एवं लाइफटाइम लाइसेंस
 # ----------------------------------------------------------------------
-print("\n[Step 2/6]: Locking Sumit Kumar Master Identity...")
+print("\n[Step 2/6]: Locking Sumeet Kumar Master Identity...")
 identity_data = {
     "system_name": "SK AI 4.0",
     "codename": "Project JARVIS 4.0",
     "platform_version": "Jarvis Platform V5.0",
-    "inventor": "Sumit Kumar",
-    "owner": "Sumit Kumar",
+    "inventor": "Sumeet Kumar",
+    "owner": "Sumeet Kumar",
     "organization": "SK Enterprises",
     "license_tier": "LIFETIME_MASTER_ADMIN",
     "supported_platforms": ["Windows (EXE)", "Android (APK)", "macOS (DMG)", "iOS (IPA/PWA)"]
@@ -52,7 +52,7 @@ identity_data = {
 print("\n[Step 3/6]: Deploying Precision Vedic Astrology & Jivani Engine...")
 astrology_engine_code = '''"""
 SK Enterprises | Precision Vedic Astrology & Complete Lifelong Kundali Matrix
-Inventor: Sumit Kumar
+Inventor: Sumeet Kumar
 """
 import datetime
 
@@ -112,7 +112,7 @@ class VedicKundaliMatrix:
             "planetary_chart": planetary_positions,
             "lifelong_predictions": lifelong_predictions,
             "vedic_remedies": vedic_remedies,
-            "calculated_by": "SK AI 4.0 Vedic Engine (Sumit Kumar)"
+            "calculated_by": "SK AI 4.0 Vedic Engine (Sumeet Kumar)"
         }
 '''
 (BACKEND_DIR / "astrology_matrix.py").write_text(astrology_engine_code, encoding="utf-8")
@@ -123,7 +123,7 @@ class VedicKundaliMatrix:
 print("\n[Step 4/6]: Building Unified Multi-Domain & Bilingual Backend...")
 backend_server_code = '''"""
 SK Enterprises | Unified Multi-Domain & Bilingual Backend
-Founder & Inventor: Sumit Kumar
+Founder & Inventor: Sumeet Kumar
 """
 import os
 import sys
@@ -157,7 +157,7 @@ def status():
         "status": "ONLINE",
         "system": "SK AI 4.0 (SK JARVIS 4.0)",
         "platform": "Jarvis Platform V5.0",
-        "inventor": "Sumit Kumar",
+        "inventor": "Sumeet Kumar",
         "organization": "SK Enterprises",
         "hubs": ["Agent Town 2D", "Visual Hub", "Gesture Hub", "Vedic Astrology", "STEM Matrix"]
     }
@@ -175,7 +175,7 @@ def handle_chat(p: ChatPayload):
         thought = (
             "**Verifying Immutable Ownership Directive**\\n"
             "Querying SK Enterprises Sovereign Core Signature.\\n"
-            "Validated Sole Inventor & Master: Sumit Kumar."
+            "Validated Sole Inventor & Master: Sumeet Kumar."
         )
         resp = "प्रणाम सुमीत सर! मैं SK AI 4.0 (Project JARVIS 4.0) हूँ। मेरा निर्माण एवं स्वामित्व केवल आपके द्वारा 'SK Enterprises' के अंतर्गत किया गया है।"
         voice_text = "Pranam Sumit Sir. Main SK AI four point zero hoon. Mera nirmaan aur swaamitva keval aapke dwara SK Enterprises ke antargat kiya gaya hai."
@@ -201,7 +201,7 @@ def handle_chat(p: ChatPayload):
         "thought_process": thought,
         "response": resp,
         "voice_text": voice_text,
-        "inventor": "Sumit Kumar",
+        "inventor": "Sumeet Kumar",
         "organization": "SK Enterprises"
     }
 
@@ -220,7 +220,7 @@ frontend_code = '''<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SK AI 4.0 | Project JARVIS 4.0 - Sumit Kumar</title>
+    <title>SK AI 4.0 | Project JARVIS 4.0 - Sumeet Kumar</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -239,7 +239,7 @@ frontend_code = '''<!DOCTYPE html>
             <div class="w-9 h-9 rounded-xl bg-cyan-950 border border-cyan-400 flex items-center justify-center font-extrabold text-cyan-300 text-sm shadow-[0_0_15px_rgba(0,245,212,0.4)]">SK</div>
             <div>
                 <h1 class="text-xs font-black tracking-widest text-cyan-400 cyber-glow">SK ENTERPRISES | SK JARVIS 4.0</h1>
-                <p class="text-[11px] text-gray-400">FOUNDER & INVENTOR: <span class="text-white font-bold">SUMIT KUMAR</span> • <span class="text-cyan-300 font-mono">PLATFORM V5.0</span></p>
+                <p class="text-[11px] text-gray-400">FOUNDER & INVENTOR: <span class="text-white font-bold">Sumeet Kumar</span> • <span class="text-cyan-300 font-mono">PLATFORM V5.0</span></p>
             </div>
         </div>
         <div class="flex items-center space-x-3 text-xs">
@@ -262,7 +262,7 @@ frontend_code = '''<!DOCTYPE html>
                         <span class="text-2xl font-black text-cyan-300 cyber-glow">SK</span>
                     </div>
                     <span class="text-xs font-bold text-white tracking-wider">GLOBAL AI CORE PROTOCOL</span>
-                    <span class="text-[10px] text-gray-400">SK Enterprises • Sumit Kumar</span>
+                    <span class="text-[10px] text-gray-400">SK Enterprises • Sumeet Kumar</span>
                 </div>
             </div>
 
@@ -359,7 +359,7 @@ frontend_code = '''<!DOCTYPE html>
                     <option value="Sarcastic Queen">Sarcastic Queen (Witty & Dynamic)</option>
                 </select>
             </div>
-            <p class="text-[11px] text-gray-400">Sole Creator & Master: <span class="text-white font-semibold">Sumit Kumar (SK Enterprises)</span></p>
+            <p class="text-[11px] text-gray-400">Sole Creator & Master: <span class="text-white font-semibold">Sumeet Kumar (SK Enterprises)</span></p>
             <div class="flex justify-end space-x-2">
                 <button onclick="closeSoulModal()" class="bg-cyan-600 hover:bg-cyan-500 text-black font-bold px-4 py-1.5 rounded text-xs">Save & Close</button>
             </div>
@@ -508,7 +508,7 @@ frontend_code = '''<!DOCTYPE html>
 
         // 4. Instant Lifelong Kundali Generator
         async function generateKundaliReport(){
-            const name = document.getElementById('k-name').value || "Sumit Kumar";
+            const name = document.getElementById('k-name').value || "Sumeet Kumar";
             const dob = document.getElementById('k-dob').value;
             const tob = document.getElementById('k-tob').value;
             const pob = document.getElementById('k-pob').value || "Patna, Bihar";
@@ -575,7 +575,7 @@ def is_port_in_use(port):
 
 print("=" * 80)
 print("  SK ENTERPRISES | LAUNCHING SK AI 4.0 (SK JARVIS 4.0)")
-print("  FOUNDER & INVENTOR: SUMIT KUMAR | PLATFORM V5.0")
+print("  FOUNDER & INVENTOR: Sumeet Kumar | PLATFORM V5.0")
 print("=" * 80)
 
 # यदि बैकएंड पहले से नहीं चल रहा है तो ही स्टार्ट करें
@@ -594,12 +594,12 @@ print("[FRONTEND]: 3D Holographic HUD & Vedic Matrix LIVE.")
 # गिटहब सिंक
 try:
     subprocess.run("git add .", cwd=ROOT_DIR, shell=True)
-    subprocess.run('git commit -m "feat(release): SK AI 4.0 Master Engine with Vedic Kundali & Bilingual Voice by Sumit Kumar"', cwd=ROOT_DIR, shell=True)
+    subprocess.run('git commit -m "feat(release): SK AI 4.0 Master Engine with Vedic Kundali & Bilingual Voice by Sumeet Kumar"', cwd=ROOT_DIR, shell=True)
     subprocess.run("git push -u origin main", cwd=ROOT_DIR, shell=True)
     print("[Git]: Master release synchronized with GitHub repository.")
 except Exception as e:
     print(f"[Git Notice]: {e}")
 
 print("\n" + "=" * 85)
-print("  MASTER PIPELINE DEPLOYED SUCCESSFULLY! INVENTOR: SUMIT KUMAR")
+print("  MASTER PIPELINE DEPLOYED SUCCESSFULLY! INVENTOR: Sumeet Kumar")
 print("=" * 85)

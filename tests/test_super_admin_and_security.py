@@ -1,6 +1,6 @@
 """
 SK Enterprises | Super Admin & Anti-Extraction Security Test Suite
-Founder, Inventor & Sole Architect: Sumit Kumar
+Founder, Inventor & Sole Architect: Sumeet Kumar
 Platform V5.0
 """
 import unittest
@@ -23,7 +23,7 @@ class TestSuperAdminAndSecurity(unittest.TestCase):
     def test_anti_extraction_shield_integrity(self):
         status = AntiExtractionShield.verify_integrity()
         self.assertEqual(status["status"], "SECURED_AND_LOCKED")
-        self.assertEqual(status["owner"], "Sumit Kumar")
+        self.assertEqual(status["owner"], "Sumeet Kumar")
         self.assertEqual(status["organization"], "SK Enterprises")
         self.assertTrue(status["anti_extraction_active"])
 
@@ -44,7 +44,7 @@ class TestSuperAdminAndSecurity(unittest.TestCase):
 
     # ─── Key Generator Unit Tests ──────────────────────────────────────────────
     def test_admin_lifetime_key_generation(self):
-        res = MasterKeyGenerator.generate_admin_lifetime_key("Sumit Kumar", "sumit.admin@skenterprises.ai")
+        res = MasterKeyGenerator.generate_admin_lifetime_key("Sumeet Kumar", "sumeet.admin@skenterprises.ai")
         self.assertEqual(res["key_type"], "SUPER_ADMIN_LIFETIME")
         self.assertTrue(res["details"]["lifetime_access"])
         
@@ -52,7 +52,7 @@ class TestSuperAdminAndSecurity(unittest.TestCase):
         val = MasterKeyGenerator.validate_any_key(res["license_key"])
         self.assertTrue(val["valid"])
         self.assertEqual(val["type"], "SUPER_ADMIN")
-        self.assertEqual(val["payload"]["admin_name"], "Sumit Kumar")
+        self.assertEqual(val["payload"]["admin_name"], "Sumeet Kumar")
 
     def test_user_annual_key_generation(self):
         res = MasterKeyGenerator.generate_user_annual_key("Amit Sharma", "amit@example.com", "9153579997")

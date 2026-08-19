@@ -1,6 +1,6 @@
 """
 SK Enterprises | ULTRON PRIME — 24x7 Autonomous Self-Evolution Daemon
-Founder, Inventor & Sole Architect: Sumit Kumar
+Founder, Inventor & Sole Architect: Sumeet Kumar
 Platform V5.0 — Layer 3: Recursive Evolution Engine
 - ArXiv cs.AI ingestion every 60 minutes (urllib — zero deps)
 - Daily versioned capability patch writer
@@ -60,7 +60,7 @@ def _load_status() -> dict:
         "cycle_count": 0,
         "patches": [],
         "last_ingested_papers": [],
-        "architect": "Sumit Kumar (SK Enterprises)"
+        "architect": "Sumeet Kumar (SK Enterprises)"
     }
     if STATUS_FILE.exists():
         try:
@@ -136,7 +136,7 @@ def _evolution_cycle():
 
     # 4. Checkpoint
     status["last_evolution_cycle"] = now
-    status["architect"] = "Sumit Kumar (SK Enterprises)"
+    status["architect"] = "Sumeet Kumar (SK Enterprises)"
     _save_status(status)
     return status
 

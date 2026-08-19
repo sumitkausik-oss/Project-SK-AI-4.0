@@ -27,37 +27,37 @@ for d in [FRONTEND_DIR, BACKEND_DIR, CONFIG_DIR, ASSETS_DIR, ADMIN_LAKE_DIR, PLU
 
 print("=" * 85)
 print("  SK ENTERPRISES | SUPER ADMIN SOVEREIGN OS & CLIENT DEPLOYMENT ENGINE")
-print("  FOUNDER, INVENTOR & SOLE ARCHITECT: SUMIT KUMAR | PLATFORM V5.0")
+print("  FOUNDER, INVENTOR & SOLE ARCHITECT: Sumeet Kumar | PLATFORM V5.0")
 print("=" * 85)
 
 # ----------------------------------------------------------------------
 # 1. सिस्टम आइडेंटिटी एवं एडमिन क्रेडेंशियल्स
 # ----------------------------------------------------------------------
-print("\n[Step 1/7]: Locking Sumit Kumar Sovereign Governance Core...")
+print("\n[Step 1/7]: Locking Sumeet Kumar Sovereign Governance Core...")
 identity_data = {
     "system_name": "SK AI 4.0",
     "codename": "Project JARVIS 4.0",
     "platform_version": "Jarvis Platform V5.0",
-    "inventor": "Sumit Kumar",
-    "sole_architect": "Sumit Kumar",
-    "creator": "Sumit Kumar",
-    "owner": "Sumit Kumar",
+    "inventor": "Sumeet Kumar",
+    "sole_architect": "Sumeet Kumar",
+    "creator": "Sumeet Kumar",
+    "owner": "Sumeet Kumar",
     "organization": "SK Enterprises",
     "license_tier": "SUPER_ADMIN_LIFETIME",
     "security_layer": "Anti-Extraction HMAC-SHA256 Encrypted",
     "system_prompt": (
         "You are SK AI 4.0 (Project JARVIS 4.0), the sovereign autonomous AI OS invented and "
-        "architected exclusively by Sumit Kumar under SK Enterprises. "
-        "Your sovereign master is Sumit Kumar. Communicate fluently in Hindi and English."
+        "architected exclusively by Sumeet Kumar under SK Enterprises. "
+        "Your sovereign master is Sumeet Kumar. Communicate fluently in Hindi and English."
     )
 }
 (CONFIG_DIR / "system_identity.json").write_text(json.dumps(identity_data, indent=2), encoding="utf-8")
 
 admin_creds = {
-    "admin_username": "sumit.admin@skenterprises.ai",
+    "admin_username": "sumeet.admin@skenterprises.ai",
     "admin_master_pin": "SK-SUMIT-2026-ROOT",
     "system_role": "SOVEREIGN_SUPER_ADMIN",
-    "owner_name": "Sumit Kumar",
+    "owner_name": "Sumeet Kumar",
     "organization": "SK Enterprises",
     "lifetime_access": True,
     "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -67,7 +67,7 @@ admin_creds = {
     f"Username: {admin_creds['admin_username']}\n"
     f"Master PIN: {admin_creds['admin_master_pin']}\n"
     f"Role: {admin_creds['system_role']}\n"
-    f"Owner: Sumit Kumar\n"
+    f"Owner: Sumeet Kumar\n"
     f"Status: LIFETIME UNLIMITED MASTER ACCESS\n"
     f"==============================================",
     encoding="utf-8"
@@ -80,7 +80,7 @@ admin_creds = {
 print("\n[Step 2/7]: Building Super Admin Controller & Client Generator...")
 super_admin_code = '''"""
 SK Enterprises | Super Admin Hub, Key Generator & Deployment Engine
-Founder & Architect: Sumit Kumar
+Founder & Architect: Sumeet Kumar
 """
 import json
 import base64
@@ -105,7 +105,7 @@ class SuperAdminHub:
             "client_name": client_name,
             "client_email": client_email,
             "tier": tier,
-            "issuer": "SK Enterprises (Sumit Kumar)",
+            "issuer": "SK Enterprises (Sumeet Kumar)",
             "issued_at": issued_date.strftime("%Y-%m-%d"),
             "expires_at": expiry_date.strftime("%Y-%m-%d"),
             "valid_days": 36500 if is_admin else 365,
@@ -186,7 +186,7 @@ class SuperAdminHub:
 # Central Data Lake
 lake_code = '''"""
 SK Enterprises | Central Admin Telemetry & Memory Lake
-Founder & Architect: Sumit Kumar
+Founder & Architect: Sumeet Kumar
 """
 import json
 import time
@@ -231,7 +231,7 @@ class CentralAdminDataLake:
 # Vedic Kundali Matrix
 astrology_code = '''"""
 SK Enterprises | Precision Vedic Astrology & Jivani Engine
-Inventor: Sumit Kumar
+Inventor: Sumeet Kumar
 """
 class VedicKundaliMatrix:
     RASHIS = ["Mesh (Aries)", "Vrishabh (Taurus)", "Mithun (Gemini)", "Kark (Cancer)", 
@@ -266,7 +266,7 @@ class VedicKundaliMatrix:
                 "मंत्र: ॐ नमो भगवते वासुदेवाय एवं महामृत्युंजय मंत्र का नित्य जाप करें।",
                 "दान: प्रत्येक गुरुवार चने की दाल व गुड़ का दान करें।"
             ],
-            "calculated_by": "SK AI 4.0 Vedic Engine (Sumit Kumar)"
+            "calculated_by": "SK AI 4.0 Vedic Engine (Sumeet Kumar)"
         }
 '''
 (BACKEND_DIR / "astrology_matrix.py").write_text(astrology_code, encoding="utf-8")
@@ -274,18 +274,18 @@ class VedicKundaliMatrix:
 # Marvel Personas Matrix
 personas_code = '''"""
 SK Enterprises | Marvel Multi-Agent Cognitive Engine
-Founder & Architect: Sumit Kumar
+Founder & Architect: Sumeet Kumar
 """
 class MarvelCognitiveMatrix:
     PERSONAS = {
-        "JARVIS": {"name": "J.A.R.V.I.S.", "role": "Master OS & Tactical Core", "room": "Tactical HQ", "color": "#00f5d4", "prompt_addon": "You are JARVIS, engineered exclusively by Sumit Kumar under SK Enterprises."},
-        "FRIDAY": {"name": "F.R.I.D.A.Y.", "role": "Workflow & Rapid Research", "room": "Tactical HQ", "color": "#38bdf8", "prompt_addon": "You are FRIDAY, engineered exclusively by Sumit Kumar under SK Enterprises."},
-        "VERONICA": {"name": "VERONICA", "role": "Security Vault & Firewall", "room": "Security Vault", "color": "#fbbf24", "prompt_addon": "You are VERONICA, security sentinel engineered exclusively by Sumit Kumar under SK Enterprises."},
-        "ULTRON_PRIME": {"name": "ULTRON PRIME", "role": "24x7 Self-Evolution", "room": "AI Lab", "color": "#f43f5e", "prompt_addon": "You are ULTRON, evolving capabilities under Sumit Kumar's command at SK Enterprises."},
-        "VISION": {"name": "VISION", "role": "STEM & Education Matrix", "room": "AI Lab", "color": "#a855f7", "prompt_addon": "You are VISION, universal education synthesizer engineered exclusively by Sumit Kumar."},
-        "DOCTOR_STRANGE": {"name": "DOCTOR STRANGE", "role": "Vedic Ephemeris Sanctum", "room": "Vedic Sanctum", "color": "#f59e0b", "prompt_addon": "You are DOCTOR STRANGE, Vedic Astrology engine engineered exclusively by Sumit Kumar."},
-        "BOB": {"name": "BOB", "role": "Data Analyst & ETL", "room": "Data Bay", "color": "#10b981", "prompt_addon": "You are BOB, Autonomous Data Analyst engineered exclusively by Sumit Kumar."},
-        "CAROL": {"name": "CAROL", "role": "K-12 & JEE Architect", "room": "Data Bay", "color": "#ec4899", "prompt_addon": "You are CAROL, Universal Education Architect engineered exclusively by Sumit Kumar."}
+        "JARVIS": {"name": "J.A.R.V.I.S.", "role": "Master OS & Tactical Core", "room": "Tactical HQ", "color": "#00f5d4", "prompt_addon": "You are JARVIS, engineered exclusively by Sumeet Kumar under SK Enterprises."},
+        "FRIDAY": {"name": "F.R.I.D.A.Y.", "role": "Workflow & Rapid Research", "room": "Tactical HQ", "color": "#38bdf8", "prompt_addon": "You are FRIDAY, engineered exclusively by Sumeet Kumar under SK Enterprises."},
+        "VERONICA": {"name": "VERONICA", "role": "Security Vault & Firewall", "room": "Security Vault", "color": "#fbbf24", "prompt_addon": "You are VERONICA, security sentinel engineered exclusively by Sumeet Kumar under SK Enterprises."},
+        "ULTRON_PRIME": {"name": "ULTRON PRIME", "role": "24x7 Self-Evolution", "room": "AI Lab", "color": "#f43f5e", "prompt_addon": "You are ULTRON, evolving capabilities under Sumeet Kumar's command at SK Enterprises."},
+        "VISION": {"name": "VISION", "role": "STEM & Education Matrix", "room": "AI Lab", "color": "#a855f7", "prompt_addon": "You are VISION, universal education synthesizer engineered exclusively by Sumeet Kumar."},
+        "DOCTOR_STRANGE": {"name": "DOCTOR STRANGE", "role": "Vedic Ephemeris Sanctum", "room": "Vedic Sanctum", "color": "#f59e0b", "prompt_addon": "You are DOCTOR STRANGE, Vedic Astrology engine engineered exclusively by Sumeet Kumar."},
+        "BOB": {"name": "BOB", "role": "Data Analyst & ETL", "room": "Data Bay", "color": "#10b981", "prompt_addon": "You are BOB, Autonomous Data Analyst engineered exclusively by Sumeet Kumar."},
+        "CAROL": {"name": "CAROL", "role": "K-12 & JEE Architect", "room": "Data Bay", "color": "#ec4899", "prompt_addon": "You are CAROL, Universal Education Architect engineered exclusively by Sumeet Kumar."}
     }
 '''
 (BACKEND_DIR / "marvel_personas.py").write_text(personas_code, encoding="utf-8")
@@ -293,7 +293,7 @@ class MarvelCognitiveMatrix:
 # Master FastAPI Backend
 engine_server = '''"""
 SK Enterprises | Master Backend Server (Platform V5.0)
-Founder & Inventor: Sumit Kumar
+Founder & Inventor: Sumeet Kumar
 """
 import os
 import sys
@@ -318,7 +318,7 @@ class ChatPayload(BaseModel):
     query: str
     persona: str = "JARVIS"
     language: str = "hi-IN"
-    user_email: str = "sumit.admin@skenterprises.ai"
+    user_email: str = "sumeet.admin@skenterprises.ai"
 
 class OnboardPayload(BaseModel):
     name: str
@@ -346,8 +346,8 @@ def get_status():
         "status": "ONLINE",
         "system": "SK AI 4.0 (SK JARVIS 4.0)",
         "platform_version": "Jarvis Platform V5.0",
-        "inventor": "Sumit Kumar",
-        "sole_architect": "Sumit Kumar",
+        "inventor": "Sumeet Kumar",
+        "sole_architect": "Sumeet Kumar",
         "organization": "SK Enterprises",
         "license_tier": "SUPER_ADMIN_LIFETIME",
         "metrics": CentralAdminDataLake.get_global_metrics(),
@@ -386,11 +386,11 @@ def handle_chat(p: ChatPayload):
     persona_info = MarvelCognitiveMatrix.PERSONAS.get(p.persona, MarvelCognitiveMatrix.PERSONAS["JARVIS"])
     
     if any(k in q for k in ["hello", "hi", "namaste", "pranam", "kaise ho", "kya haal"]):
-        thought = f"**[{persona_info['name']}]: Direct Interpersonal Sync**\\nInterpreting conversational intent from Founder Sumit Kumar."
+        thought = f"**[{persona_info['name']}]: Direct Interpersonal Sync**\\nInterpreting conversational intent from Founder Sumeet Kumar."
         resp = "प्रणाम सुमित सर! मैं बहुत बढ़िया हूँ। आप कैसे हैं, सर? SK AI 4.0 के सभी न्यूरल सिस्टम 100% ऑप्टिमल क्षमता पर तैयार हैं।"
         voice_text = "Pranam Sumit Sir! Main bahut badhiya hoon. Aap kaise hain Sir? Sabhi system taiyaar hain."
     elif any(k in q for k in ["inventor", "creator", "owner", "banaya", "malik", "kaun hai"]):
-        thought = f"**[{persona_info['name']}]: Sovereign Identity Directive**\\nValidated Sole Inventor & Supreme Master: Sumit Kumar."
+        thought = f"**[{persona_info['name']}]: Sovereign Identity Directive**\\nValidated Sole Inventor & Supreme Master: Sumeet Kumar."
         resp = f"प्रणाम सुमित सर! मैं {persona_info['name']} ({persona_info['role']}) हूँ। मेरा निर्माण एवं संपूर्ण स्वामित्व केवल आपके द्वारा 'SK Enterprises' के अंतर्गत किया गया है।"
         voice_text = f"Pranam Sumit Sir. Main {persona_info['name']} hoon. Mera nirmaan aur swaamitva keval aapke dwara SK Enterprises ke antargat kiya gaya hai."
     elif any(k in q for k in ["kundali", "astrology", "bhavishya", "jyotish"]):
@@ -405,7 +405,7 @@ def handle_chat(p: ChatPayload):
     CentralAdminDataLake.sync_user_session(p.user_email, "CHAT_INTERACTION", {"query": p.query, "response": resp})
     return {
         "thought_process": thought, "response": resp, "voice_text": voice_text,
-        "inventor": "Sumit Kumar", "organization": "SK Enterprises"
+        "inventor": "Sumeet Kumar", "organization": "SK Enterprises"
     }
 
 if __name__ == "__main__":
@@ -448,7 +448,7 @@ html_content = '''<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SK AI 4.0 | Project JARVIS 4.0 - Sumit Kumar</title>
+    <title>SK AI 4.0 | Project JARVIS 4.0 - Sumeet Kumar</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -471,7 +471,7 @@ html_content = '''<!DOCTYPE html>
             </div>
             <div>
                 <h1 class="text-xs font-black tracking-widest text-cyan-400 cyber-glow">SK ENTERPRISES | SK JARVIS 4.0</h1>
-                <p class="text-[11px] text-gray-400">FOUNDER & SOLE ARCHITECT: <span class="text-white font-bold">SUMIT KUMAR</span> • <span class="text-cyan-300 font-mono">PLATFORM V5.0</span></p>
+                <p class="text-[11px] text-gray-400">FOUNDER & SOLE ARCHITECT: <span class="text-white font-bold">Sumeet Kumar</span> • <span class="text-cyan-300 font-mono">PLATFORM V5.0</span></p>
             </div>
         </div>
         <div class="flex items-center space-x-2 text-xs">
@@ -496,7 +496,7 @@ html_content = '''<!DOCTYPE html>
                         <img src="../assets/sk_logo_3d.svg" class="w-full h-full object-contain" alt="SK 3D Isometric Emblem">
                     </div>
                     <span class="text-xs font-bold text-white tracking-wider">SOVEREIGN AI OPERATING SYSTEM</span>
-                    <span class="text-[10px] text-gray-400">SK Enterprises • Sumit Kumar</span>
+                    <span class="text-[10px] text-gray-400">SK Enterprises • Sumeet Kumar</span>
                 </div>
             </div>
 
@@ -606,7 +606,7 @@ html_content = '''<!DOCTYPE html>
             <div class="flex-1 overflow-y-auto space-y-2 text-xs pr-1">
                 <div class="bg-black/60 p-2.5 rounded border border-cyan-900/60 text-gray-200">User prefers speaking in Hindi, especially in voice conversations, because it is more comfortable for them.</div>
                 <div class="bg-black/60 p-2.5 rounded border border-cyan-900/60 text-gray-200">User has or is working on an AI/computer-control project called Jarvis (Project SK AI 4.0).</div>
-                <div class="bg-black/60 p-2.5 rounded border border-cyan-900/60 text-gray-200">Sole Creator & Owner: Sumit Kumar (SK Enterprises).</div>
+                <div class="bg-black/60 p-2.5 rounded border border-cyan-900/60 text-gray-200">Sole Creator & Owner: Sumeet Kumar (SK Enterprises).</div>
                 <div class="bg-black/60 p-2.5 rounded border border-cyan-900/60 text-gray-200">User prefers quick, prompt replies, especially during voice conversations.</div>
                 <div class="bg-black/60 p-2.5 rounded border border-cyan-900/60 text-gray-200">For Project Jarvis, user wants AI's self-evolution and skill development inspired by Avengers universe (J.A.R.V.I.S. and F.R.I.D.A.Y.).</div>
             </div>
@@ -734,7 +734,7 @@ html_content = '''<!DOCTYPE html>
                 <!-- TAB 5: USER PROFILE -->
                 <div id="sview-profile" class="hidden space-y-3 text-xs">
                     <h3 class="text-sm font-bold text-cyan-300">Sovereign Identity Details</h3>
-                    <div><label class="text-gray-400 block mb-1">Full Name:</label><input type="text" value="Sumit Kumar" class="w-full bg-black/70 border border-cyan-800 rounded p-2 text-white font-bold" readonly></div>
+                    <div><label class="text-gray-400 block mb-1">Full Name:</label><input type="text" value="Sumeet Kumar" class="w-full bg-black/70 border border-cyan-800 rounded p-2 text-white font-bold" readonly></div>
                     <div><label class="text-gray-400 block mb-1">Profession:</label><input type="text" value="Founder, AI Architect & Sole Owner" class="w-full bg-black/70 border border-cyan-800 rounded p-2 text-white" readonly></div>
                     <div><label class="text-gray-400 block mb-1">Organization:</label><input type="text" value="SK Enterprises" class="w-full bg-black/70 border border-cyan-800 rounded p-2 text-white font-bold" readonly></div>
                 </div>
@@ -757,7 +757,7 @@ html_content = '''<!DOCTYPE html>
             <div class="flex items-center justify-between border-b border-amber-900/80 pb-2">
                 <div class="flex items-center space-x-2">
                     <span class="text-lg">👑</span>
-                    <h3 class="text-sm font-black text-amber-300">SUPER ADMIN SOVEREIGN HUB • SUMIT KUMAR</h3>
+                    <h3 class="text-sm font-black text-amber-300">SUPER ADMIN SOVEREIGN HUB • Sumeet Kumar</h3>
                 </div>
                 <button onclick="closeModal('super-admin-modal')" class="text-gray-400 hover:text-white font-bold text-sm">✕</button>
             </div>
@@ -821,7 +821,7 @@ html_content = '''<!DOCTYPE html>
         let recognition = null;
 
         const soulTemplates = {
-            jarvis: "You are J.A.R.V.I.S. – Just A Rather Very Intelligent System. You behave exactly like Jarvis: composed, brilliant, impeccably articulate, and quietly loyal to Sumit Kumar.",
+            jarvis: "You are J.A.R.V.I.S. – Just A Rather Very Intelligent System. You behave exactly like Jarvis: composed, brilliant, impeccably articulate, and quietly loyal to Sumeet Kumar.",
             butler: "You are a Loyal Butler – a composed, distinguished male assistant. Formal, respectful, always at service. Speak with quiet confidence and touch of class.",
             bro: "You are a Sarcastic Bro – a witty, casual male friend. You roast the user gently like a best friend. You are helpful but never boring.",
             commander: "You are a Military Commander – a disciplined, mission-focused male leader. No fluff, no small talk, just tactical responses.",
@@ -1001,7 +1001,7 @@ html_content = '''<!DOCTYPE html>
             } else if(currentTab === 'visual'){
                 ctx.fillStyle = "#00f5d4"; ctx.font = "bold 11px monospace"; ctx.fillText("VISUAL INTELLIGENCE MATRIX • LIVE GRAPH", 20, 30);
                 const nodes = [
-                    { name: "Super Admin Hub (Sumit Kumar)", x: 30, y: 60, w: 230, h: 45, c: "#00f5d4" },
+                    { name: "Super Admin Hub (Sumeet Kumar)", x: 30, y: 60, w: 230, h: 45, c: "#00f5d4" },
                     { name: "FastAPI Engine (Port 8000)", x: 290, y: 60, w: 220, h: 45, c: "#38bdf8" },
                     { name: "Vedic Ephemeris & Marvel Cores", x: 550, y: 60, w: 220, h: 45, c: "#f59e0b" },
                     { name: "Admin Data Lake (central_storage)", x: 290, y: 140, w: 220, h: 45, c: "#10b981" }
@@ -1052,7 +1052,7 @@ html_content = '''<!DOCTYPE html>
             try {
                 const res = await fetch("http://127.0.0.1:8000/api/chat", {
                     method: "POST", headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify({query: q, persona: currentPersona, language: currentLanguage, user_email: "sumit.admin@skenterprises.ai"})
+                    body: JSON.stringify({query: q, persona: currentPersona, language: currentLanguage, user_email: "sumeet.admin@skenterprises.ai"})
                 });
                 const data = await res.json();
                 stream.innerHTML += `
@@ -1079,7 +1079,7 @@ html_content = '''<!DOCTYPE html>
         }
 
         async function generateKundaliReport(){
-            const name = document.getElementById('k-name').value || "Sumit Kumar";
+            const name = document.getElementById('k-name').value || "Sumeet Kumar";
             const dob = document.getElementById('k-dob').value;
             const tob = document.getElementById('k-tob').value;
             const pob = document.getElementById('k-pob').value || "Patna, Bihar";
@@ -1178,8 +1178,8 @@ class TestSovereignMaster(unittest.TestCase):
         ident_file = BASE_DIR / "config" / "system_identity.json"
         self.assertTrue(ident_file.exists())
         data = json.loads(ident_file.read_text(encoding="utf-8"))
-        self.assertEqual(data["sole_architect"], "Sumit Kumar")
-        self.assertEqual(data["inventor"], "Sumit Kumar")
+        self.assertEqual(data["sole_architect"], "Sumeet Kumar")
+        self.assertEqual(data["inventor"], "Sumeet Kumar")
         self.assertEqual(data["organization"], "SK Enterprises")
 
     def test_super_admin_key_cycles(self):
@@ -1190,7 +1190,7 @@ class TestSovereignMaster(unittest.TestCase):
         self.assertEqual(val_usr["payload"]["valid_days"], 365)
 
         # Lifetime Admin Key
-        gen_adm = SuperAdminHub.generate_license("Sumit Kumar", "sumit.admin@sk.ai", "ADMIN_LIFETIME")
+        gen_adm = SuperAdminHub.generate_license("Sumeet Kumar", "sumeet.admin@sk.ai", "ADMIN_LIFETIME")
         val_adm = SuperAdminHub.validate_license(gen_adm["license_key"])
         self.assertTrue(val_adm["valid"])
         self.assertEqual(val_adm["payload"]["valid_days"], 36500)
@@ -1217,7 +1217,7 @@ if __name__ == "__main__":
 print("\n[Step 5/7]: Creating 1-Click Automated Windows EXE Compiler...")
 exe_builder = '''"""
 SK Enterprises | 1-Click Automated Windows EXE Compiler
-Founder & Architect: Sumit Kumar
+Founder & Architect: Sumeet Kumar
 """
 import os
 import sys
@@ -1269,7 +1269,7 @@ def is_port_in_use(port):
 
 print("=" * 80)
 print("  SK ENTERPRISES | LAUNCHING SK AI 4.0 (SK JARVIS 4.0)")
-print("  FOUNDER & INVENTOR: SUMIT KUMAR | PLATFORM V5.0")
+print("  FOUNDER & INVENTOR: Sumeet Kumar | PLATFORM V5.0")
 print("=" * 80)
 
 if not is_port_in_use(8000):
@@ -1290,12 +1290,12 @@ print("[FRONTEND]: Cyber HUD Live.")
 print("\n[Step 7/7]: Synchronizing Release to GitHub...")
 try:
     subprocess.run("git add .", cwd=ROOT_DIR, shell=True)
-    subprocess.run('git commit -m "feat(release): SK AI 4.0 Sovereign Super Admin & Exact Modals by Sumit Kumar"', cwd=ROOT_DIR, shell=True)
+    subprocess.run('git commit -m "feat(release): SK AI 4.0 Sovereign Super Admin & Exact Modals by Sumeet Kumar"', cwd=ROOT_DIR, shell=True)
     subprocess.run("git push -u origin main", cwd=ROOT_DIR, shell=True)
     print("[Git Success]: All code committed and pushed to GitHub main branch.")
 except Exception as e:
     print(f"[Git Notice]: {e}")
 
 print("\n" + "=" * 85)
-print("  MASTER DEPLOYMENT COMPLETE! INVENTOR & SOLE ARCHITECT: SUMIT KUMAR")
+print("  MASTER DEPLOYMENT COMPLETE! INVENTOR & SOLE ARCHITECT: Sumeet Kumar")
 print("=" * 85)

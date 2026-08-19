@@ -1,6 +1,6 @@
 """
 SK Enterprises | 1-Click Automated Windows EXE Compiler
-Founder & Architect: Sumit Kumar
+Founder & Architect: Sumeet Kumar
 """
 import os
 import sys

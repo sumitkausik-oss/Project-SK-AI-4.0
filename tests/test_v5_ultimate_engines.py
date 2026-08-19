@@ -15,8 +15,8 @@ class TestSovereignMaster(unittest.TestCase):
         ident_file = BASE_DIR / "config" / "system_identity.json"
         self.assertTrue(ident_file.exists())
         data = json.loads(ident_file.read_text(encoding="utf-8"))
-        self.assertEqual(data["sole_architect"], "Sumit Kumar")
-        self.assertEqual(data["inventor"], "Sumit Kumar")
+        self.assertEqual(data["sole_architect"], "Sumeet Kumar")
+        self.assertEqual(data["inventor"], "Sumeet Kumar")
         self.assertEqual(data["organization"], "SK Enterprises")
 
     def test_super_admin_key_cycles(self):
@@ -27,7 +27,7 @@ class TestSovereignMaster(unittest.TestCase):
         self.assertEqual(val_usr["payload"]["valid_days"], 365)
 
         # Lifetime Admin Key
-        gen_adm = SuperAdminHub.generate_license("Sumit Kumar", "sumit.admin@sk.ai", "ADMIN_LIFETIME")
+        gen_adm = SuperAdminHub.generate_license("Sumeet Kumar", "sumeet.admin@sk.ai", "ADMIN_LIFETIME")
         val_adm = SuperAdminHub.validate_license(gen_adm["license_key"])
         self.assertTrue(val_adm["valid"])
         self.assertEqual(val_adm["payload"]["valid_days"], 36500)

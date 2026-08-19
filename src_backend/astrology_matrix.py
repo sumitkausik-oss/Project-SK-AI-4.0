@@ -1,6 +1,6 @@
 """
 SK Enterprises | Precision Vedic Astrology & Jivani Engine
-Inventor: Sumit Kumar
+Inventor: Sumeet Kumar
 """
 class VedicKundaliMatrix:
     RASHIS = ["Mesh (Aries)", "Vrishabh (Taurus)", "Mithun (Gemini)", "Kark (Cancer)", 
@@ -35,5 +35,5 @@ class VedicKundaliMatrix:
                 "मंत्र: ॐ नमो भगवते वासुदेवाय एवं महामृत्युंजय मंत्र का नित्य जाप करें।",
                 "दान: प्रत्येक गुरुवार चने की दाल व गुड़ का दान करें।"
             ],
-            "calculated_by": "SK AI 4.0 Vedic Engine (Sumit Kumar)"
+            "calculated_by": "SK AI 4.0 Vedic Engine (Sumeet Kumar)"
         }

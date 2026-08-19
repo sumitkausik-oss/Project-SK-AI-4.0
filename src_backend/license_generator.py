@@ -1,6 +1,6 @@
 """
 SK Enterprises | 1-Year Client Cryptographic License Engine
-Founder & Architect: Sumit Kumar
+Founder & Architect: Sumeet Kumar
 """
 import json
 import base64
@@ -21,7 +21,7 @@ class SKLicenseKeyEngine:
             "client_name": client_name,
             "client_email": client_email,
             "tier": tier,
-            "issuer": "SK Enterprises (Sumit Kumar)",
+            "issuer": "SK Enterprises (Sumeet Kumar)",
             "issued_at": issued_date.strftime("%Y-%m-%d"),
             "expires_at": expiry_date.strftime("%Y-%m-%d"),
             "valid_days": 365

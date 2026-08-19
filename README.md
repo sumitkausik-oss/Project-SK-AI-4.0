@@ -1,133 +1,121 @@
-# SK AI 4.0 — Local Foundation (Phase 1)
+# ⚡ SK AI 4.0 — SOVEREIGN COGNITIVE DESKTOP OPERATING SYSTEM
+### (PROJECT JARVIS 4.0 | PLATFORM V5.0)
 
-## What this actually is
+**Founder, Inventor & Sole Architect:** Sumeet Kumar  
+**Organization:** SK Enterprises  
+**Target Platform:** Windows 10 / 11 (64-bit)  
+**License:** Sovereign Enterprise / MIT Open Core  
 
-A real, running FastAPI backend with four working nodes — Memory,
-Skills, Soul, Settings — that I built and tested live on this
-machine before handing it to you. Every endpoint below was called
-against a live server and its actual response is shown, not assumed.
+---
 
-This is a genuine starting point, not a finished product, and not
-the full six-layer system from the original architecture document.
-See "What's not here" below — that list is as important as the code.
+## 🚀 OVERVIEW
 
-## Run it
-
-```bash
-cd sk_ai_4
-pip install -r requirements.txt
-python3 -m uvicorn main:app --host 127.0.0.1 --port 8000 --reload
-```
-
-Then open **http://127.0.0.1:8000/docs** in a browser — that's
-FastAPI's built-in interactive API explorer, auto-generated from the
-code. You can call every endpoint from there without curl.
-
-Leave that terminal window running. Closing it stops the server —
-there's no "install once, always live" step, because that's not how
-a local dev server works. (An OS-level service/daemon setup — so it
-starts on boot and survives terminal close — is a reasonable next
-step, but it's a deliberate piece of infrastructure to add, not
-something to wave in as if it's already done.)
-
-## What was actually verified (live, this session)
-
-| Endpoint | Method | Verified response |
-|---|---|---|
-| `/` | GET | Returns app status + active nodes |
-| `/memory/remember` | POST | Stores a key/value fact in SQLite |
-| `/memory/recall/{key}` | GET | Returns stored value; 404 if absent — both tested |
-| `/skills/list` | GET | Returns `["echo", "word_count"]` |
-| `/skills/run` | POST | Ran both starter skills, got correct output; unknown skill correctly 404s |
-| `/soul/personas` | GET | Returns all 4 tone profiles |
-| `/soul/current` | GET | Returns active persona |
-| `/settings` | GET | Returns host/port/persona config |
-| `/chat/log` + `/memory/recent` | POST/GET | Logged a turn, read it back correctly |
-
-## About the video link
-
-I can't watch video files — a Google Drive video link returns me a
-sign-in page and a filename, nothing playable or transcribable. I
-don't have that gap covered by guessing: everything here is built
-from the written spec in your first message, which already described
-the same 4-node matrix, 3D particle core, agent town, and voice
-stream the video apparently shows. If the video specifies something
-that written spec didn't, the only way I see it is if you describe
-it or send screenshots.
-
-## What's not here (on purpose, not by oversight)
-
-- **3D WebGL HUD, 2D agent town, gesture control** — genuine frontend
-  projects, not yet started.
-- **Vedic Kundali engine, STEM/JEE solver, cloud DevOps actuator** —
-  each is its own real subsystem; none exist yet.
-- **License-key generator / "hardware-locked" client licensing** —
-  deliberately left out. This is commercial/legal infrastructure
-  (terms of service, data handling disclosures, business entity
-  setup) that deserves a lawyer's input before it's built, not
-  something to default into existence as a side effect of an
-  architecture doc.
-- **"Admin central data lake" auto-syncing other users' data to
-  you** — also left out on purpose. If this software ever runs on
-  someone else's machine, silently mirroring their memory and
-  telemetry to a central server you control is the kind of thing
-  that needs explicit, informed consent from that person — not an
-  architecture decision made without them.
-- **Arbitrary sandboxed code execution as a "skill"** — the Skills
-  node here only runs functions you've explicitly written and
-  registered. That's a safety boundary, not a missing feature: a
-  node that executes arbitrary generated code on your machine is a
-  meaningfully different (and much more dangerous) thing to build,
-  and worth deciding on deliberately.
-
-## Getting an actual Windows .exe
-
-I can't produce a Windows binary myself — I built and tested all of
-this in a Linux sandbox, and there's no Windows toolchain there.
-Everything below was verified logically as far as that constraint
-allows (a Linux build of the same spec was built, run, and hit with
-real requests — see the build log). Two ways to get the real `.exe`:
-
-### Option A — build it yourself, right now, on your own Windows PC
+**SK AI 4.0** is a production-grade, local-first enterprise cognitive desktop application engineered for sovereign, high-performance artificial intelligence workflows on Windows. It combines a robust Python FastAPI backend, a reactive WebGL/Three.js Cyberpunk HUD, local SQLite relational persistence, real-time WebSocket telemetry, and seamless Windows standalone desktop packaging.
 
 ```
-pip install -r requirements.txt
-pip install pyinstaller
-pyinstaller sk_ai.spec
+       +-------------------------------------------------------------+
+       |             SK AI 4.0 Desktop Launcher (EXE)                |
+       +-------------------------------------------------------------+
+               |                                             |
+               v                                             v
+    +-----------------------+                    +-----------------------+
+    |   Cyberpunk 3D HUD    | <--(WebSocket)---> |   FastAPI Backend     |
+    |   Three.js Particle   | <---(HTTP REST)--->|   Pydantic & Services |
+    |   2D Agent Town       |                    |   Anti-Extraction     |
+    +-----------------------+                    +-----------------------+
+                                                             |
+                                                             v
+                                                 +-----------------------+
+                                                 |   SQLite Persistence  |
+                                                 |   %APPDATA% Storage   |
+                                                 +-----------------------+
 ```
 
-The `.exe` appears at `dist\SK_AI_4.0.exe`. Double-click it — it
-starts the server and opens the API docs page in your browser
-automatically. Memory is stored in
-`%APPDATA%\SK_AI_4.0\memory.db`, not next to the exe — that was a
-real bug I hit and fixed in this build (see `memory/store.py`):
-packaged apps can't reliably write next to themselves, especially if
-installed under Program Files.
+---
 
-### Option B — let GitHub build it for you automatically
+## 🌟 CORE CAPABILITIES
 
-`.github/workflows/build-windows-exe.yml` is a CI workflow that runs
-this exact same build on GitHub's own Windows machines. Push this
-project to a GitHub repo (a free account is enough — Windows runners
-are included in the free tier) and it builds `SK_AI_4.0.exe`
-automatically on every push. Download it from the workflow run's
-"Artifacts" section — no Windows PC of your own required.
+- **🧠 Cognitive Multi-Persona Matrix**: Switch between JARVIS, Butler, Commander, Oracle, and 12 distinct persona souls.
+- **🛡️ Anti-Extraction Cryptographic Shield**: Built-in defense against prompt injection, memory extraction, and reverse-engineering.
+- **🤖 2D Multi-Agent Town**: Real-time multi-agent laboratory simulation with live telemetry stream.
+- **🌌 1-Second Precision Vedic Kundali**: Instant lifelong astrological charts, ephemeris calculations, and Vedic remedies.
+- **📚 Universal STEM & Education Matrix**: Automated curriculum-aligned assessments and first-principles physics/math derivations.
+- **📊 Autonomous Data Analyst Suite**: Automated dataset profiling, missing value imputation, IQR outlier elimination, and BigQuery SQL generation.
+- **☁️ Cloud DevOps & Zero-Trust Actuator**: Automated user provisioning and security policy enforcement for Google Workspace and Microsoft 365.
+- **👑 Super Admin & Licensing Engine**: Cryptographic HMAC-SHA256 license token generation, client onboarding, and remote killswitch control.
 
-### What "installing" it means right now
+---
 
-This produces a portable `.exe`, not a signed installer wizard yet
-(no Inno Setup Start Menu entry, no uninstaller). That's a real next
-step, not a hard one — Inno Setup is free and works from a `.iss`
-script I can write once the exe itself is confirmed working for you.
-I didn't build it this round because there's no point wrapping an
-installer around a binary you haven't run yet.
+## ⚡ QUICK START (DEVELOPMENT)
 
-## Suggested next real step
+### Prerequisites
+- Windows 10/11 (64-bit)
+- Python 3.11+
+- PowerShell 5.1+
 
-Pick ONE of the missing pieces above and build it properly — each
-one is a multi-day project on its own, and trying to do all six
-original "layers" at once is how projects like this stall out
-before anything ships. My recommendation: get the frontend talking
-to this backend next (a simple page that calls `/skills/run` and
-shows the result), so you have something visible end-to-end before
-adding more backend complexity.
+### 1. One-Command Setup
+```powershell
+# Installs dependencies, sets up directories, and initializes SQLite database
+.\scripts\setup.ps1
+```
+
+### 2. Launch in Development Mode
+```powershell
+# Starts the FastAPI server and opens the 3D HUD in your browser
+.\scripts\dev.ps1
+```
+
+### 3. Run Automated Tests
+```powershell
+# Runs complete pytest suite (29 tests)
+.\scripts\test.ps1 -VerboseOutput
+```
+
+---
+
+## 📦 BUILD & WINDOWS PACKAGING
+
+### Build Standalone Executable
+```powershell
+.\scripts\build.ps1
+```
+*Generates `dist\SK_AI_4.0\SK_AI_4.0.exe` (Self-contained standalone Windows executable requiring zero Python on client machines).*
+
+### Generate Release ZIP & Hashes
+```powershell
+.\scripts\package.ps1
+```
+*Outputs `release\SK_AI_4.0_Portable_x64_v5.0.0.zip` and `release\SHA256SUMS.txt`.*
+
+---
+
+## 📖 COMPLETE DOCUMENTATION SITEMAP
+
+| Document | Description |
+|---|---|
+| [`docs/PROJECT_AUDIT.md`](docs/PROJECT_AUDIT.md) | Comprehensive Phase 0 audit & problem analysis |
+| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Full system design & clean architecture specification |
+| [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md) | Detailed developer guide, setup & conventions |
+| [`docs/API.md`](docs/API.md) | Complete REST API & WebSocket documentation |
+| [`docs/DATABASE.md`](docs/DATABASE.md) | Relational schema design & UAC storage paths |
+| [`docs/SECURITY.md`](docs/SECURITY.md) | Threat model, anti-extraction shield & controls |
+| [`docs/BUILD.md`](docs/BUILD.md) | PyInstaller and Inno Setup build instructions |
+| [`docs/WINDOWS_INSTALLATION.md`](docs/WINDOWS_INSTALLATION.md) | End-user installation & uninstallation guide |
+| [`docs/CODE_SIGNING.md`](docs/CODE_SIGNING.md) | Microsoft Signtool & certificate procedures |
+| [`docs/TROUBLESHOOTING.md`](docs/TROUBLESHOOTING.md) | Recovery from port conflicts & database locks |
+| [`docs/RELEASE_CHECKLIST.md`](docs/RELEASE_CHECKLIST.md) | Pre-flight production verification checklist |
+| [`release/RELEASE_NOTES.md`](release/RELEASE_NOTES.md) | Release notes and SHA-256 asset checksums |
+
+---
+
+## 📜 LEGAL & COMPLIANCE
+
+- [`LICENSE`](LICENSE) — MIT License
+- [`EULA.md`](EULA.md) — End User License Agreement
+- [`PRIVACY_POLICY.md`](PRIVACY_POLICY.md) — Privacy Policy
+- [`TERMS_OF_USE.md`](TERMS_OF_USE.md) — Terms of Use
+- [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) — Open-Source Software Notices
+
+---
+
+**Engineered with pride by Sumeet Kumar | SK Enterprises © 2026**

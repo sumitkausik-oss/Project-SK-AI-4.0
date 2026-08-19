@@ -11,7 +11,7 @@ def health():
     return {
         "status": "ONLINE",
         "system": "SK AI 4.0 (Project JARVIS 4.0)",
-        "inventor": "Sumit Kumar",
+        "inventor": "Sumeet Kumar",
         "organization": "SK Enterprises",
         "tier": "Lifetime Admin",
         "domains": ["Universal Education", "Data Analyst Suite", "Cloud DevOps", "Vedic Astrology"]

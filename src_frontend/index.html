@@ -3,9 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SK AI 4.0 | Project JARVIS 4.0 - Sumit Kumar</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <title>SK AI 4.0 | Project JARVIS 4.0 - Sumeet Kumar</title>
+    <script src="js/three.min.js"></script>
+    <script>if (typeof THREE === 'undefined') { document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>'); }</script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="js/api_client.js"></script>
+    <script src="js/ws_manager.js"></script>
     <style>
         body { background-color: #030712; color: #f3f4f6; font-family: 'Segoe UI', system-ui, sans-serif; overflow: hidden; }
         .glass-panel { background: rgba(8, 16, 32, 0.92); backdrop-filter: blur(20px); border: 1px solid rgba(0, 245, 212, 0.25); border-radius: 12px; }
@@ -26,7 +29,7 @@
             </div>
             <div>
                 <h1 class="text-xs font-black tracking-widest text-cyan-400 cyber-glow">SK ENTERPRISES | SK JARVIS 4.0</h1>
-                <p class="text-[11px] text-gray-400">FOUNDER & SOLE ARCHITECT: <span class="text-white font-bold">SUMIT KUMAR</span> • <span class="text-cyan-300 font-mono">PLATFORM V5.0</span></p>
+                <p class="text-[11px] text-gray-400">FOUNDER & SOLE ARCHITECT: <span class="text-white font-bold">Sumeet Kumar</span> • <span class="text-cyan-300 font-mono">PLATFORM V5.0</span></p>
             </div>
         </div>
         <div class="flex items-center space-x-2 text-xs">
@@ -51,7 +54,7 @@
                         <img src="../assets/sk_logo_3d.svg" class="w-full h-full object-contain" alt="SK 3D Isometric Emblem">
                     </div>
                     <span class="text-xs font-bold text-white tracking-wider">SOVEREIGN AI OPERATING SYSTEM</span>
-                    <span class="text-[10px] text-gray-400">SK Enterprises • Sumit Kumar</span>
+                    <span class="text-[10px] text-gray-400">SK Enterprises • Sumeet Kumar</span>
                 </div>
             </div>
 
@@ -161,7 +164,7 @@
             <div class="flex-1 overflow-y-auto space-y-2 text-xs pr-1">
                 <div class="bg-black/60 p-2.5 rounded border border-cyan-900/60 text-gray-200">User prefers speaking in Hindi, especially in voice conversations, because it is more comfortable for them.</div>
                 <div class="bg-black/60 p-2.5 rounded border border-cyan-900/60 text-gray-200">User has or is working on an AI/computer-control project called Jarvis (Project SK AI 4.0).</div>
-                <div class="bg-black/60 p-2.5 rounded border border-cyan-900/60 text-gray-200">Sole Creator & Owner: Sumit Kumar (SK Enterprises).</div>
+                <div class="bg-black/60 p-2.5 rounded border border-cyan-900/60 text-gray-200">Sole Creator & Owner: Sumeet Kumar (SK Enterprises).</div>
                 <div class="bg-black/60 p-2.5 rounded border border-cyan-900/60 text-gray-200">User prefers quick, prompt replies, especially during voice conversations.</div>
                 <div class="bg-black/60 p-2.5 rounded border border-cyan-900/60 text-gray-200">For Project Jarvis, user wants AI's self-evolution and skill development inspired by Avengers universe (J.A.R.V.I.S. and F.R.I.D.A.Y.).</div>
             </div>
@@ -289,7 +292,7 @@
                 <!-- TAB 5: USER PROFILE -->
                 <div id="sview-profile" class="hidden space-y-3 text-xs">
                     <h3 class="text-sm font-bold text-cyan-300">Sovereign Identity Details</h3>
-                    <div><label class="text-gray-400 block mb-1">Full Name:</label><input type="text" value="Sumit Kumar" class="w-full bg-black/70 border border-cyan-800 rounded p-2 text-white font-bold" readonly></div>
+                    <div><label class="text-gray-400 block mb-1">Full Name:</label><input type="text" value="Sumeet Kumar" class="w-full bg-black/70 border border-cyan-800 rounded p-2 text-white font-bold" readonly></div>
                     <div><label class="text-gray-400 block mb-1">Profession:</label><input type="text" value="Founder, AI Architect & Sole Owner" class="w-full bg-black/70 border border-cyan-800 rounded p-2 text-white" readonly></div>
                     <div><label class="text-gray-400 block mb-1">Organization:</label><input type="text" value="SK Enterprises" class="w-full bg-black/70 border border-cyan-800 rounded p-2 text-white font-bold" readonly></div>
                 </div>
@@ -312,7 +315,7 @@
             <div class="flex items-center justify-between border-b border-amber-900/80 pb-2">
                 <div class="flex items-center space-x-2">
                     <span class="text-lg">👑</span>
-                    <h3 class="text-sm font-black text-amber-300">SUPER ADMIN SOVEREIGN HUB • SUMIT KUMAR</h3>
+                    <h3 class="text-sm font-black text-amber-300">SUPER ADMIN SOVEREIGN HUB • Sumeet Kumar</h3>
                 </div>
                 <button onclick="closeModal('super-admin-modal')" class="text-gray-400 hover:text-white font-bold text-sm">✕</button>
             </div>
@@ -376,7 +379,7 @@
         let recognition = null;
 
         const soulTemplates = {
-            jarvis: "You are J.A.R.V.I.S. – Just A Rather Very Intelligent System. You behave exactly like Jarvis: composed, brilliant, impeccably articulate, and quietly loyal to Sumit Kumar.",
+            jarvis: "You are J.A.R.V.I.S. – Just A Rather Very Intelligent System. You behave exactly like Jarvis: composed, brilliant, impeccably articulate, and quietly loyal to Sumeet Kumar.",
             butler: "You are a Loyal Butler – a composed, distinguished male assistant. Formal, respectful, always at service. Speak with quiet confidence and touch of class.",
             bro: "You are a Sarcastic Bro – a witty, casual male friend. You roast the user gently like a best friend. You are helpful but never boring.",
             commander: "You are a Military Commander – a disciplined, mission-focused male leader. No fluff, no small talk, just tactical responses.",
@@ -556,7 +559,7 @@
             } else if(currentTab === 'visual'){
                 ctx.fillStyle = "#00f5d4"; ctx.font = "bold 11px monospace"; ctx.fillText("VISUAL INTELLIGENCE MATRIX • LIVE GRAPH", 20, 30);
                 const nodes = [
-                    { name: "Super Admin Hub (Sumit Kumar)", x: 30, y: 60, w: 230, h: 45, c: "#00f5d4" },
+                    { name: "Super Admin Hub (Sumeet Kumar)", x: 30, y: 60, w: 230, h: 45, c: "#00f5d4" },
                     { name: "FastAPI Engine (Port 8000)", x: 290, y: 60, w: 220, h: 45, c: "#38bdf8" },
                     { name: "Vedic Ephemeris & Marvel Cores", x: 550, y: 60, w: 220, h: 45, c: "#f59e0b" },
                     { name: "Admin Data Lake (central_storage)", x: 290, y: 140, w: 220, h: 45, c: "#10b981" }
@@ -605,11 +608,13 @@
             sphere.material.color.setHex(0xf59e0b);
 
             try {
-                const res = await fetch("http://127.0.0.1:8000/api/chat", {
-                    method: "POST", headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify({query: q, persona: currentPersona, language: currentLanguage, user_email: "sumit.admin@skenterprises.ai"})
-                });
-                const data = await res.json();
+                const data = window.apiClient ? 
+                    await window.apiClient.sendChatQuery(q, currentPersona, currentLanguage, "sumeet.admin@skenterprises.ai") :
+                    await (await fetch("http://127.0.0.1:8000/api/v1/chat", {
+                        method: "POST", headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify({query: q, persona: currentPersona, language: currentLanguage, user_email: "sumeet.admin@skenterprises.ai"})
+                    })).json();
+                
                 stream.innerHTML += `
                     <div class="bg-black/60 border border-cyan-800/60 p-2.5 rounded-lg space-y-1">
                         <details class="text-[10px] text-gray-400 bg-cyan-950/40 p-1.5 rounded cursor-pointer" open>
@@ -627,14 +632,14 @@
                     sphere.material.color.setHex(isAIActive ? 0x00f5d4 : 0x38bdf8);
                 }, 3000);
             } catch(e) {
-                stream.innerHTML += `<div class="text-rose-400 p-2">Connecting to backend on Port 8000...</div>`;
+                stream.innerHTML += `<div class="text-rose-400 p-2">Error communicating with Cognitive Core (Port 8000).</div>`;
                 stateText.innerText = "JARVIS CORE • STANDBY";
             }
             stream.scrollTop = stream.scrollHeight;
         }
 
         async function generateKundaliReport(){
-            const name = document.getElementById('k-name').value || "Sumit Kumar";
+            const name = document.getElementById('k-name').value || "Sumeet Kumar";
             const dob = document.getElementById('k-dob').value;
             const tob = document.getElementById('k-tob').value;
             const pob = document.getElementById('k-pob').value || "Patna, Bihar";
@@ -642,11 +647,13 @@
             stream.innerHTML += `<div class="bg-amber-950/30 border border-amber-500/50 p-2 rounded text-amber-300 font-bold text-xs">🌌 Generating Lifelong Vedic Kundali for: ${name}...</div>`;
 
             try {
-                const res = await fetch("http://127.0.0.1:8000/api/kundali/generate", {
-                    method: "POST", headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify({name: name, dob: dob, tob: tob, pob: pob})
-                });
-                const k = await res.json();
+                const k = window.apiClient ?
+                    await window.apiClient.generateKundali(name, dob, tob, pob) :
+                    await (await fetch("http://127.0.0.1:8000/api/v1/kundali/generate", {
+                        method: "POST", headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify({name: name, dob: dob, tob: tob, pob: pob})
+                    })).json();
+
                 stream.innerHTML += `
                     <div class="bg-black/80 border border-amber-500/80 p-3 rounded-lg space-y-2 text-amber-200">
                         <h4 class="font-black text-amber-400 text-xs">⭐ संपूर्ण जीवन कुंडली रिपोर्ट • ${k.native_name}</h4>
@@ -657,7 +664,9 @@
                     </div>
                 `;
                 speakText(`सुमित सर, ${k.native_name} की संपूर्ण जीवन कुंडली और वैदिक उपाय तैयार हैं।`);
-            } catch(e){}
+            } catch(e){
+                stream.innerHTML += `<div class="text-rose-400 p-2">Vedic calculation error. Check connection.</div>`;
+            }
             stream.scrollTop = stream.scrollHeight;
         }
 
@@ -665,8 +674,10 @@
             const name = document.getElementById('adm-lic-name').value || "Client";
             const email = document.getElementById('adm-lic-email').value || "client@example.com";
             const tier = document.getElementById('adm-lic-tier').value;
-            const res = await fetch(`http://127.0.0.1:8000/api/admin/generate_license?name=${name}&email=${email}&tier=${tier}`, {method: "POST"});
-            const data = await res.json();
+            const data = window.apiClient ?
+                await window.apiClient.generateLicenseKey(name, email, tier) :
+                await (await fetch(`http://127.0.0.1:8000/api/v1/admin/generate_license?name=${name}&email=${email}&tier=${tier}`, {method: "POST"})).json();
+
             const out = document.getElementById('adm-key-result');
             out.classList.remove('hidden');
             out.innerText = `GENERATED TOKEN (${tier}):\n` + data.license_key;
@@ -675,17 +686,21 @@
         async function toggleRemoteKill(active){
             const email = document.getElementById('kill-email').value;
             if(!email) return alert('Enter target email');
-            await fetch('http://127.0.0.1:8000/api/admin/toggle_user', {
-                method: 'POST', headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({email: email, active: active})
-            });
+            if (window.apiClient) {
+                await window.apiClient.toggleUserStatus(email, active);
+            } else {
+                await fetch('http://127.0.0.1:8000/api/v1/admin/toggle_user', {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({email: email, active: active})
+                });
+            }
             alert(`User ${email} status set to: ${active ? 'ENABLED' : 'DISABLED / KILLED'}`);
         }
 
         async function dispatchWhatsApp(){
             const phone = document.getElementById('wp-phone').value;
             const link = document.getElementById('wp-link').value;
-            await fetch(`http://127.0.0.1:8000/api/admin/dispatch_whatsapp?phone=${phone}&name=SumitKumar&link=${encodeURIComponent(link)}`, {method: 'POST'});
+            await fetch(`http://127.0.0.1:8000/api/v1/admin/dispatch_whatsapp?phone=${phone}&name=SumitKumar&link=${encodeURIComponent(link)}`, {method: 'POST'});
             alert(`Installer download link dispatched to WhatsApp: ${phone}`);
         }
 
@@ -696,16 +711,33 @@
             const email = document.getElementById('ob-email').value;
             const phone = document.getElementById('ob-phone').value;
             if(!email || !name) return alert('Name and Email required');
-            const res = await fetch('http://127.0.0.1:8000/api/admin/onboard_client', {
-                method: 'POST', headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({name: name, age: age, location: loc, email: email, phone: phone})
-            });
-            const data = await res.json();
+            const data = window.apiClient ?
+                await window.apiClient.onboardClient(name, age, loc, email, phone) :
+                await (await fetch('http://127.0.0.1:8000/api/v1/admin/onboard_client', {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({name: name, age: age, location: loc, email: email, phone: phone})
+                })).json();
+
             alert(`Client ${name} registered! 365-Day License issued. Ready for WhatsApp dispatch.`);
             closeModal('onboard-modal');
         }
 
         document.getElementById('user-input').addEventListener('keypress', (e) => { if(e.key === 'Enter') sendQuery(); });
+
+        // Initialize WebSocket Telemetry Stream
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.telemetryStream) {
+                window.telemetryStream.subscribe((event) => {
+                    if (event.type === 'telemetry' && event.data && event.data.agents) {
+                        // Dynamically update agents from live stream if available
+                        if (Array.isArray(event.data.agents) && event.data.agents.length > 0) {
+                            agents = event.data.agents;
+                        }
+                    }
+                });
+                window.telemetryStream.connect();
+            }
+        });
     </script>
 </body>
 </html>

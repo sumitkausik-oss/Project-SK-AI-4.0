@@ -1,6 +1,6 @@
 """
 SK Enterprises | Master All-in-One Windows Executable & Package Builder
-Founder, Inventor & Sole Architect: Sumit Kumar
+Founder, Inventor & Sole Architect: Sumeet Kumar
 Platform V5.0
 """
 import os
@@ -14,7 +14,7 @@ DIST_DIR.mkdir(parents=True, exist_ok=True)
 
 print("=" * 80)
 print("  [SK ENTERPRISES] | MASTER EXECUTABLE & DEPLOYMENT PACKAGER")
-print("  SOLE INVENTOR & ARCHITECT: SUMIT KUMAR")
+print("  SOLE INVENTOR & ARCHITECT: Sumeet Kumar")
 print("=" * 80)
 
 # Generate direct instant Windows EXE Launchers / Batch Runners
@@ -22,7 +22,7 @@ def create_standalone_launchers():
     # 1. Super Admin Launcher
     admin_bat = ROOT / "Launch_Super_Admin.bat"
     admin_bat.write_text(f"""@echo off
-title SK AI 4.0 - Super Admin Master Hub (Sumit Kumar)
+title SK AI 4.0 - Super Admin Master Hub (Sumeet Kumar)
 cd /d "{ROOT}"
 python entry_super_admin.py
 pause
@@ -31,7 +31,7 @@ pause
     # 2. Key Generator Launcher
     keygen_bat = ROOT / "Launch_Key_Generator.bat"
     keygen_bat.write_text(f"""@echo off
-title SK AI 4.0 - Key Generator Unit (Sumit Kumar)
+title SK AI 4.0 - Key Generator Unit (Sumeet Kumar)
 cd /d "{ROOT}"
 python entry_keygen.py
 pause
@@ -49,7 +49,7 @@ pause
     # 4. Main Runtime Launcher
     runtime_bat = ROOT / "Launch_SK_AI_4.0.bat"
     runtime_bat.write_text(f"""@echo off
-title SK AI 4.0 - Sovereign Runtime (Sumit Kumar)
+title SK AI 4.0 - Sovereign Runtime (Sumeet Kumar)
 cd /d "{ROOT}"
 python run_sk_ai.py
 pause

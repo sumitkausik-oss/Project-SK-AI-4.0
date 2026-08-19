@@ -21,8 +21,19 @@ SK_AI_4.0_App/
 raw_cpp_sources/
 vulkan-deps/
 runtime_engine/
-*.spec
 *.exe
 *.log
 .DS_Store
 tools/
+
+# Sensitive credentials and local keys
+config/admin_credentials.json
+config/admin_credentials.txt
+config/admin_key.json
+config/license.key
+*.db
+*.sqlite
+*.sqlite3
+admin_central_storage/users/
+*.zip
+release/SK_AI_4.0_Portable_*/

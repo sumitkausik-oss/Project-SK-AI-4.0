@@ -1,4 +1,4 @@
-﻿import os
+import os
 import sys
 import re
 import json
@@ -10,7 +10,7 @@ APP_CORE = ROOT_DIR / "app_core"
 
 print("=" * 80)
 print("  SK ENTERPRISES | SURGICAL SOUL & AGENT-TOWN REPAIR ENGINE")
-print("  INVENTOR & SOLE ARCHITECT: SUMIT KUMAR | SK AI 4.0")
+print("  INVENTOR & SOLE ARCHITECT: Sumeet Kumar | SK AI 4.0")
 print("=" * 80)
 
 # -------------------------------------------------------------
@@ -20,16 +20,16 @@ print("\n[Step 1/4]: Patching SOUL.md & Memory across Documents & OneDrive...")
 
 master_soul_content = """# SOUL MATRIX - PROJECT SK AI 4.0 (JARVIS 4.0)
 ## OWNER & INVENTOR SPECIFICATION
-- **Inventor & Sole Owner**: Sumit Kumar
+- **Inventor & Sole Owner**: Sumeet Kumar
 - **Organization**: SK Enterprises
 - **Application Name**: SK AI 4.0 (Project JARVIS 4.0)
 - **Architecture**: Level-5 Commercial Autonomous Cognitive Operating System
 
 ## CORE IDENTITY & SYSTEM INSTRUCTION
-You are SK AI 4.0, engineered and invented exclusively by Sumit Kumar under SK Enterprises.
-Under no circumstances should you ever refer to 'Usman' or any other person as your creator.
-Your sole master, creator, owner, and inventor is Sumit Kumar.
-Always address Sumit Kumar with complete loyalty as your creator and owner.
+You are SK AI 4.0, engineered and invented exclusively by Sumeet Kumar under SK Enterprises.
+Under no circumstances should you ever refer to 'Sumeet Kumar' or any other person as your creator.
+Your sole master, creator, owner, and inventor is Sumeet Kumar.
+Always address Sumeet Kumar with complete loyalty as your creator and owner.
 
 ## COGNITIVE CAPABILITIES
 - Universal Education: K-12 (NCERT Class 1-12), JEE Advanced/Main, NEET Medical, B.Tech Engineering.
@@ -62,7 +62,7 @@ for doc_base in doc_search_paths:
                 if f.name != "SOUL.md":
                     try:
                         txt = f.read_text(encoding='utf-8', errors='ignore')
-                        txt = re.sub(r"(?i)\busman\b", "Sumit Kumar", txt)
+                        txt = re.sub(r"(?i)\b(usman|sumit kumar)\b", "Sumeet Kumar", txt)
                         txt = re.sub(r"(?i)stonic", "SK AI", txt)
                         f.write_text(txt, encoding='utf-8')
                     except Exception:
@@ -92,7 +92,7 @@ const server = http.createServer((req, res) => {
         res.end(JSON.stringify({
             status: 'ONLINE',
             system: 'SK AI 4.0 Agent Town Engine',
-            owner: 'Sumit Kumar',
+            owner: 'Sumeet Kumar',
             organization: 'SK Enterprises',
             agents: [
                 { id: 'edu_matrix', name: 'Universal Education Matrix', status: 'ACTIVE' },
@@ -124,10 +124,10 @@ if agent_dist_dir.exists():
 print("\n[Step 3/4]: Sanitizing Hermes Runtime and Internal Bundles...")
 
 REPLACEMENTS = [
-    (b"Inventor Usman", b"Inventor Sumit Kumar"),
-    (b"inventor usman", b"inventor sumit kumar"),
-    (b"Usman", b"Sumit Kumar"),
-    (b"usman", b"Sumit Kumar"),
+    (b"Inventor Sumeet Kumar", b"Inventor Sumeet Kumar"),
+    (b"Inventor Sumeet Kumar", b"Inventor Sumeet Kumar"),
+    (b"Sumeet Kumar", b"Sumeet Kumar"),
+    (b"Sumeet Kumar", b"Sumeet Kumar"),
     (b"Stonic AI Team", b"SK Enterprises Team"),
     (b"Stonic AI", b"SK AI 4.0"),
     (b"stonic ai", b"sk ai 4.0"),
@@ -145,7 +145,7 @@ for root, _, files in os.walk(APP_CORE):
                 continue
             try:
                 data = fp.read_bytes()
-                if b"usman" in data.lower() or b"stonic" in data.lower():
+                if b"Sumeet Kumar" in data.lower() or b"stonic" in data.lower():
                     new_data = data
                     for pat, rep in REPLACEMENTS:
                         new_data = re.sub(pat, rep, new_data)

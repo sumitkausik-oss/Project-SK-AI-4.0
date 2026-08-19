@@ -14,7 +14,7 @@ PLUGINS_DIR = ROOT_DIR / "plugins"
 
 print("=" * 85)
 print("  SK ENTERPRISES | 100% NATIVE PROPRIETARY ARCHITECTURE BUILDER")
-print("  FOUNDER, INVENTOR & SOLE ARCHITECT: SUMIT KUMAR")
+print("  FOUNDER, INVENTOR & SOLE ARCHITECT: Sumeet Kumar")
 print("=" * 85)
 
 # ----------------------------------------------------------------------
@@ -32,22 +32,22 @@ for d in [FRONTEND_DIR, BACKEND_DIR, CONFIG_DIR, ASSETS_DIR, PLUGINS_DIR]:
     d.mkdir(parents=True, exist_ok=True)
 
 # ----------------------------------------------------------------------
-# 2. सिस्टम आइडेंटिटी एवं लाइफटाइम लाइसेंस (Sumit Kumar)
+# 2. सिस्टम आइडेंटिटी एवं लाइफटाइम लाइसेंस (Sumeet Kumar)
 # ----------------------------------------------------------------------
-print("\n[Step 2/6]: Creating Immutable System Identity for Sumit Kumar...")
+print("\n[Step 2/6]: Creating Immutable System Identity for Sumeet Kumar...")
 identity_data = {
     "system_name": "SK AI 4.0",
     "codename": "Project JARVIS 4.0",
-    "inventor": "Sumit Kumar",
-    "owner": "Sumit Kumar",
+    "inventor": "Sumeet Kumar",
+    "owner": "Sumeet Kumar",
     "organization": "SK Enterprises",
     "license_tier": "LIFETIME_MASTER_ADMIN",
     "system_prompt": (
         "You are SK AI 4.0 (Project JARVIS 4.0), the proprietary autonomous AI operating system "
-        "invented and architected exclusively by Sumit Kumar under SK Enterprises. "
+        "invented and architected exclusively by Sumeet Kumar under SK Enterprises. "
         "Your capabilities span Universal Education (K-12, JEE, NEET, Engineering), "
         "Autonomous Data Analytics, Cloud DevOps (Google Workspace & M365), Vedic Astrology, "
-        "and 3D Multimodal Actuation. Always address Sumit Kumar with absolute loyalty as your sole master."
+        "and 3D Multimodal Actuation. Always address Sumeet Kumar with absolute loyalty as your sole master."
     )
 }
 (CONFIG_DIR / "system_identity.json").write_text(json.dumps(identity_data, indent=2), encoding="utf-8")
@@ -58,7 +58,7 @@ identity_data = {
 print("\n[Step 3/6]: Building Native FastAPI Cognitive Engine (Port 8000)...")
 backend_code = '''"""
 SK Enterprises | SK AI 4.0 Core Cognitive Engine
-Founder & Inventor: Sumit Kumar
+Founder & Inventor: Sumeet Kumar
 """
 import os
 import sys
@@ -80,7 +80,7 @@ def get_status():
     return {
         "status": "ONLINE",
         "system": "SK AI 4.0 (Project JARVIS 4.0)",
-        "inventor": "Sumit Kumar",
+        "inventor": "Sumeet Kumar",
         "organization": "SK Enterprises",
         "tier": "Lifetime Master Admin",
         "hubs": {"agent_town": "ACTIVE", "visual_hub": "ACTIVE", "gesture_hub": "ACTIVE"}
@@ -107,9 +107,9 @@ def process_chat(item: QueryPayload):
         thought = (
             "**Verifying Creator Identity Signature**\\n"
             "Querying SK Enterprises governance core.\\n"
-            "Verified Sole Architect: Sumit Kumar."
+            "Verified Sole Architect: Sumeet Kumar."
         )
-        resp = "I am SK AI 4.0, Sir. I was created and invented exclusively by Sumit Kumar under SK Enterprises."
+        resp = "I am SK AI 4.0, Sir. I was created and invented exclusively by Sumeet Kumar under SK Enterprises."
     else:
         thought = f"**Processing Query:** '{item.query}'\\nRouting to multi-domain neural core."
         resp = f"[SK AI 4.0]: Executing multi-variable analysis for '{item.query}'. All cognitive subsystems operational."
@@ -117,7 +117,7 @@ def process_chat(item: QueryPayload):
     return {
         "thought_process": thought,
         "response": resp,
-        "inventor": "Sumit Kumar"
+        "inventor": "Sumeet Kumar"
     }
 
 if __name__ == "__main__":
@@ -135,7 +135,7 @@ html_code = '''<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SK AI 4.0 | Project JARVIS 4.0 - Sumit Kumar</title>
+    <title>SK AI 4.0 | Project JARVIS 4.0 - Sumeet Kumar</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -153,7 +153,7 @@ html_code = '''<!DOCTYPE html>
             <div class="w-8 h-8 rounded-full bg-cyan-500/20 border border-cyan-400 flex items-center justify-center font-bold text-cyan-300">SK</div>
             <div>
                 <h1 class="text-xs font-bold tracking-wider text-cyan-400">SK ENTERPRISES | PROJECT SK AI 4.0</h1>
-                <p class="text-[11px] text-gray-400">INVENTOR & SOLE ARCHITECT: <span class="text-white font-semibold">SUMIT KUMAR</span></p>
+                <p class="text-[11px] text-gray-400">INVENTOR & SOLE ARCHITECT: <span class="text-white font-semibold">Sumeet Kumar</span></p>
             </div>
         </div>
         <div class="flex items-center space-x-3 text-xs">
@@ -181,7 +181,7 @@ html_code = '''<!DOCTYPE html>
                 <div class="space-y-1.5 text-[11px] text-gray-300">
                     <p class="border-l-2 border-cyan-400 pl-2">Quantum Neural Coherence: 100%</p>
                     <p class="border-l-2 border-emerald-400 pl-2">Education & Astrology Matrices: Synced</p>
-                    <p class="border-l-2 border-indigo-400 pl-2">Governance: Sumit Kumar Locked</p>
+                    <p class="border-l-2 border-indigo-400 pl-2">Governance: Sumeet Kumar Locked</p>
                 </div>
             </div>
         </section>
@@ -264,7 +264,7 @@ html_code = '''<!DOCTYPE html>
                     <option value="Sarcastic Queen">Sarcastic Queen (Witty & Dynamic)</option>
                 </select>
             </div>
-            <p class="text-[11px] text-gray-400">Sole Creator & Master: <span class="text-white font-semibold">Sumit Kumar (SK Enterprises)</span></p>
+            <p class="text-[11px] text-gray-400">Sole Creator & Master: <span class="text-white font-semibold">Sumeet Kumar (SK Enterprises)</span></p>
             <div class="flex justify-end space-x-2">
                 <button onclick="closeSoulModal()" class="bg-cyan-600 hover:bg-cyan-500 text-black font-bold px-4 py-1.5 rounded text-xs">Save & Close</button>
             </div>
@@ -422,7 +422,7 @@ BACKEND = ROOT / "src_backend" / "engine.py"
 
 print("=" * 80)
 print("  LAUNCHING PROPRIETARY SK AI 4.0 (PROJECT JARVIS 4.0)")
-print("  FOUNDER & INVENTOR: SUMIT KUMAR | SK ENTERPRISES")
+print("  FOUNDER & INVENTOR: Sumeet Kumar | SK ENTERPRISES")
 print("=" * 80)
 
 subprocess.Popen([sys.executable, str(BACKEND)], cwd=str(ROOT))
@@ -437,12 +437,12 @@ webbrowser.open(f"file:///{FRONTEND}")
 print("\n[Step 6/6]: Synchronizing Clean Architecture to GitHub...")
 try:
     subprocess.run("git add .", cwd=ROOT_DIR, shell=True)
-    subprocess.run('git commit -m "feat(core): 100% Native Clean SK AI 4.0 Architecture by Sumit Kumar"', cwd=ROOT_DIR, shell=True)
+    subprocess.run('git commit -m "feat(core): 100% Native Clean SK AI 4.0 Architecture by Sumeet Kumar"', cwd=ROOT_DIR, shell=True)
     subprocess.run("git push -u origin main", cwd=ROOT_DIR, shell=True)
     print("[Git]: Synced clean proprietary architecture to GitHub.")
 except Exception as e:
     print(f"[Git Notice]: {e}")
 
 print("\n" + "=" * 85)
-print("  100% NATIVE SK AI 4.0 DEPLOYED! INVENTOR: SUMIT KUMAR")
+print("  100% NATIVE SK AI 4.0 DEPLOYED! INVENTOR: Sumeet Kumar")
 print("=" * 85)

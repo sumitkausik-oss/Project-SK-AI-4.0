@@ -2,13 +2,13 @@
 name: sk-ai-deployment
 description: >-
   Automates the launch, license generation, testing, and multi-domain execution
-  for SK AI 4.0 (Project JARVIS 4.0 / Jarvis Platform V5.0) engineered by Sumit Kumar.
+  for SK AI 4.0 (Project JARVIS 4.0 / Jarvis Platform V5.0) engineered by Sumeet Kumar.
 ---
 
 # SK AI 4.0 Deployment & Execution Skill
 
 ## Overview
-This skill provides automated management, socket recovery, 1-year cryptographic client license generation, central telemetry aggregation, and multi-domain actuation for **SK AI 4.0 (Project JARVIS 4.0 / Platform V5.0)** by **Inventor & Sole Architect: Sumit Kumar (SK Enterprises)**.
+This skill provides automated management, socket recovery, 1-year cryptographic client license generation, central telemetry aggregation, and multi-domain actuation for **SK AI 4.0 (Project JARVIS 4.0 / Platform V5.0)** by **Inventor & Sole Architect: Sumeet Kumar (SK Enterprises)**.
 
 ## Key Architectures
 - **FastAPI Engine (Port 8000):** Real-time multi-domain endpoints, Marvel persona routing, and telemetry WebSockets.
@@ -36,7 +36,7 @@ print("Expiry Date:", res["details"]["expires_at"])
 ```python
 from src_backend.astrology_matrix import VedicKundaliMatrix
 
-kundali = VedicKundaliMatrix.generate_full_lifelong_kundali("Sumit Kumar", "1993-09-09", "12:00", "New Delhi")
+kundali = VedicKundaliMatrix.generate_full_lifelong_kundali("Sumeet Kumar", "1993-09-09", "12:00", "New Delhi")
 print("Lagna:", kundali["lagna_rashi"])
 print("Remedies:", kundali["vedic_remedies"])
 ```
@@ -48,5 +48,5 @@ python -m unittest discover -s tests -v
 
 ## Common Workflows
 1. **Freeing Stale Sockets:** `run_sk_ai.py` automatically checks port 8000 and clears stale processes if unresponsive before starting uvicorn.
-2. **Identity Verification:** Queries regarding creator or owner strictly return **"Inventor Sumit Kumar (SK Enterprises)"**.
+2. **Identity Verification:** Queries regarding creator or owner strictly return **"Inventor Sumeet Kumar (SK Enterprises)"**.
 3. **Multi-Agent Simulation:** 4 agents (Bob, Carol, Dave, Arya) roam the 4 office zones in real-time.

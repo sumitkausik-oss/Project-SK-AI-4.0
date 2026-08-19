@@ -1,6 +1,6 @@
 """
 SK Enterprises | Central Admin Telemetry & Memory Lake
-Founder & Architect: Sumit Kumar
+Founder & Architect: Sumeet Kumar
 """
 import json
 import time

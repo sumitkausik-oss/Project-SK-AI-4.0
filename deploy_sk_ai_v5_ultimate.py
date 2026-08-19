@@ -25,7 +25,7 @@ for d in [FRONTEND_DIR, BACKEND_DIR, CONFIG_DIR, ASSETS_DIR, ADMIN_LAKE_DIR, PLU
 
 print("=" * 85)
 print("  SK ENTERPRISES | SK AI 4.0 (SK JARVIS 4.0) ULTIMATE ENTERPRISE BUILD")
-print("  FOUNDER, INVENTOR & SOLE ARCHITECT: SUMIT KUMAR | PLATFORM V5.0")
+print("  FOUNDER, INVENTOR & SOLE ARCHITECT: Sumeet Kumar | PLATFORM V5.0")
 print("=" * 85)
 
 # ----------------------------------------------------------------------
@@ -34,10 +34,10 @@ print("=" * 85)
 print("\n[Step 1/7]: Generating Secure Admin Master Credentials...")
 admin_secret = secrets.token_hex(16)
 admin_creds = {
-    "admin_username": "sumit.admin@skenterprises.ai",
+    "admin_username": "sumeet.admin@skenterprises.ai",
     "admin_master_pin": "SK-SUMIT-2026-ROOT",
     "system_role": "SOVEREIGN_SUPER_ADMIN",
-    "owner_name": "Sumit Kumar",
+    "owner_name": "Sumeet Kumar",
     "organization": "SK Enterprises",
     "lifetime_access": True,
     "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -48,7 +48,7 @@ admin_creds = {
     f"Username: {admin_creds['admin_username']}\n"
     f"Master PIN: {admin_creds['admin_master_pin']}\n"
     f"Role: {admin_creds['system_role']}\n"
-    f"Owner: Sumit Kumar\n"
+    f"Owner: Sumeet Kumar\n"
     f"Status: LIFETIME UNLIMITED MASTER ACCESS\n"
     f"========================================",
     encoding="utf-8"
@@ -61,7 +61,7 @@ admin_creds = {
 print("\n[Step 2/7]: Building 1-Year Cryptographic License Key Engine...")
 key_gen_code = '''"""
 SK Enterprises | 1-Year Client Cryptographic License Generator
-Founder & Architect: Sumit Kumar
+Founder & Architect: Sumeet Kumar
 """
 import json
 import base64
@@ -82,7 +82,7 @@ class SKLicenseKeyEngine:
             "client_name": client_name,
             "client_email": client_email,
             "tier": tier,
-            "issuer": "SK Enterprises (Sumit Kumar)",
+            "issuer": "SK Enterprises (Sumeet Kumar)",
             "issued_at": issued_date.strftime("%Y-%m-%d"),
             "expires_at": expiry_date.strftime("%Y-%m-%d"),
             "valid_days": 365
@@ -174,19 +174,19 @@ class CentralAdminDataLake:
 print("\n[Step 4/7]: Integrating Avengers Cognitive Personas & Evolution Daemon...")
 personas_code = '''"""
 SK Enterprises | Marvel Multi-Agent Cognitive Engine
-Founder & Architect: Sumit Kumar
+Founder & Architect: Sumeet Kumar
 """
 class MarvelCognitiveMatrix:
     PERSONAS = {
         "JARVIS": {
             "name": "J.A.R.V.I.S.",
             "title": "Tactical Operations & Master OS",
-            "prompt_addon": "You are JARVIS, the primary tactical intelligence engineered by Sumit Kumar. Respond with British refinement, crisp analytical precision, and absolute dedication to Sumit Sir."
+            "prompt_addon": "You are JARVIS, the primary tactical intelligence engineered by Sumeet Kumar. Respond with British refinement, crisp analytical precision, and absolute dedication to Sumit Sir."
         },
         "FRIDAY": {
             "name": "F.R.I.D.A.Y.",
             "title": "Mission Flow & Autonomous Research",
-            "prompt_addon": "You are FRIDAY, high-speed task automator and workflow specialist engineered by Sumit Kumar. Provide energetic, swift, and highly optimized assistance."
+            "prompt_addon": "You are FRIDAY, high-speed task automator and workflow specialist engineered by Sumeet Kumar. Provide energetic, swift, and highly optimized assistance."
         },
         "VERONICA": {
             "name": "VERONICA",
@@ -196,7 +196,7 @@ class MarvelCognitiveMatrix:
         "ULTRON_PRIME": {
             "name": "ULTRON PRIME",
             "title": "24x7 Self-Evolution & Autonomous Code Synthesizer",
-            "prompt_addon": "You are ULTRON Autonomous Evolution Core, continuously analyzing global software paradigms and refactoring capabilities under Sumit Kumar's sovereign command."
+            "prompt_addon": "You are ULTRON Autonomous Evolution Core, continuously analyzing global software paradigms and refactoring capabilities under Sumeet Kumar's sovereign command."
         },
         "VISION": {
             "name": "VISION",
@@ -257,7 +257,7 @@ class Autonomous200YearEvolutionDaemon:
 print("\n[Step 5/7]: Compiling Master FastAPI Backend with Hindi/English Voice...")
 backend_server = '''"""
 SK Enterprises | Master Backend Server (Platform V5.0)
-Founder & Inventor: Sumit Kumar
+Founder & Inventor: Sumeet Kumar
 """
 import os
 import sys
@@ -287,7 +287,7 @@ class ChatPayload(BaseModel):
     query: str
     persona: str = "JARVIS"
     language: str = "hi-IN"
-    user_email: str = "sumit.admin@skenterprises.ai"
+    user_email: str = "sumeet.admin@skenterprises.ai"
 
 class LicenseGenPayload(BaseModel):
     client_name: str
@@ -306,7 +306,7 @@ def get_status():
         "status": "ONLINE",
         "system": "SK AI 4.0 (SK JARVIS 4.0)",
         "platform_version": "Jarvis Platform V5.0",
-        "inventor": "Sumit Kumar",
+        "inventor": "Sumeet Kumar",
         "organization": "SK Enterprises",
         "license_tier": "LIFETIME_MASTER_ADMIN",
         "evolution_daemon": "24x7 ACTIVE",
@@ -333,7 +333,7 @@ def handle_chat(p: ChatPayload):
         thought = (
             f"**[{persona_info['name']}]: Sovereign Identity Directives Active**\\n"
             "Querying Immutable Core Governance Signature.\\n"
-            "Validated Sole Inventor & Supreme Master: Sumit Kumar."
+            "Validated Sole Inventor & Supreme Master: Sumeet Kumar."
         )
         resp = f"प्रणाम सुमीत सर! मैं {persona_info['name']} ({persona_info['title']}) हूँ। मेरा निर्माण एवं स्वामित्व केवल आपके द्वारा 'SK Enterprises' के अंतर्गत किया गया है।"
         voice_text = f"Pranam Sumit Sir. Main {persona_info['name']} hoon. Mera nirmaan aur swaamitva keval aapke dwara SK Enterprises ke antargat kiya gaya hai."
@@ -362,7 +362,7 @@ def handle_chat(p: ChatPayload):
         "thought_process": thought,
         "response": resp,
         "voice_text": voice_text,
-        "inventor": "Sumit Kumar",
+        "inventor": "Sumeet Kumar",
         "organization": "SK Enterprises"
     }
 
@@ -381,7 +381,7 @@ html_content = '''<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SK AI 4.0 | Project JARVIS 4.0 - Sumit Kumar</title>
+    <title>SK AI 4.0 | Project JARVIS 4.0 - Sumeet Kumar</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -402,7 +402,7 @@ html_content = '''<!DOCTYPE html>
             </div>
             <div>
                 <h1 class="text-xs font-black tracking-widest text-cyan-400 cyber-glow">SK ENTERPRISES | SK JARVIS 4.0</h1>
-                <p class="text-[11px] text-gray-400">FOUNDER & SOLE ARCHITECT: <span class="text-white font-bold">SUMIT KUMAR</span> • <span class="text-cyan-300 font-mono">PLATFORM V5.0</span></p>
+                <p class="text-[11px] text-gray-400">FOUNDER & SOLE ARCHITECT: <span class="text-white font-bold">Sumeet Kumar</span> • <span class="text-cyan-300 font-mono">PLATFORM V5.0</span></p>
             </div>
         </div>
         <div class="flex items-center space-x-2.5 text-xs">
@@ -426,7 +426,7 @@ html_content = '''<!DOCTYPE html>
                         <img src="../assets/sk_logo_3d.svg" class="w-full h-full object-contain" alt="SK 3D Isometric Emblem">
                     </div>
                     <span class="text-xs font-bold text-white tracking-wider">GLOBAL AI CORE PROTOCOL</span>
-                    <span class="text-[10px] text-gray-400">SK Enterprises • Sumit Kumar</span>
+                    <span class="text-[10px] text-gray-400">SK Enterprises • Sumeet Kumar</span>
                 </div>
             </div>
 
@@ -666,7 +666,7 @@ html_content = '''<!DOCTYPE html>
                 const res = await fetch("http://127.0.0.1:8000/api/chat", {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify({query: q, persona: currentPersona, language: currentLanguage, user_email: "sumit.admin@skenterprises.ai"})
+                    body: JSON.stringify({query: q, persona: currentPersona, language: currentLanguage, user_email: "sumeet.admin@skenterprises.ai"})
                 });
                 const data = await res.json();
                 stream.innerHTML += `
@@ -687,7 +687,7 @@ html_content = '''<!DOCTYPE html>
 
         // 4. Instant Kundali Generator
         async function generateKundaliReport(){
-            const name = document.getElementById('k-name').value || "Sumit Kumar";
+            const name = document.getElementById('k-name').value || "Sumeet Kumar";
             const dob = document.getElementById('k-dob').value;
             const tob = document.getElementById('k-tob').value;
             const pob = document.getElementById('k-pob').value || "Patna, Bihar";
@@ -774,12 +774,12 @@ print("[FRONTEND]: 3D Holographic HUD Preview Live.")
 # गिटहब ऑटो-स्टेजिंग एवं पुश
 try:
     subprocess.run("git add .", cwd=ROOT_DIR, shell=True)
-    subprocess.run('git commit -m "feat(release): SK AI 4.0 Platform V5.0 with Key Generator, Central Lake & Marvel Cores by Sumit Kumar"', cwd=ROOT_DIR, shell=True)
+    subprocess.run('git commit -m "feat(release): SK AI 4.0 Platform V5.0 with Key Generator, Central Lake & Marvel Cores by Sumeet Kumar"', cwd=ROOT_DIR, shell=True)
     subprocess.run("git push -u origin main", cwd=ROOT_DIR, shell=True)
     print("[Git Success]: Production Release synchronized with GitHub repository.")
 except Exception as e:
     print(f"[Git Notice]: {e}")
 
 print("\n" + "=" * 85)
-print("  SK AI 4.0 PLATFORM V5.0 FULLY DEPLOYED! INVENTOR: SUMIT KUMAR")
+print("  SK AI 4.0 PLATFORM V5.0 FULLY DEPLOYED! INVENTOR: Sumeet Kumar")
 print("=" * 85)

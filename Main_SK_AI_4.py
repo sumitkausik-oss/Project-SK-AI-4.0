@@ -1,6 +1,6 @@
 """
 SK Enterprises | Project SK AI 4.0 (Project JARVIS 4.0)
-Inventor & Sole Architect: Sumit Kumar
+Inventor & Sole Architect: Sumeet Kumar
 Master Enterprise Entry Point & Runtime Orchestrator
 """
 import os
@@ -29,12 +29,12 @@ def run_headless_console():
 
     print("=" * 85)
     print("  SK ENTERPRISES | PROJECT SK AI 4.0 (PROJECT JARVIS 4.0)")
-    print("  INVENTOR & SOLE ARCHITECT: SUMIT KUMAR | COMMERCIAL COGNITIVE OS")
+    print("  INVENTOR & SOLE ARCHITECT: Sumeet Kumar | COMMERCIAL COGNITIVE OS")
     print("=" * 85)
 
     license_file = BASE_DIR / "config" / "license.key"
     if license_file.exists():
-        print("[SECURITY]: Lifetime Admin Master License Verified for Sumit Kumar.")
+        print("[SECURITY]: Lifetime Admin Master License Verified for Sumeet Kumar.")
     
     identity_file = BASE_DIR / "config" / "system_identity.json"
     if identity_file.exists():

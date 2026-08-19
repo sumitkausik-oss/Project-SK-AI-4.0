@@ -1,6 +1,6 @@
 """
 SK Enterprises | Anti-Extraction Security & Cryptographic Shield
-Founder, Inventor & Sole Architect: Sumit Kumar
+Founder, Inventor & Sole Architect: Sumeet Kumar
 Platform V5.0 — Sovereign Security Layer
 
 Features:
@@ -24,7 +24,7 @@ SECURITY_LEVEL = "DEFENSE_GRADE_ZERO_EXTRACTION"
 class AntiExtractionShield:
     """
     High-grade security layer preventing prompt, source code, and key extraction.
-    Strictly verifies ownership of Sumit Kumar & SK Enterprises.
+    Strictly verifies ownership of Sumeet Kumar & SK Enterprises.
     """
     _SESSION_CHALLENGE = secrets.token_hex(32)
     _TAMPER_DETECTED = False
@@ -40,7 +40,7 @@ class AntiExtractionShield:
         status = {
             "status": "SECURED_AND_LOCKED",
             "security_tier": SECURITY_LEVEL,
-            "owner": "Sumit Kumar",
+            "owner": "Sumeet Kumar",
             "organization": "SK Enterprises",
             "anti_extraction_active": True,
             "anti_reverse_engineering": True,
@@ -65,7 +65,7 @@ class AntiExtractionShield:
         for pattern in dangerous_patterns:
             if pattern in q_lower:
                 cls._TAMPER_DETECTED = True
-                return "[SECURITY LOCK ACTIVATED]: Extraction attempt neutralized by SK Sovereign Core (Sumit Kumar)."
+                return "[SECURITY LOCK ACTIVATED]: Extraction attempt neutralized by SK Sovereign Core (Sumeet Kumar)."
         return query
 
     @classmethod

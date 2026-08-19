@@ -1,6 +1,6 @@
 """
 SK Enterprises | Project SK AI 4.0 Master Launcher
-Inventor & Sole Architect: Sumit Kumar
+Inventor & Sole Architect: Sumeet Kumar
 """
 import os
 import sys
@@ -51,7 +51,7 @@ def free_port_if_stale(port: int):
 def main():
     print("=" * 85)
     print("  SK ENTERPRISES | PROJECT SK AI 4.0 (PROJECT JARVIS 4.0)")
-    print("  INVENTOR & SOLE ARCHITECT: SUMIT KUMAR | NATIVE CYBERPUNK ARCHITECTURE")
+    print("  INVENTOR & SOLE ARCHITECT: Sumeet Kumar | NATIVE CYBERPUNK ARCHITECTURE")
     print("=" * 85)
 
     backend_ready = False
@@ -85,7 +85,7 @@ def main():
     frontend_uri = f"file:///{FRONTEND_FILE.as_posix()}"
     print(f"[FRONTEND]: Launching Cyberpunk 3D Neural Sphere & Agent Town HUD at:\n{frontend_uri}")
     webbrowser.open(frontend_uri)
-    print("\n[SYSTEM ACTIVE]: SK AI 4.0 running at 60 FPS. Creator: Sumit Kumar.")
+    print("\n[SYSTEM ACTIVE]: SK AI 4.0 running at 60 FPS. Creator: Sumeet Kumar.")
 
 if __name__ == "__main__":
     main()

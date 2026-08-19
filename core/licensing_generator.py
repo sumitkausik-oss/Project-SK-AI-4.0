@@ -31,7 +31,7 @@ class KeyGenerator:
 # Example Usage
 if __name__ == "__main__":
     kg = KeyGenerator()
-    print("Sample Admin Lifetime Key (e.g. for InventorUsman):")
-    print(kg.generate_admin_lifetime_key("InventorUsman"))
+    print("Sample Admin Lifetime Key (e.g. for InventorSumeetKumar):")
+    print(kg.generate_admin_lifetime_key("InventorSumeetKumar"))
     print("\nSample User Yearly Key (365 days):")
     print(kg.generate_user_yearly_key())

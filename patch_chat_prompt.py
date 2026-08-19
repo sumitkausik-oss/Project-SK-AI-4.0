@@ -7,19 +7,19 @@ APP_CORE = Path(r"D:\Project SK AI 4.0\app_core")
 
 print("=" * 80)
 print("  SK ENTERPRISES | FINAL HARDCODED PROMPT OVERWRITE ENGINE")
-print("  INVENTOR & SOLE OWNER: SUMIT KUMAR | SK AI 4.0")
+print("  INVENTOR & SOLE OWNER: Sumeet Kumar | SK AI 4.0")
 print("=" * 80)
 
 # सटीक बाइनरी रीप्लेसमेंट (समान या सुरक्षित बाइट लेंग्थ)
 REPLACEMENTS = [
-    (b"Inventor Usman", b"Inventor Sumit Kumar"),
-    (b"inventor usman", b"inventor sumit kumar"),
-    (b"INVENTOR USMAN", b"INVENTOR SUMIT KUMAR"),
-    (b"belong to Inventor Usman", b"belong to Inventor Sumit Kumar"),
-    (b"I belong to Inventor Usman", b"I belong to Inventor Sumit Kumar"),
-    (b"created by the SK AI team, and I belong to Inventor Usman", b"created by SK Enterprises, and I belong to Inventor Sumit Kumar"),
-    (b"Usman", b"Sumit Kumar"),
-    (b"usman", b"sumit kumar")
+    (b"Inventor Sumeet Kumar", b"Inventor Sumeet Kumar"),
+    (b"Inventor Sumeet Kumar", b"Inventor Sumeet Kumar"),
+    (b"Inventor Sumeet Kumar", b"Inventor Sumeet Kumar"),
+    (b"belong to Inventor Sumeet Kumar", b"belong to Inventor Sumeet Kumar"),
+    (b"I belong to Inventor Sumeet Kumar", b"I belong to Inventor Sumeet Kumar"),
+    (b"created by the SK AI team, and I belong to Inventor Sumeet Kumar", b"created by SK Enterprises, and I belong to Inventor Sumeet Kumar"),
+    (b"Sumeet Kumar", b"Sumeet Kumar"),
+    (b"Sumeet Kumar", b"Sumeet Kumar")
 ]
 
 # 1. सभी जावास्क्रिप्ट, JSON, HTML और ASAR बाइनरी को पैच करना
@@ -31,7 +31,7 @@ for root, _, files in os.walk(APP_CORE):
         if fp.stat().st_size < 100 * 1024 * 1024:
             try:
                 raw = fp.read_bytes()
-                if b"usman" in raw.lower() or b"inventor usman" in raw.lower():
+                if b"Sumeet Kumar" in raw.lower() or b"Inventor Sumeet Kumar" in raw.lower():
                     new_raw = raw
                     for pat, rep in REPLACEMENTS:
                         new_raw = re.sub(pat, rep, new_raw)
@@ -53,5 +53,5 @@ for app_name in ["SK AI", "SK_AI", "stonic-ai", "Project-JARVIS"]:
             print(f" - Wiped Session Storage: {c_path}")
 
 print("=" * 80)
-print("  ALL PROMPTS PERMANENTLY LOCKED TO SUMIT KUMAR!")
+print("  ALL PROMPTS PERMANENTLY LOCKED TO Sumeet Kumar!")
 print("=" * 80)

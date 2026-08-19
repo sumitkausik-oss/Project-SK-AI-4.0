@@ -1,6 +1,6 @@
 """
 SK Enterprises | Super Admin Master Control Hub
-Founder, Inventor & Sole Architect: Sumit Kumar
+Founder, Inventor & Sole Architect: Sumeet Kumar
 Platform V5.0 — Sovereign Central Governance & Remote Administration Hub
 
 Capabilities:
@@ -29,9 +29,9 @@ from src_backend.anti_extraction_security import AntiExtractionShield
 
 class SuperAdminHub:
     """
-    Sovereign Super Admin Control Unit operated exclusively by Sumit Kumar.
+    Sovereign Super Admin Control Unit operated exclusively by Sumeet Kumar.
     """
-    OWNER = "Sumit Kumar"
+    OWNER = "Sumeet Kumar"
     ORGANIZATION = "SK Enterprises"
     DEFAULT_PHONE = "9153579997"
 
@@ -45,8 +45,8 @@ class SuperAdminHub:
         # Default seed
         default_data = {
             "master_admin": {
-                "name": "Sumit Kumar",
-                "email": "sumit.admin@skenterprises.ai",
+                "name": "Sumeet Kumar",
+                "email": "sumeet.admin@skenterprises.ai",
                 "phone": cls.DEFAULT_PHONE,
                 "role": "SUPER_ADMIN",
                 "lifetime_active": True

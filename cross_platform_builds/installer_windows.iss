@@ -1,7 +1,7 @@
 [Setup]
 AppName=SK AI 4.0
 AppVersion=5.0.0
-AppPublisher=SK Enterprises (Sumit Kumar)
+AppPublisher=SK Enterprises (Sumeet Kumar)
 DefaultDirName={autopf}\SK Enterprises\SK AI 4.0
 DefaultGroupName=SK AI 4.0
 OutputDir=..\cross_platform_builds\windows_installer

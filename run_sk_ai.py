@@ -16,7 +16,7 @@ def is_port_in_use(port):
 
 print("=" * 80)
 print("  SK ENTERPRISES | LAUNCHING SK AI 4.0 (SK JARVIS 4.0)")
-print("  FOUNDER & INVENTOR: SUMIT KUMAR | PLATFORM V5.0")
+print("  FOUNDER & INVENTOR: Sumeet Kumar | PLATFORM V5.0")
 print("=" * 80)
 
 if not is_port_in_use(8000):

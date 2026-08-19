@@ -1,5 +1,5 @@
 """
-SK Enterprises | Fast Targeted Standardization to 'Sumit Kumar'
+SK Enterprises | Fast Targeted Standardization to 'Sumeet Kumar'
 Platform V5.0
 """
 import os
@@ -17,9 +17,9 @@ TARGET_DIRS = [
 ]
 
 REPLACEMENTS = [
-    ("Sumit Kumar", "Sumit Kumar"),
-    ("sumit kumar", "sumit kumar"),
-    ("SUMIT KUMAR", "SUMIT KUMAR"),
+    ("Sumeet Kumar", "Sumeet Kumar"),
+    ("Sumeet Kumar", "Sumeet Kumar"),
+    ("Sumeet Kumar", "Sumeet Kumar"),
     ("sumit.admin", "sumit.admin"),
     ("Sumit", "Sumit"),
     ("sumit", "sumit"),
@@ -54,7 +54,7 @@ def standardize_fast():
                 for file in files:
                     if clean_file(Path(root) / file):
                         count += 1
-    print(f"Fast standardization complete: updated {count} files to 'Sumit Kumar'.")
+    print(f"Fast standardization complete: updated {count} files to 'Sumeet Kumar'.")
 
 if __name__ == "__main__":
     standardize_fast()
