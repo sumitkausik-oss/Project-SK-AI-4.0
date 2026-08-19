@@ -1,6 +1,6 @@
 # ==============================================================================
-# SK ENTERPRISES | SK AI 4.0 - TEST SUITE RUNNER
-# INVENTOR & SOLE ARCHITECT: SUMIT KUMAR
+# SK ENTERPRISES | SK AI 4.0 - AUTOMATED PYTEST SUITE RUNNER
+# FOUNDER & SOLE ARCHITECT: SUMEET KUMAR
 # ==============================================================================
 param(
     [switch]$VerboseOutput,
@@ -11,7 +11,8 @@ $RootDir = Split-Path -Parent $PSScriptRoot
 Set-Location $RootDir
 
 Write-Host "========================================================================" -ForegroundColor Cyan
-Write-Host "  RUNNING SK AI 4.0 AUTOMATED TEST SUITE" -ForegroundColor Cyan
+Write-Host "  SK ENTERPRISES | PROJECT SK AI 4.0 (PROJECT JARVIS 4.0)" -ForegroundColor Cyan
+Write-Host "  FOUNDER & SOLE ARCHITECT: SUMEET KUMAR | AUTOMATED TEST RUNNER" -ForegroundColor Cyan
 Write-Host "========================================================================" -ForegroundColor Cyan
 
 $pytestArgs = @("tests/")

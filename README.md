@@ -61,14 +61,17 @@
 
 ### 2. Launch in Development Mode
 ```powershell
-# Starts the FastAPI server and opens the 3D HUD in your browser
+# Option A: Python one-command launcher
+python run_dev.py
+
+# Option B: PowerShell dev script
 .\scripts\dev.ps1
 ```
 
 ### 3. Run Automated Tests
 ```powershell
-# Runs complete pytest suite (29 tests)
-.\scripts\test.ps1 -VerboseOutput
+# Runs complete pytest suite (33 tests)
+python -m pytest
 ```
 
 ---

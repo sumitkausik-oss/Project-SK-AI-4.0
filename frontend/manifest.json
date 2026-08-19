@@ -1,0 +1,16 @@
+{
+  "name": "SK AI 4.0 - Project JARVIS",
+  "short_name": "SK AI",
+  "start_url": "/src_frontend/index.html",
+  "display": "standalone",
+  "background_color": "#030712",
+  "theme_color": "#00f5d4",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "../assets/sk_logo_3d.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}

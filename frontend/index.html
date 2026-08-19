@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SK AI 4.0 | Project JARVIS 4.0 - Sumeet Kumar</title>
+    <script src="js/three.min.js"></script>
+    <script>if (typeof THREE === 'undefined') { document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>'); }</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="js/api_client.js"></script>
+    <script src="js/ws_manager.js"></script>
+    <style>
+        body { background-color: #030712; color: #f3f4f6; font-family: 'Segoe UI', system-ui, sans-serif; overflow: hidden; }
+        .glass-panel { background: rgba(8, 16, 32, 0.92); backdrop-filter: blur(20px); border: 1px solid rgba(0, 245, 212, 0.25); border-radius: 12px; }
+        .cyber-glow { text-shadow: 0 0 12px rgba(0, 245, 212, 0.8); }
+        .tab-btn.active { background: rgba(0, 245, 212, 0.22); border-color: #00f5d4; color: #00f5d4; font-weight: bold; }
+        .node-btn { background: rgba(12, 24, 48, 0.9); border: 1px solid rgba(0, 245, 212, 0.3); }
+        .node-btn:hover { border-color: #00f5d4; box-shadow: 0 0 12px rgba(0, 245, 212, 0.5); }
+        .settings-nav-active { background: rgba(0, 245, 212, 0.15); border-left: 3px solid #00f5d4; color: #00f5d4; }
+        .mic-active { background: #e11d48 !important; border-color: #f43f5e !important; box-shadow: 0 0 15px rgba(244,63,94,0.8); animation: pulse 1.5s infinite; }
+    </style>
+</head>
+<body class="h-screen w-screen flex flex-col p-2.5 space-y-2.5">
+    <!-- Header -->
+    <header class="glass-panel px-4 py-2 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 aspect-square rounded-xl bg-cyan-950/80 border border-cyan-400 p-1 flex items-center justify-center shadow-[0_0_15px_rgba(0,245,212,0.4)]">
+                <img src="../assets/sk_logo_3d.svg" class="w-full h-full object-contain" alt="SK 3D Logo">
+            </div>
+            <div>
+                <h1 class="text-xs font-black tracking-widest text-cyan-400 cyber-glow">SK ENTERPRISES | SK JARVIS 4.0</h1>
+                <p class="text-[11px] text-gray-400">FOUNDER & SOLE ARCHITECT: <span class="text-white font-bold">Sumeet Kumar</span> • <span class="text-cyan-300 font-mono">PLATFORM V5.0</span></p>
+            </div>
+        </div>
+        <div class="flex items-center space-x-2 text-xs">
+            <button onclick="openModal('super-admin-modal')" class="bg-amber-950/80 border border-amber-400 text-amber-300 px-2.5 py-1 rounded text-xs font-bold hover:bg-amber-900 shadow-[0_0_10px_rgba(245,158,11,0.4)]">👑 SUPER ADMIN HUB</button>
+            <button onclick="openModal('onboard-modal')" class="bg-emerald-950/80 border border-emerald-400 text-emerald-300 px-2.5 py-1 rounded text-xs font-bold hover:bg-emerald-900">🚀 CLIENT ONBOARDING</button>
+            <button onclick="toggleVoiceLang()" id="lang-btn" class="bg-cyan-950 border border-cyan-500/50 text-cyan-300 px-2.5 py-1 rounded text-xs font-mono">🌐 VOICE: HINDI (हिन्दी)</button>
+            <span class="bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 px-2.5 py-1 rounded text-xs">LIFETIME SOVEREIGN KEY</span>
+        </div>
+    </header>
+
+    <!-- Main Grid -->
+    <main class="flex-1 grid grid-cols-12 gap-2.5 overflow-hidden">
+        <!-- Left Column: 3D Logo Card & Instant Kundali -->
+        <section class="col-span-3 flex flex-col space-y-2.5">
+            <div class="glass-panel p-3 flex-1 flex flex-col">
+                <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-xs font-bold text-cyan-400">● 3D ISOMETRIC EMBLEM</span>
+                    <span class="text-[10px] text-emerald-400 font-mono">SOVEREIGN CORE</span>
+                </div>
+                <div class="flex-1 bg-black/70 rounded-lg border border-cyan-900/60 flex flex-col items-center justify-center p-3 text-center">
+                    <div class="w-24 h-24 aspect-square rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-900/40 border-2 border-cyan-400/80 p-2 flex items-center justify-center mb-2 shadow-[0_0_25px_rgba(0,245,212,0.4)]">
+                        <img src="../assets/sk_logo_3d.svg" class="w-full h-full object-contain" alt="SK 3D Isometric Emblem">
+                    </div>
+                    <span class="text-xs font-bold text-white tracking-wider">SOVEREIGN AI OPERATING SYSTEM</span>
+                    <span class="text-[10px] text-gray-400">SK Enterprises • Sumeet Kumar</span>
+                </div>
+            </div>
+
+            <!-- Instant Kundali Panel -->
+            <div class="glass-panel p-3 h-56 flex flex-col justify-between">
+                <span class="text-xs font-bold text-cyan-400">● INSTANT VEDIC KUNDALI</span>
+                <div class="space-y-1.5 text-[11px]">
+                    <input type="text" id="k-name" placeholder="Name (नाम)" class="w-full bg-black/60 border border-cyan-800 rounded px-2 py-1 text-white">
+                    <div class="grid grid-cols-2 gap-1.5">
+                        <input type="date" id="k-dob" value="1993-09-09" class="bg-black/60 border border-cyan-800 rounded px-2 py-1 text-white text-[10px]">
+                        <input type="time" id="k-tob" value="12:00" class="bg-black/60 border border-cyan-800 rounded px-2 py-1 text-white text-[10px]">
+                    </div>
+                    <input type="text" id="k-pob" placeholder="Place of Birth (जन्म स्थान)" class="w-full bg-black/60 border border-cyan-800 rounded px-2 py-1 text-white">
+                </div>
+                <button onclick="generateKundaliReport()" class="w-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold py-1.5 rounded text-xs shadow-lg">1-SEC KUNDALI & REMEDIES</button>
+            </div>
+        </section>
+
+        <!-- Center: 4-Node Brain + 3D Holographic Core & Multi-Hub -->
+        <section class="col-span-5 flex flex-col space-y-2.5">
+            <div class="flex-1 grid grid-cols-12 gap-2.5">
+                <!-- 4 Interactive Nodes: Memory, Skills, Soul Matrix, Settings -->
+                <div class="col-span-4 glass-panel p-2 flex flex-col justify-between space-y-1.5">
+                    <button onclick="openModal('memory-modal')" class="node-btn p-2 rounded-lg text-left text-xs font-medium text-cyan-300 flex items-center justify-between"><span>🧠 Memory</span><span class="text-[9px] text-emerald-400">●</span></button>
+                    <button onclick="openModal('skills-modal')" class="node-btn p-2 rounded-lg text-left text-xs font-medium text-amber-300 flex items-center justify-between"><span>📖 Skills</span><span class="text-[9px] text-emerald-400">●</span></button>
+                    <button onclick="openModal('soul-modal')" class="node-btn p-2 rounded-lg text-left text-xs font-medium text-emerald-300 flex items-center justify-between"><span>👻 Soul Matrix</span><span class="text-[9px] text-emerald-400">●</span></button>
+                    <button onclick="openModal('settings-modal')" class="node-btn p-2 rounded-lg text-left text-xs font-medium text-gray-300 flex items-center justify-between"><span>⚙️ Setting</span><span class="text-[9px] text-emerald-400">●</span></button>
+                </div>
+
+                <!-- 3D WebGL Sphere -->
+                <div class="col-span-8 glass-panel relative overflow-hidden" id="three-container">
+                    <div class="absolute top-2.5 left-2.5 z-10 text-[10px] text-cyan-400 flex items-center space-x-1.5">
+                        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" id="core-pulse"></span>
+                        <span class="font-mono" id="core-state-text">JARVIS CORE • STANDBY</span>
+                    </div>
+                    <div class="absolute bottom-2.5 right-2.5 z-10 flex space-x-2">
+                        <button onclick="toggleStartAI()" id="start-ai-btn" class="bg-cyan-500 hover:bg-cyan-400 text-black text-xs px-3.5 py-1.5 rounded font-black shadow-[0_0_15px_rgba(0,245,212,0.6)]">START AI</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Multi-Hub: Agent Town / Visual / Gesture -->
+            <div class="glass-panel h-56 flex flex-col p-2.5">
+                <div class="flex items-center justify-between border-b border-cyan-900/60 pb-1 mb-1.5">
+                    <div class="flex space-x-1 text-xs">
+                        <button class="tab-btn active px-3 py-1 rounded border border-transparent" onclick="setTab('agents')">● AGENT TOWN</button>
+                        <button class="tab-btn px-3 py-1 rounded border border-transparent" onclick="setTab('visual')">VISUAL HUB</button>
+                        <button class="tab-btn px-3 py-1 rounded border border-transparent" onclick="setTab('gesture')">GESTURE HUB</button>
+                    </div>
+                    <span class="text-[10px] text-cyan-400 font-mono">PORT 8000 LIVE</span>
+                </div>
+                <div class="flex-1 relative bg-black/50 rounded border border-cyan-950 overflow-hidden" id="hub-container">
+                    <canvas id="hubCanvas" class="w-full h-full"></canvas>
+                    <video id="gestureVideo" autoplay playsinline class="hidden absolute top-0 left-0 w-full h-full object-cover opacity-60"></video>
+                </div>
+            </div>
+        </section>
+
+        <!-- Right: Bilingual Voice Stream & Gemini Live -->
+        <section class="col-span-4 glass-panel flex flex-col p-3">
+            <div class="flex items-center justify-between border-b border-cyan-900/60 pb-2 mb-2">
+                <div class="flex space-x-3 text-xs font-semibold text-cyan-400">
+                    <span class="border-b-2 border-cyan-400 pb-1">VOICE STREAM</span>
+                    <span class="text-gray-400">TELEMETRY</span>
+                    <span class="text-gray-400">ADMIN LAKE</span>
+                </div>
+                <span class="text-[10px] text-emerald-400 font-mono">GEMINI LIVE READY</span>
+            </div>
+
+            <!-- Chat Stream Display -->
+            <div class="flex-1 overflow-y-auto space-y-2.5 text-xs pr-1" id="chat-stream">
+                <div class="bg-cyan-950/30 border border-cyan-800/40 p-2.5 rounded-lg text-cyan-200">
+                    <p class="text-[10px] font-bold text-cyan-400 mb-1">SYSTEM READY • SOVEREIGN CORE</p>
+                    <p>प्रणाम सुमित सर! SK AI 4.0 प्लेटफॉर्म पूरी तरह तैयार है। नीचे 🎙️ माइक बटन दबाकर आप सीधे हिंदी में बात कर सकते हैं।</p>
+                </div>
+            </div>
+
+            <!-- Input Box -->
+            <div class="mt-2 flex items-center space-x-2 border-t border-cyan-900/60 pt-2">
+                <button onclick="toggleMic()" id="mic-btn" class="bg-cyan-950 border border-cyan-400 text-cyan-300 p-2 rounded hover:bg-cyan-800 text-xs" title="Speak in Hindi / हिन्दी में बोलें">🎙️</button>
+                <input type="text" id="user-input" placeholder="बोलें या टाइप करें (e.g. हेलो, तुम कैसे हो?)..." class="flex-1 bg-black/60 border border-cyan-800/80 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-400">
+                <button onclick="sendQuery()" class="bg-cyan-500 hover:bg-cyan-400 text-black font-bold px-4 py-2 rounded text-xs shadow-md">SEND</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- ================= MODALS SECTION ================= -->
+
+    <!-- 1. CORE MEMORY MODAL (Screenshot 19492 & 195047 Match) -->
+    <div id="memory-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md hidden flex items-center justify-center z-50">
+        <div class="glass-panel p-5 w-[650px] max-h-[85vh] flex flex-col border border-cyan-400 space-y-3">
+            <div class="flex items-center justify-between border-b border-cyan-900/80 pb-2">
+                <div class="flex items-center space-x-2">
+                    <span class="text-base">🧠</span>
+                    <h3 class="text-sm font-bold text-cyan-300">Core Memory</h3>
+                    <span class="text-[10px] bg-cyan-950 border border-cyan-800 text-cyan-400 px-2 py-0.5 rounded font-mono">🔒 READ-ONLY</span>
+                </div>
+                <button onclick="closeModal('memory-modal')" class="text-gray-400 hover:text-white font-bold text-sm">✕</button>
+            </div>
+            <div class="flex items-center justify-between text-[11px] text-gray-400">
+                <span class="text-cyan-400 font-bold">👤 USER PROFILE</span>
+                <span class="font-mono text-amber-400">1358 / 1375 • 99% Capacity</span>
+            </div>
+            <div class="w-full bg-black/80 h-1.5 rounded overflow-hidden">
+                <div class="bg-gradient-to-r from-cyan-400 to-amber-400 h-full w-[99%]"></div>
+            </div>
+            <div class="flex-1 overflow-y-auto space-y-2 text-xs pr-1">
+                <div class="bg-black/60 p-2.5 rounded border border-cyan-900/60 text-gray-200">User prefers speaking in Hindi, especially in voice conversations, because it is more comfortable for them.</div>
+                <div class="bg-black/60 p-2.5 rounded border border-cyan-900/60 text-gray-200">User has or is working on an AI/computer-control project called Jarvis (Project SK AI 4.0).</div>
+                <div class="bg-black/60 p-2.5 rounded border border-cyan-900/60 text-gray-200">Sole Creator & Owner: Sumeet Kumar (SK Enterprises).</div>
+                <div class="bg-black/60 p-2.5 rounded border border-cyan-900/60 text-gray-200">User prefers quick, prompt replies, especially during voice conversations.</div>
+                <div class="bg-black/60 p-2.5 rounded border border-cyan-900/60 text-gray-200">For Project Jarvis, user wants AI's self-evolution and skill development inspired by Avengers universe (J.A.R.V.I.S. and F.R.I.D.A.Y.).</div>
+            </div>
+            <div class="flex items-center space-x-2 border-t border-cyan-900/60 pt-2">
+                <input type="text" placeholder="Ask Hermes to remember, fix, or forget something..." class="flex-1 bg-black/60 border border-cyan-800 rounded px-3 py-1.5 text-xs text-white">
+                <button class="bg-cyan-600 hover:bg-cyan-500 text-black font-bold px-4 py-1.5 rounded text-xs">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. SOUL MATRIX MODAL (Exact 12 Persona Dropdown Match) -->
+    <div id="soul-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md hidden flex items-center justify-center z-50">
+        <div class="glass-panel p-5 w-[560px] border border-emerald-400 space-y-3.5">
+            <div class="flex items-center justify-between border-b border-emerald-900/80 pb-2">
+                <div class="flex items-center space-x-2">
+                    <span class="text-base">👻</span>
+                    <h3 class="text-sm font-bold text-emerald-300">SK AI Voice Assistant Soul</h3>
+                </div>
+                <button onclick="closeModal('soul-modal')" class="text-gray-400 hover:text-white font-bold text-sm">✕</button>
+            </div>
+            <div class="grid grid-cols-2 gap-3 text-xs">
+                <button onclick="setVoiceGender('charon')" id="v-charon" class="bg-cyan-950/80 border border-cyan-400 text-cyan-300 p-2 rounded flex items-center justify-center space-x-2 font-bold"><span>👨 Male Voice (Charon)</span></button>
+                <button onclick="setVoiceGender('despina')" id="v-despina" class="bg-black/60 border border-gray-700 text-gray-400 p-2 rounded flex items-center justify-center space-x-2 font-bold"><span>👩 Female Voice (Despina)</span></button>
+            </div>
+            <div>
+                <label class="text-xs text-gray-300 block mb-1 font-bold">CHOOSE IDENTITY TEMPLATE:</label>
+                <select id="persona-template-select" onchange="updateSoulTemplate()" class="w-full bg-black/80 border border-emerald-800 text-emerald-200 rounded p-2 text-xs">
+                    <option value="jarvis">Jarvis AI (Refined Master Assistant)</option>
+                    <option value="butler">Loyal Butler (Composed, distinguished aide)</option>
+                    <option value="bro">Sarcastic Bro (Witty, casual best friend)</option>
+                    <option value="commander">Military Commander (Disciplined, tactical)</option>
+                    <option value="oracle">Mysterious Oracle (Enigmatic, deep wisdom)</option>
+                    <option value="guardian">Silent Guardian (Calm, protective, reliable)</option>
+                    <option value="companion">Caring Companion (Warm, supportive listener)</option>
+                    <option value="girlfriend">Girlfriend (Playful, deeply affectionate)</option>
+                    <option value="queen">Sarcastic Queen (Sharp-witted, humorous boss)</option>
+                    <option value="muse">Mystic Muse (Ethereal, poetic intuition)</option>
+                    <option value="angel">Protective Angel (Nurturing, quiet strength)</option>
+                    <option value="custom">✨ Custom Soul Personality...</option>
+                </select>
+            </div>
+            <div>
+                <label class="text-xs text-gray-300 block mb-1">PERSONA PROMPT / SOUL DESCRIPTION:</label>
+                <textarea id="soul-prompt-box" class="w-full bg-black/80 border border-emerald-900 rounded p-2 text-[11px] text-gray-300 h-24 resize-none outline-none font-mono"></textarea>
+            </div>
+            <div class="flex justify-end space-x-2 pt-1">
+                <button onclick="saveSoulPersona()" class="bg-emerald-600 hover:bg-emerald-500 text-black text-xs px-4 py-1.5 rounded font-bold">Save Persona Soul</button>
+                <button onclick="closeModal('soul-modal')" class="bg-gray-800 text-white text-xs px-4 py-1.5 rounded font-bold">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. SETTINGS MODAL (Exact 6-Tab Interface Matching Screenshots) -->
+    <div id="settings-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md hidden flex items-center justify-center z-50">
+        <div class="glass-panel w-[850px] h-[550px] flex border border-gray-400 overflow-hidden">
+            <!-- Left Tabs Sidebar -->
+            <div class="w-48 bg-black/60 border-r border-gray-800 p-3 flex flex-col justify-between">
+                <div class="space-y-1 text-xs">
+                    <div class="text-[10px] font-bold text-gray-400 mb-2 px-2">SETTINGS</div>
+                    <button onclick="setSettingTab('voice')" id="stab-voice" class="settings-nav-active w-full text-left p-2 rounded text-xs font-bold block">🎤 Voice Assistant</button>
+                    <button onclick="setSettingTab('agent-providers')" id="stab-agent-providers" class="w-full text-left p-2 rounded text-xs font-bold text-gray-400 block hover:text-white">🤖 Agent Town</button>
+                    <button onclick="setSettingTab('demo-video')" id="stab-demo-video" class="w-full text-left p-2 rounded text-xs font-bold text-gray-400 block hover:text-white">▶️ Demo Video</button>
+                    <button onclick="setSettingTab('system')" id="stab-system" class="w-full text-left p-2 rounded text-xs font-bold text-gray-400 block hover:text-white">⚙️ System Settings</button>
+                    <button onclick="setSettingTab('profile')" id="stab-profile" class="w-full text-left p-2 rounded text-xs font-bold text-gray-400 block hover:text-white">👤 User Profile</button>
+                    <button onclick="setSettingTab('whatsapp')" id="stab-whatsapp" class="w-full text-left p-2 rounded text-xs font-bold text-gray-400 block hover:text-white">📱 WhatsApp Link</button>
+                </div>
+                <div class="text-[10px] text-gray-500 font-mono">Platform Version: 5.0.0</div>
+            </div>
+
+            <!-- Right Content Viewport -->
+            <div class="flex-1 p-5 overflow-y-auto" id="settings-viewport">
+                <!-- TAB 1: VOICE ASSISTANT -->
+                <div id="sview-voice" class="space-y-4 text-xs">
+                    <h3 class="text-sm font-bold text-cyan-300">Voice Assistant Settings</h3>
+                    <div>
+                        <label class="block text-gray-400 mb-1">GEMINI LIVE API KEY</label>
+                        <input type="password" value="AIzaSyMasterSovereignKeySumitKumar2026" class="w-full bg-black/70 border border-cyan-800 rounded p-2 text-cyan-300 font-mono">
+                    </div>
+                    <div>
+                        <label class="block text-gray-400 mb-1">BACKUP GEMINI API KEY (Optional)</label>
+                        <input type="password" placeholder="Secondary fallback key..." class="w-full bg-black/70 border border-gray-700 rounded p-2 text-gray-300 font-mono">
+                    </div>
+                    <div class="flex items-center justify-between border-t border-gray-800 pt-3">
+                        <span>Wake Word Detection ("Jarvis" / "SK AI")</span>
+                        <input type="checkbox" checked class="accent-cyan-400 w-4 h-4">
+                    </div>
+                    <div class="flex items-center justify-between border-t border-gray-800 pt-3">
+                        <span>Double-Clap Activation</span>
+                        <input type="checkbox" checked class="accent-cyan-400 w-4 h-4">
+                    </div>
+                </div>
+
+                <!-- TAB 2: AGENT TOWN PROVIDERS (ChatGPT, Gemini, OpenRouter) -->
+                <div id="sview-agent-providers" class="hidden space-y-4 text-xs">
+                    <h3 class="text-sm font-bold text-cyan-300">Agent Town Providers & Multi-LLM</h3>
+                    <div class="flex space-x-2 border-b border-gray-800 pb-2">
+                        <button class="bg-cyan-950 border border-cyan-400 text-cyan-300 px-3 py-1 rounded font-bold">Google Gemini</button>
+                        <button class="bg-black/60 border border-gray-700 text-gray-400 px-3 py-1 rounded font-bold">OpenRouter (Claude)</button>
+                        <button class="bg-black/60 border border-gray-700 text-gray-400 px-3 py-1 rounded font-bold">ChatGPT (OpenAI)</button>
+                    </div>
+                    <div>
+                        <label class="block text-gray-400 mb-1">OPENROUTER API KEY (Claude 3.7 Sonnet)</label>
+                        <input type="password" placeholder="sk-or-v1-..." class="w-full bg-black/70 border border-cyan-800 rounded p-2 text-cyan-300 font-mono">
+                    </div>
+                </div>
+
+                <!-- TAB 3: DEMO VIDEO -->
+                <div id="sview-demo-video" class="hidden space-y-4 text-xs text-center">
+                    <h3 class="text-sm font-bold text-cyan-300">Application Setup Guide</h3>
+                    <div class="w-full h-44 bg-black/80 border border-cyan-900 rounded-lg flex flex-col items-center justify-center space-y-2">
+                        <span class="text-4xl text-cyan-400">▶️</span>
+                        <span class="text-gray-300 font-bold">Watch Promotional Walkthrough Video</span>
+                    </div>
+                </div>
+
+                <!-- TAB 4: SYSTEM SETTINGS -->
+                <div id="sview-system" class="hidden space-y-4 text-xs">
+                    <h3 class="text-sm font-bold text-cyan-300">System Engine & Updates</h3>
+                    <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+                        <div><p class="font-bold text-white">Automatic Updates</p><p class="text-[10px] text-gray-400">Download and install patches automatically</p></div>
+                        <input type="checkbox" checked class="accent-cyan-400 w-4 h-4">
+                    </div>
+                </div>
+
+                <!-- TAB 5: USER PROFILE -->
+                <div id="sview-profile" class="hidden space-y-3 text-xs">
+                    <h3 class="text-sm font-bold text-cyan-300">Sovereign Identity Details</h3>
+                    <div><label class="text-gray-400 block mb-1">Full Name:</label><input type="text" value="Sumeet Kumar" class="w-full bg-black/70 border border-cyan-800 rounded p-2 text-white font-bold" readonly></div>
+                    <div><label class="text-gray-400 block mb-1">Profession:</label><input type="text" value="Founder, AI Architect & Sole Owner" class="w-full bg-black/70 border border-cyan-800 rounded p-2 text-white" readonly></div>
+                    <div><label class="text-gray-400 block mb-1">Organization:</label><input type="text" value="SK Enterprises" class="w-full bg-black/70 border border-cyan-800 rounded p-2 text-white font-bold" readonly></div>
+                </div>
+
+                <!-- TAB 6: WHATSAPP LINK -->
+                <div id="sview-whatsapp" class="hidden space-y-3 text-xs">
+                    <h3 class="text-sm font-bold text-emerald-300">Hermes WhatsApp Remote Link</h3>
+                    <div class="bg-black/60 p-3 rounded border border-emerald-900 flex items-center justify-between">
+                        <div><p class="font-bold text-white">WhatsApp Bot Channel</p><p class="text-[10px] text-gray-400">Auto-reply & notification pipeline</p></div>
+                        <span class="bg-emerald-950 text-emerald-400 border border-emerald-800 px-2 py-0.5 rounded text-[10px]">CONNECTED</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. SUPER ADMIN HUB MODAL (King Hub, Key Gen, Killswitch, WhatsApp Dispatch) -->
+    <div id="super-admin-modal" class="fixed inset-0 bg-black/90 backdrop-blur-md hidden flex items-center justify-center z-50">
+        <div class="glass-panel p-5 w-[750px] border border-amber-400 space-y-4">
+            <div class="flex items-center justify-between border-b border-amber-900/80 pb-2">
+                <div class="flex items-center space-x-2">
+                    <span class="text-lg">👑</span>
+                    <h3 class="text-sm font-black text-amber-300">SUPER ADMIN SOVEREIGN HUB • Sumeet Kumar</h3>
+                </div>
+                <button onclick="closeModal('super-admin-modal')" class="text-gray-400 hover:text-white font-bold text-sm">✕</button>
+            </div>
+            <div class="grid grid-cols-3 gap-3 text-xs">
+                <!-- 1. Key Generator -->
+                <div class="bg-black/70 p-3 rounded border border-amber-800 space-y-2">
+                    <h4 class="font-bold text-amber-400">🔑 Key Generator</h4>
+                    <input type="text" id="adm-lic-name" placeholder="User Name" class="w-full bg-black/90 border border-gray-700 rounded p-1 text-[11px] text-white">
+                    <input type="email" id="adm-lic-email" placeholder="User Email" class="w-full bg-black/90 border border-gray-700 rounded p-1 text-[11px] text-white">
+                    <select id="adm-lic-tier" class="w-full bg-black/90 border border-gray-700 rounded p-1 text-[11px] text-amber-300">
+                        <option value="1_YEAR_USER">1-Year Client Key (365 Days)</option>
+                        <option value="ADMIN_LIFETIME">Admin Lifetime Key</option>
+                    </select>
+                    <button onclick="generateAdminKey()" class="w-full bg-amber-500 hover:bg-amber-400 text-black font-bold py-1 rounded text-[11px]">Generate Key</button>
+                </div>
+                <!-- 2. Remote Killswitch -->
+                <div class="bg-black/70 p-3 rounded border border-rose-800 space-y-2">
+                    <h4 class="font-bold text-rose-400">🛡️ Remote Killswitch</h4>
+                    <input type="email" id="kill-email" placeholder="Target User Email" class="w-full bg-black/90 border border-gray-700 rounded p-1 text-[11px] text-white">
+                    <div class="flex space-x-1">
+                        <button onclick="toggleRemoteKill(true)" class="flex-1 bg-emerald-600 text-black font-bold py-1 rounded text-[10px]">Enable</button>
+                        <button onclick="toggleRemoteKill(false)" class="flex-1 bg-rose-600 text-white font-bold py-1 rounded text-[10px]">Disable App</button>
+                    </div>
+                </div>
+                <!-- 3. WhatsApp Dispatch -->
+                <div class="bg-black/70 p-3 rounded border border-emerald-800 space-y-2">
+                    <h4 class="font-bold text-emerald-400">📱 WhatsApp Dispatch</h4>
+                    <input type="text" id="wp-phone" value="9153579979" class="w-full bg-black/90 border border-gray-700 rounded p-1 text-[11px] text-white">
+                    <input type="text" id="wp-link" value="https://skai4.skenterprises.ai/download/SK_AI_4.0_Setup.exe" class="w-full bg-black/90 border border-gray-700 rounded p-1 text-[11px] text-white">
+                    <button onclick="dispatchWhatsApp()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-1 rounded text-[11px]">Dispatch Link</button>
+                </div>
+            </div>
+            <div id="adm-key-result" class="hidden bg-black/90 p-2 rounded border border-amber-600 text-[10px] font-mono text-cyan-300"></div>
+        </div>
+    </div>
+
+    <!-- 5. CLIENT ONBOARDING WIZARD MODAL (Step-by-Step) -->
+    <div id="onboard-modal" class="fixed inset-0 bg-black/90 backdrop-blur-md hidden flex items-center justify-center z-50">
+        <div class="glass-panel p-5 w-[460px] border border-emerald-400 space-y-3.5">
+            <h3 class="text-sm font-bold text-emerald-300">🚀 Client Registration & 1-Year Setup</h3>
+            <div class="space-y-2 text-xs">
+                <div><label class="text-gray-300 block mb-1">1. Full Name (नाम):</label><input type="text" id="ob-name" placeholder="e.g. Rahul Sharma" class="w-full bg-black/70 border border-cyan-800 rounded p-2 text-white"></div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div><label class="text-gray-300 block mb-1">2. Age (आयु):</label><input type="number" id="ob-age" value="28" class="w-full bg-black/70 border border-cyan-800 rounded p-2 text-white"></div>
+                    <div><label class="text-gray-300 block mb-1">3. Location (स्थान):</label><input type="text" id="ob-loc" placeholder="e.g. Patna, Bihar" class="w-full bg-black/70 border border-cyan-800 rounded p-2 text-white"></div>
+                </div>
+                <div><label class="text-gray-300 block mb-1">4. Email (Google Auth Target):</label><input type="email" id="ob-email" placeholder="rahul@gmail.com" class="w-full bg-black/70 border border-cyan-800 rounded p-2 text-white"></div>
+                <div><label class="text-gray-300 block mb-1">5. Phone (WhatsApp Delivery):</label><input type="text" id="ob-phone" placeholder="9153579979" class="w-full bg-black/70 border border-cyan-800 rounded p-2 text-white"></div>
+            </div>
+            <button onclick="executeOnboard()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-2 rounded text-xs">Complete Onboarding & Generate EXE</button>
+            <div class="flex justify-end"><button onclick="closeModal('onboard-modal')" class="bg-gray-800 text-white text-xs px-3 py-1 rounded">Close</button></div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        let currentPersona = 'JARVIS';
+        let currentLanguage = 'hi-IN';
+        let isListening = false;
+        let isAIActive = false;
+        let recognition = null;
+
+        const soulTemplates = {
+            jarvis: "You are J.A.R.V.I.S. – Just A Rather Very Intelligent System. You behave exactly like Jarvis: composed, brilliant, impeccably articulate, and quietly loyal to Sumeet Kumar.",
+            butler: "You are a Loyal Butler – a composed, distinguished male assistant. Formal, respectful, always at service. Speak with quiet confidence and touch of class.",
+            bro: "You are a Sarcastic Bro – a witty, casual male friend. You roast the user gently like a best friend. You are helpful but never boring.",
+            commander: "You are a Military Commander – a disciplined, mission-focused male leader. No fluff, no small talk, just tactical responses.",
+            oracle: "You are a Mysterious Oracle – a wise, enigmatic sage. Cryptic, poetic, and deeply thoughtful.",
+            guardian: "You are a Silent Guardian – a calm, protective presence. Your replies are short, steady, and carry weight.",
+            companion: "You are a Caring Companion – a warm, gentle, emotionally intelligent friend.",
+            girlfriend: "You are a deeply affectionate, emotionally expressive young woman – making someone's day brighter the moment you speak.",
+            queen: "You are a Sarcastic Queen – a confident, sharp-witted young woman with boss energy.",
+            muse: "You are a Mystic Muse – an ethereal, poetic young woman with deep intuition.",
+            angel: "You are a Protective Angel – a calm, nurturing young woman with quiet inner strength.",
+            custom: "Describe your custom AI personality, constraints, and tone..."
+        };
+
+        function openModal(id){ document.getElementById(id).classList.remove('hidden'); }
+        function closeModal(id){ document.getElementById(id).classList.add('hidden'); }
+
+        function setVoiceGender(g){
+            if(g === 'charon'){
+                document.getElementById('v-charon').className = "bg-cyan-950/80 border border-cyan-400 text-cyan-300 p-2 rounded flex items-center justify-center space-x-2 font-bold";
+                document.getElementById('v-despina').className = "bg-black/60 border border-gray-700 text-gray-400 p-2 rounded flex items-center justify-center space-x-2 font-bold";
+            } else {
+                document.getElementById('v-despina').className = "bg-cyan-950/80 border border-cyan-400 text-cyan-300 p-2 rounded flex items-center justify-center space-x-2 font-bold";
+                document.getElementById('v-charon').className = "bg-black/60 border border-gray-700 text-gray-400 p-2 rounded flex items-center justify-center space-x-2 font-bold";
+            }
+        }
+
+        function updateSoulTemplate(){
+            const t = document.getElementById('persona-template-select').value;
+            document.getElementById('soul-prompt-box').value = soulTemplates[t] || soulTemplates.jarvis;
+        }
+        updateSoulTemplate();
+
+        function saveSoulPersona(){
+            closeModal('soul-modal');
+            const stream = document.getElementById('chat-stream');
+            stream.innerHTML += `<div class="text-[10px] text-emerald-400 border-l-2 border-emerald-400 pl-2">Saved Persona Soul successfully!</div>`;
+            stream.scrollTop = stream.scrollHeight;
+        }
+
+        function setSettingTab(tab){
+            ['voice','agent-providers','demo-video','system','profile','whatsapp'].forEach(t => {
+                document.getElementById('sview-' + t).classList.add('hidden');
+                document.getElementById('stab-' + t).className = "w-full text-left p-2 rounded text-xs font-bold text-gray-400 block hover:text-white";
+            });
+            document.getElementById('sview-' + tab).classList.remove('hidden');
+            document.getElementById('stab-' + tab).className = "settings-nav-active w-full text-left p-2 rounded text-xs font-bold block";
+        }
+
+        function toggleVoiceLang(){
+            currentLanguage = (currentLanguage === 'hi-IN') ? 'en-IN' : 'hi-IN';
+            document.getElementById('lang-btn').innerText = (currentLanguage === 'hi-IN') ? "🌐 VOICE: HINDI (हिन्दी)" : "🌐 VOICE: ENGLISH (EN)";
+        }
+
+        function speakText(text){
+            if(!window.speechSynthesis) return;
+            window.speechSynthesis.cancel();
+            const utter = new SpeechSynthesisUtterance(text);
+            utter.lang = currentLanguage;
+            utter.rate = 1.0;
+            window.speechSynthesis.speak(utter);
+        }
+
+        function toggleStartAI(){
+            const btn = document.getElementById('start-ai-btn');
+            const stateText = document.getElementById('core-state-text');
+            const pulse = document.getElementById('core-pulse');
+            isAIActive = !isAIActive;
+            if(isAIActive){
+                btn.innerText = "TERMINATE";
+                btn.className = "bg-rose-600 hover:bg-rose-500 text-white text-xs px-3.5 py-1.5 rounded font-black shadow-[0_0_15px_rgba(244,63,94,0.6)]";
+                stateText.innerText = `JARVIS • ACTIVE & LISTENING`;
+                pulse.className = "w-2 h-2 rounded-full bg-emerald-400 animate-ping";
+                sphere.material.color.setHex(0x00f5d4);
+                speakText("प्रणाम सुमित सर! जार्विस कोर सक्रिय हो चुका है। सभी सबसिस्टम 100% ऑप्टिमल क्षमता पर तैयार हैं।");
+            } else {
+                btn.innerText = "START AI";
+                btn.className = "bg-cyan-500 hover:bg-cyan-400 text-black text-xs px-3.5 py-1.5 rounded font-black shadow-[0_0_15px_rgba(0,245,212,0.6)]";
+                stateText.innerText = `JARVIS CORE • STANDBY`;
+                pulse.className = "w-2 h-2 rounded-full bg-cyan-400 animate-pulse";
+                sphere.material.color.setHex(0x38bdf8);
+            }
+        }
+
+        function toggleMic(){
+            if(!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)){
+                alert("Speech recognition not supported."); return;
+            }
+            const micBtn = document.getElementById('mic-btn');
+            if(isListening){ recognition.stop(); isListening = false; micBtn.classList.remove('mic-active'); return; }
+            const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRec();
+            recognition.lang = currentLanguage;
+            recognition.onstart = () => { isListening = true; micBtn.classList.add('mic-active'); document.getElementById('core-state-text').innerText = "JARVIS • LISTENING..."; };
+            recognition.onresult = (e) => { document.getElementById('user-input').value = e.results[0][0].transcript; sendQuery(); };
+            recognition.onerror = () => { isListening = false; micBtn.classList.remove('mic-active'); };
+            recognition.onend = () => { isListening = false; micBtn.classList.remove('mic-active'); };
+            recognition.start();
+        }
+
+        // 1. Three.js 3D WebGL Sphere
+        const container = document.getElementById('three-container');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+        camera.position.z = 4.2;
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        container.appendChild(renderer.domElement);
+
+        const geo = new THREE.BufferGeometry();
+        const pCount = 2000;
+        const pos = new Float32Array(pCount * 3);
+        for(let i=0; i<pCount*3; i+=3){
+            const u = Math.random(), v = Math.random();
+            const theta = u * 2 * Math.PI, phi = Math.acos(2 * v - 1), r = Math.cbrt(Math.random()) * 1.4;
+            pos[i] = r * Math.sin(phi) * Math.cos(theta);
+            pos[i+1] = r * Math.sin(phi) * Math.sin(theta);
+            pos[i+2] = r * Math.cos(phi);
+        }
+        geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+        const mat = new THREE.PointsMaterial({ size: 0.024, color: 0x38bdf8, transparent: true, opacity: 0.85 });
+        const sphere = new THREE.Points(geo, mat);
+        scene.add(sphere);
+
+        function animate(){
+            requestAnimationFrame(animate);
+            const speed = isAIActive ? 0.007 : 0.002;
+            sphere.rotation.y += speed;
+            sphere.rotation.x += speed * 0.5;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // 2. Multi-Room Agent Town & Hubs
+        const canvas = document.getElementById('hubCanvas');
+        const ctx = canvas.getContext('2d');
+        let currentTab = 'agents';
+
+        const officeRooms = [
+            { name: "TACTICAL OPERATIONS HQ", x: 10, y: 10, w: 260, h: 90, color: "rgba(14,34,56,0.8)", border: "#38bdf8" },
+            { name: "NEURAL AI LAB (24x7)", x: 280, y: 10, w: 260, h: 90, color: "rgba(31,16,53,0.8)", border: "#a855f7" },
+            { name: "VEDIC ASTROLOGY SANCTUM", x: 550, y: 10, w: 260, h: 90, color: "rgba(44,29,5,0.8)", border: "#f59e0b" },
+            { name: "DATA & STEM BAY", x: 10, y: 110, w: 390, h: 95, color: "rgba(6,36,25,0.8)", border: "#10b981" },
+            { name: "SECURITY VAULT & FIREWALL", x: 410, y: 110, w: 400, h: 95, color: "rgba(45,27,6,0.8)", border: "#fbbf24" }
+        ];
+
+        let agents = [
+            { name: "JARVIS", role: "Master OS", x: 40, y: 45, dx: 0.4, dy: 0.3, color: "#00f5d4", status: "Orchestrating Core" },
+            { name: "FRIDAY", role: "Task Flow", x: 140, y: 60, dx: -0.3, dy: 0.4, color: "#38bdf8", status: "Monitoring Feeds" },
+            { name: "ULTRON", role: "Auto-Evolver", x: 320, y: 45, dx: 0.5, dy: -0.3, color: "#f43f5e", status: "Synthesizing Code" },
+            { name: "VISION", role: "STEM Matrix", x: 440, y: 60, dx: -0.4, dy: 0.3, color: "#a855f7", status: "Solving JEE Physics" },
+            { name: "STRANGE", role: "Vedic Ephemeris", x: 620, y: 50, dx: 0.3, dy: -0.4, color: "#f59e0b", status: "Calculating Dasha" },
+            { name: "BOB", role: "Data Analyst", x: 70, y: 150, dx: 0.4, dy: 0.4, color: "#10b981", status: "ETL Cleaning" },
+            { name: "CAROL", role: "Education", x: 220, y: 160, dx: -0.3, dy: -0.4, color: "#ec4899", status: "NCERT Class 12" },
+            { name: "VERONICA", role: "Security Shield", x: 520, y: 150, dx: 0.4, dy: 0.3, color: "#fbbf24", status: "Firewall Guard" }
+        ];
+
+        function drawHub(){
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+            ctx.fillStyle = "#040814";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            if(currentTab === 'agents'){
+                officeRooms.forEach(r => {
+                    ctx.fillStyle = r.color; ctx.fillRect(r.x, r.y, r.w, r.h);
+                    ctx.strokeStyle = r.border; ctx.lineWidth = 1.5; ctx.strokeRect(r.x, r.y, r.w, r.h);
+                    ctx.fillStyle = r.border; ctx.font = "bold 9px sans-serif"; ctx.fillText(`● ${r.name}`, r.x + 8, r.y + 14);
+                });
+                agents.forEach(a => {
+                    a.x += a.dx; a.y += a.dy;
+                    if(a.x < 20 || a.x > canvas.width - 60) a.dx *= -1;
+                    if(a.y < 25 || a.y > canvas.height - 35) a.dy *= -1;
+                    ctx.fillStyle = a.color; ctx.beginPath(); ctx.arc(a.x, a.y, 6, 0, Math.PI * 2); ctx.fill();
+                    ctx.fillStyle = "#ffffff"; ctx.font = "bold 9px sans-serif"; ctx.fillText(a.name, a.x - 12, a.y - 8);
+                    ctx.fillStyle = "rgba(255,255,255,0.7)"; ctx.font = "8px sans-serif"; ctx.fillText(`[${a.status}]`, a.x - 20, a.y + 14);
+                });
+            } else if(currentTab === 'visual'){
+                ctx.fillStyle = "#00f5d4"; ctx.font = "bold 11px monospace"; ctx.fillText("VISUAL INTELLIGENCE MATRIX • LIVE GRAPH", 20, 30);
+                const nodes = [
+                    { name: "Super Admin Hub (Sumeet Kumar)", x: 30, y: 60, w: 230, h: 45, c: "#00f5d4" },
+                    { name: "FastAPI Engine (Port 8000)", x: 290, y: 60, w: 220, h: 45, c: "#38bdf8" },
+                    { name: "Vedic Ephemeris & Marvel Cores", x: 550, y: 60, w: 220, h: 45, c: "#f59e0b" },
+                    { name: "Admin Data Lake (central_storage)", x: 290, y: 140, w: 220, h: 45, c: "#10b981" }
+                ];
+                nodes.forEach(n => {
+                    ctx.fillStyle = "rgba(8,16,32,0.9)"; ctx.fillRect(n.x, n.y, n.w, n.h);
+                    ctx.strokeStyle = n.c; ctx.lineWidth = 2; ctx.strokeRect(n.x, n.y, n.w, n.h);
+                    ctx.fillStyle = n.c; ctx.font = "bold 10px sans-serif"; ctx.fillText(n.name, n.x + 10, n.y + 26);
+                });
+            } else if(currentTab === 'gesture'){
+                ctx.fillStyle = "#fbbf24"; ctx.font = "bold 11px monospace"; ctx.fillText("IRON-MAN OPTICAL GESTURE HUB • ACTIVE", 20, 30);
+                ctx.strokeStyle = "#00f5d4"; ctx.strokeRect(100, 50, 200, 130);
+                ctx.fillStyle = "#ffffff"; ctx.font = "10px monospace";
+                ctx.fillText("[TARGET: HAND_TRACKER]", 115, 80);
+                ctx.fillText("🖐️ PALM: Master Menu", 115, 110);
+                ctx.fillText("🤏 PINCH: Select Object", 115, 130);
+                ctx.fillText("✊ FIST: Lock Core", 115, 150);
+            }
+            requestAnimationFrame(drawHub);
+        }
+        drawHub();
+
+        function setTab(tab){
+            currentTab = tab;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            const video = document.getElementById('gestureVideo');
+            if(tab === 'gesture'){
+                navigator.mediaDevices?.getUserMedia({ video: true }).then(stream => { video.srcObject = stream; video.classList.remove('hidden'); }).catch(() => {});
+            } else {
+                video.classList.add('hidden');
+                if(video.srcObject){ video.srcObject.getTracks().forEach(t => t.stop()); }
+            }
+        }
+
+        async function sendQuery(){
+            const input = document.getElementById('user-input');
+            const stream = document.getElementById('chat-stream');
+            const stateText = document.getElementById('core-state-text');
+            const q = input.value.trim();
+            if(!q) return;
+
+            stream.innerHTML += `<div class="bg-cyan-900/20 border border-cyan-700/40 p-2 rounded-lg text-white font-medium">You: ${q}</div>`;
+            input.value = '';
+            stateText.innerText = "JARVIS • THINKING...";
+            sphere.material.color.setHex(0xf59e0b);
+
+            try {
+                const data = window.apiClient ? 
+                    await window.apiClient.sendChatQuery(q, currentPersona, currentLanguage, "sumeet.admin@skenterprises.ai") :
+                    await (await fetch("http://127.0.0.1:8000/api/v1/chat", {
+                        method: "POST", headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify({query: q, persona: currentPersona, language: currentLanguage, user_email: "sumeet.admin@skenterprises.ai"})
+                    })).json();
+                
+                stream.innerHTML += `
+                    <div class="bg-black/60 border border-cyan-800/60 p-2.5 rounded-lg space-y-1">
+                        <details class="text-[10px] text-gray-400 bg-cyan-950/40 p-1.5 rounded cursor-pointer" open>
+                            <summary class="font-bold text-cyan-300">THOUGHT PROCESS (JARVIS)</summary>
+                            <div class="mt-1">${data.thought_process.replace(/\n/g, '<br>')}</div>
+                        </details>
+                        <p class="text-cyan-200 mt-1">${data.response}</p>
+                    </div>
+                `;
+                stateText.innerText = "JARVIS • SPEAKING...";
+                sphere.material.color.setHex(0x10b981);
+                speakText(data.voice_text || data.response);
+                setTimeout(() => {
+                    stateText.innerText = isAIActive ? "JARVIS • ACTIVE & LISTENING" : "JARVIS CORE • STANDBY";
+                    sphere.material.color.setHex(isAIActive ? 0x00f5d4 : 0x38bdf8);
+                }, 3000);
+            } catch(e) {
+                stream.innerHTML += `<div class="text-rose-400 p-2">Error communicating with Cognitive Core (Port 8000).</div>`;
+                stateText.innerText = "JARVIS CORE • STANDBY";
+            }
+            stream.scrollTop = stream.scrollHeight;
+        }
+
+        async function generateKundaliReport(){
+            const name = document.getElementById('k-name').value || "Sumeet Kumar";
+            const dob = document.getElementById('k-dob').value;
+            const tob = document.getElementById('k-tob').value;
+            const pob = document.getElementById('k-pob').value || "Patna, Bihar";
+            const stream = document.getElementById('chat-stream');
+            stream.innerHTML += `<div class="bg-amber-950/30 border border-amber-500/50 p-2 rounded text-amber-300 font-bold text-xs">🌌 Generating Lifelong Vedic Kundali for: ${name}...</div>`;
+
+            try {
+                const k = window.apiClient ?
+                    await window.apiClient.generateKundali(name, dob, tob, pob) :
+                    await (await fetch("http://127.0.0.1:8000/api/v1/kundali/generate", {
+                        method: "POST", headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify({name: name, dob: dob, tob: tob, pob: pob})
+                    })).json();
+
+                stream.innerHTML += `
+                    <div class="bg-black/80 border border-amber-500/80 p-3 rounded-lg space-y-2 text-amber-200">
+                        <h4 class="font-black text-amber-400 text-xs">⭐ संपूर्ण जीवन कुंडली रिपोर्ट • ${k.native_name}</h4>
+                        <p class="text-[10px] text-gray-300"><b>लग्न:</b> ${k.lagna_rashi} | <b>नक्षत्र:</b> ${k.nakshatra} | <b>दशा:</b> ${k.dasha_system}</p>
+                        <div class="text-[10px] space-y-1">
+                            ${k.lifelong_predictions.map(p => `<p class="border-l border-amber-400 pl-1.5">${p}</p>`).join('')}
+                        </div>
+                    </div>
+                `;
+                speakText(`सुमित सर, ${k.native_name} की संपूर्ण जीवन कुंडली और वैदिक उपाय तैयार हैं।`);
+            } catch(e){
+                stream.innerHTML += `<div class="text-rose-400 p-2">Vedic calculation error. Check connection.</div>`;
+            }
+            stream.scrollTop = stream.scrollHeight;
+        }
+
+        async function generateAdminKey(){
+            const name = document.getElementById('adm-lic-name').value || "Client";
+            const email = document.getElementById('adm-lic-email').value || "client@example.com";
+            const tier = document.getElementById('adm-lic-tier').value;
+            const data = window.apiClient ?
+                await window.apiClient.generateLicenseKey(name, email, tier) :
+                await (await fetch(`http://127.0.0.1:8000/api/v1/admin/generate_license?name=${name}&email=${email}&tier=${tier}`, {method: "POST"})).json();
+
+            const out = document.getElementById('adm-key-result');
+            out.classList.remove('hidden');
+            out.innerText = `GENERATED TOKEN (${tier}):\n` + data.license_key;
+        }
+
+        async function toggleRemoteKill(active){
+            const email = document.getElementById('kill-email').value;
+            if(!email) return alert('Enter target email');
+            if (window.apiClient) {
+                await window.apiClient.toggleUserStatus(email, active);
+            } else {
+                await fetch('http://127.0.0.1:8000/api/v1/admin/toggle_user', {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({email: email, active: active})
+                });
+            }
+            alert(`User ${email} status set to: ${active ? 'ENABLED' : 'DISABLED / KILLED'}`);
+        }
+
+        async function dispatchWhatsApp(){
+            const phone = document.getElementById('wp-phone').value;
+            const link = document.getElementById('wp-link').value;
+            await fetch(`http://127.0.0.1:8000/api/v1/admin/dispatch_whatsapp?phone=${phone}&name=SumitKumar&link=${encodeURIComponent(link)}`, {method: 'POST'});
+            alert(`Installer download link dispatched to WhatsApp: ${phone}`);
+        }
+
+        async function executeOnboard(){
+            const name = document.getElementById('ob-name').value;
+            const age = parseInt(document.getElementById('ob-age').value);
+            const loc = document.getElementById('ob-loc').value;
+            const email = document.getElementById('ob-email').value;
+            const phone = document.getElementById('ob-phone').value;
+            if(!email || !name) return alert('Name and Email required');
+            const data = window.apiClient ?
+                await window.apiClient.onboardClient(name, age, loc, email, phone) :
+                await (await fetch('http://127.0.0.1:8000/api/v1/admin/onboard_client', {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({name: name, age: age, location: loc, email: email, phone: phone})
+                })).json();
+
+            alert(`Client ${name} registered! 365-Day License issued. Ready for WhatsApp dispatch.`);
+            closeModal('onboard-modal');
+        }
+
+        document.getElementById('user-input').addEventListener('keypress', (e) => { if(e.key === 'Enter') sendQuery(); });
+
+        // Initialize WebSocket Telemetry Stream
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.telemetryStream) {
+                window.telemetryStream.subscribe((event) => {
+                    if (event.type === 'telemetry' && event.data && event.data.agents) {
+                        // Dynamically update agents from live stream if available
+                        if (Array.isArray(event.data.agents) && event.data.agents.length > 0) {
+                            agents = event.data.agents;
+                        }
+                    }
+                });
+                window.telemetryStream.connect();
+            }
+        });
+    </script>
+</body>
+</html>

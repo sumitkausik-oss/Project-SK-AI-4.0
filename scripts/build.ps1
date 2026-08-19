@@ -1,10 +1,10 @@
 # ==============================================================================
 # SK ENTERPRISES | SK AI 4.0 - PYINSTALLER PRODUCTION BUILD PIPELINE
-# INVENTOR & SOLE ARCHITECT: SUMIT KUMAR
+# FOUNDER & SOLE ARCHITECT: SUMEET KUMAR
 # ==============================================================================
 Write-Host "========================================================================" -ForegroundColor Cyan
 Write-Host "  SK ENTERPRISES | PROJECT SK AI 4.0 (PROJECT JARVIS 4.0)" -ForegroundColor Cyan
-Write-Host "  INVENTOR & SOLE ARCHITECT: SUMIT KUMAR | STANDALONE BUILD SCRIPT" -ForegroundColor Cyan
+Write-Host "  FOUNDER & SOLE ARCHITECT: SUMEET KUMAR | STANDALONE BUILD SCRIPT" -ForegroundColor Cyan
 Write-Host "========================================================================" -ForegroundColor Cyan
 
 $RootDir = Split-Path -Parent $PSScriptRoot
