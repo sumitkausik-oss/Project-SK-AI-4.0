@@ -38,6 +38,7 @@
       "assets/**/*",
       "config/**/*",
       "core/**/*",
+      "dist/**/*",
       "run_sk_ai_4.py",
       "run_dev.py",
       "Main_SK_AI_4.py"
