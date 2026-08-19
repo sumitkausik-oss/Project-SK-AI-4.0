@@ -1,0 +1,20 @@
+{
+  "gemini_api_key": "AIzaSyMasterSovereignKeySumeetKumar2026",
+  "backup_gemini_api_key": "",
+  "openrouter_key": "",
+  "openai_key": "",
+  "groq_key": "",
+  "active_model": "gemini-2.5-flash",
+  "selected_persona": "Male Voice (Charon)",
+  "wake_word_enabled": true,
+  "double_clap_enabled": true,
+  "auto_updates": true,
+  "whatsapp_phone": "9153579979",
+  "whatsapp_status": "Connected (Hermes)",
+  "user_profile": {
+    "full_name": "Sumeet Kumar",
+    "profession": "Founder, AI Architect & Sole Owner",
+    "organization": "SK Enterprises",
+    "primary_location": "Patna, Bihar, India"
+  }
+}
