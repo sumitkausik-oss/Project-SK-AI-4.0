@@ -1,44 +1,62 @@
 # ==============================================================================
-# SK ENTERPRISES | SK AI 4.0 - PYINSTALLER PRODUCTION BUILD PIPELINE
+# SK ENTERPRISES | SK AI 4.0 - MASTER BUILD PIPELINE
 # FOUNDER & SOLE ARCHITECT: SUMEET KUMAR
 # ==============================================================================
+$ErrorActionPreference = "Stop"
+
 Write-Host "========================================================================" -ForegroundColor Cyan
 Write-Host "  SK ENTERPRISES | PROJECT SK AI 4.0 (PROJECT JARVIS 4.0)" -ForegroundColor Cyan
-Write-Host "  FOUNDER & SOLE ARCHITECT: SUMEET KUMAR | STANDALONE BUILD SCRIPT" -ForegroundColor Cyan
+Write-Host "  FOUNDER & SOLE ARCHITECT: SUMEET KUMAR | MASTER BUILD SCRIPT" -ForegroundColor Cyan
 Write-Host "========================================================================" -ForegroundColor Cyan
 
 $RootDir = Split-Path -Parent $PSScriptRoot
 Set-Location $RootDir
 
-# 1. Clean previous build artifacts
-Write-Host "`n[STEP 1/3] Cleaning previous build artifacts..." -ForegroundColor Yellow
-if (Test-Path "build") { Remove-Item "build" -Recurse -Force | Out-Null }
-if (Test-Path "dist") { Remove-Item "dist" -Recurse -Force | Out-Null }
-Write-Host "  Cleaned build and dist directories." -ForegroundColor Green
-
-# 2. Run PyInstaller
-Write-Host "`n[STEP 2/3] Compiling Standalone Executable with PyInstaller..." -ForegroundColor Yellow
-pyinstaller --noconfirm SK_AI_4.0.spec
-$BuildExitCode = $LASTEXITCODE
-
-if ($BuildExitCode -ne 0) {
-    Write-Error "PyInstaller build failed with exit code $BuildExitCode."
-    Exit $BuildExitCode
+function Invoke-BuildStep {
+    param(
+        [Parameter(Mandatory=$true)][string]$Name,
+        [Parameter(Mandatory=$true)][scriptblock]$Action
+    )
+    Write-Host "`n--------------------------------------------------" -ForegroundColor Yellow
+    Write-Host ">> STEP: $Name" -ForegroundColor Yellow
+    Write-Host "--------------------------------------------------" -ForegroundColor Yellow
+    $global:LASTEXITCODE = 0
+    & $Action
+    if ($global:LASTEXITCODE -ne 0) {
+        throw "CRITICAL FAILURE: Build step '$Name' exited with code $global:LASTEXITCODE"
+    }
+    Write-Host "PASSED: $Name" -ForegroundColor Green
 }
 
-# 3. Verify Output
-Write-Host "`n[STEP 3/3] Verifying Output Executable..." -ForegroundColor Yellow
-$ExePath = Join-Path $RootDir "dist\SK_AI_4.0\SK_AI_4.0.exe"
+# 1. Verify Node and Python Environment
+Invoke-BuildStep -Name "Environment Verification" -Action {
+    node --version
+    npm --version
+    python --version
+}
 
-if (Test-Path $ExePath) {
-    $ExeSize = (Get-Item $ExePath).Length / 1MB
-    Write-Host "  [BUILD SUCCESS]: Executable generated at: $ExePath" -ForegroundColor Green
-    Write-Host "  [SIZE]: $([math]::Round($ExeSize, 2)) MB" -ForegroundColor Green
-} else {
-    Write-Error "Executable not found at expected location: $ExePath"
-    Exit 1
+# 2. Run Test Suite
+Invoke-BuildStep -Name "Automated Test Suite (pytest)" -Action {
+    python -m pytest
+}
+
+# 3. Validate Electron and Electron Builder Dependencies
+Invoke-BuildStep -Name "Electron and Electron Builder Check" -Action {
+    npx electron -v
+    npx electron-builder --version
+}
+
+# 4. Verify Frontend Assets
+Invoke-BuildStep -Name "Frontend Asset Validation" -Action {
+    if (-not (Test-Path "frontend\index.html")) {
+        throw "Missing frontend\index.html"
+    }
+    if (-not (Test-Path "frontend\js\three.min.js")) {
+        throw "Missing frontend\js\three.min.js"
+    }
+    Write-Host "Frontend HTML and Three.js offline core verified."
 }
 
 Write-Host "`n========================================================================" -ForegroundColor Green
-Write-Host "  BUILD COMPLETE: Production standalone bundle ready in dist\SK_AI_4.0" -ForegroundColor Green
+Write-Host "  MASTER BUILD VERIFICATION COMPLETED SUCCESSFULLY!" -ForegroundColor Green
 Write-Host "========================================================================" -ForegroundColor Green

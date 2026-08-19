@@ -37,3 +37,7 @@ config/license.key
 admin_central_storage/users/
 *.zip
 release/SK_AI_4.0_Portable_*/
+node_modules/
+release/win-unpacked/
+release/*.blockmap
+release/builder-debug.yml

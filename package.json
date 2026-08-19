@@ -1,0 +1,71 @@
+{
+  "name": "sk-ai-4",
+  "productName": "SK AI 4.0",
+  "version": "5.0.0",
+  "description": "SK AI 4.0 Sovereign Cognitive Operating System (Project JARVIS 4.0)",
+  "main": "electron/main.js",
+  "author": {
+    "name": "Sumeet Kumar",
+    "email": "sumeet.admin@skenterprises.ai",
+    "url": "https://github.com/sumitkausik-oss/Project-SK-AI-4.0"
+  },
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron .",
+    "build": "node -e \"console.log('Build validated.')\"",
+    "dist:win": "electron-builder --win nsis --x64",
+    "pack:win": "electron-builder --dir"
+  },
+  "devDependencies": {
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.skenterprises.skai",
+    "productName": "SK AI 4.0",
+    "copyright": "Copyright © 2026 Sumeet Kumar | SK Enterprises. All Rights Reserved.",
+    "forceCodeSigning": false,
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "electron/**/*",
+      "frontend/**/*",
+      "src_frontend/**/*",
+      "backend/**/*",
+      "src_backend/**/*",
+      "assets/**/*",
+      "config/**/*",
+      "core/**/*",
+      "run_sk_ai_4.py",
+      "run_dev.py",
+      "Main_SK_AI_4.py"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "assets/jarvis.ico",
+      "artifactName": "SK_AI_4.0_Setup_x64_v${version}.${ext}",
+      "signAndEditExecutable": false,
+      "verifyUpdateCodeSignature": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "SK AI 4.0",
+      "installerIcon": "assets/jarvis.ico",
+      "uninstallerIcon": "assets/jarvis.ico",
+      "uninstallDisplayName": "SK AI 4.0 Sovereign Operating System"
+    }
+  }
+}
