@@ -60,10 +60,13 @@ export class GeminiLiveCore {
         if (toolCalls && toolCalls.length > 0) {
           callbacks.onStateChange('THINKING')
           for (const call of toolCalls) {
-            const result = await window.electron.ipcRenderer.invoke('execute-system-tool', {
-              toolName: call.name,
-              args: call.args
-            })
+            const electron = (window as any).electron
+            const result = electron
+              ? await electron.ipcRenderer.invoke('execute-system-tool', {
+                  toolName: call.name,
+                  args: call.args
+                })
+              : { success: false, message: 'Electron IPC unavailable' }
 
             callbacks.onTranscript('model', `[System Actuation]: ${result.message}`)
 
