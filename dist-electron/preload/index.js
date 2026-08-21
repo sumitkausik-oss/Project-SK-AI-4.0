@@ -23,6 +23,7 @@ const skaiApi = {
     os: {
         openApp: (appName) => electron_1.ipcRenderer.invoke('sys:open-app', appName),
         closeApp: (appName) => electron_1.ipcRenderer.invoke('os:closeApp', appName),
+        openBrowser: (urlOrQuery) => electron_1.ipcRenderer.invoke('open-browser', urlOrQuery),
         readFile: (filePath) => electron_1.ipcRenderer.invoke('os:readFile', filePath),
         writeFile: (filePath, content, append) => electron_1.ipcRenderer.invoke('os:writeFile', filePath, content, append),
         createFile: (filePath, content) => electron_1.ipcRenderer.invoke('os:createFile', filePath, content),

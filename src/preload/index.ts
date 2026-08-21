@@ -26,6 +26,7 @@ const skaiApi = {
   os: {
     openApp: (appName: string) => ipcRenderer.invoke('sys:open-app', appName),
     closeApp: (appName: string) => ipcRenderer.invoke('os:closeApp', appName),
+    openBrowser: (urlOrQuery: string) => ipcRenderer.invoke('open-browser', urlOrQuery),
     readFile: (filePath: string) => ipcRenderer.invoke('os:readFile', filePath),
     writeFile: (filePath: string, content: string, append?: boolean) =>
       ipcRenderer.invoke('os:writeFile', filePath, content, append),

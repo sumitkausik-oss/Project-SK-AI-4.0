@@ -11,6 +11,7 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as https from 'https';
 import { spawn, exec } from 'child_process';
+import { SystemTools } from './lib/system-tools';
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -973,7 +974,12 @@ function registerIpcHandlers() {
   ipcMain.handle('sys:open-app', (_, appName: string) => OSControl.openApp(appName));
   ipcMain.handle('os:openApp', (_, appName: string) => OSControl.openApp(appName));
   ipcMain.handle('os:closeApp', (_, appName: string) => OSControl.closeApp(appName));
+  ipcMain.handle('open-browser', (_, url: string) => SystemTools.openBrowser(url));
+  ipcMain.handle('os:openBrowser', (_, url: string) => SystemTools.openBrowser(url));
   ipcMain.handle('os:readFile', (_, filePath: string) => OSControl.readFile(filePath));
+  ipcMain.handle('read-dir', (_, dirPath: string) => OSControl.listFolder(dirPath));
+  ipcMain.handle('write-file', (_, filePath: string, content: string) => OSControl.writeFile(filePath, content));
+  ipcMain.handle('get-system-metrics', () => getSystemTelemetry());
   ipcMain.handle('os:writeFile', (_, filePath: string, content: string, append?: boolean) => OSControl.writeFile(filePath, content, append));
   ipcMain.handle('os:createFile', (_, filePath: string, content?: string) => OSControl.createFile(filePath, content));
   ipcMain.handle('os:listFolder', (_, folderPath?: string) => OSControl.listFolder(folderPath));

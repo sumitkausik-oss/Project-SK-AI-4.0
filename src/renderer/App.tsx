@@ -1,40 +1,50 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { TopBarHUD } from './components/TopBarHUD';
 import { HolographicCore } from './components/HolographicCore';
 import { TelemetryHUD } from './components/TelemetryHUD';
 import { TranscriptHUD } from './components/TranscriptHUD';
 import { SettingsModal } from '../components/SettingsModal';
 import { ActionConfirmModal } from '../components/ActionConfirmModal';
-import { Mic, Camera, Globe, Brain, ShieldAlert, Sparkles, Terminal } from 'lucide-react';
+import { VoiceService, VoiceState } from './services/voice-service';
+import { ClapDetector } from './utils/clapDetector';
+import { Mic, Camera, Globe, Sparkles } from 'lucide-react';
 import { ChatMessage, PendingAction } from '../types/electron';
 
 export const App: React.FC = () => {
   const [assistantState, setAssistantState] = useState<'STANDBY' | 'LISTENING' | 'THINKING' | 'SPEAKING'>('STANDBY');
+  const [audioLevel, setAudioLevel] = useState(0);
   const [hasKey, setHasKey] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [pendingAction, setPendingAction] = useState<PendingAction | null>(null);
-  const [isListening, setIsListening] = useState(false);
-  const [speechRec, setSpeechRec] = useState<any>(null);
+  const [isVoiceActive, setIsVoiceActive] = useState(false);
+
+  const voiceServiceRef = useRef<VoiceService | null>(null);
+  const clapDetectorRef = useRef<ClapDetector | null>(null);
 
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: 'welcome',
       sender: 'AI',
-      response: `SYSTEM READY // **SKAI HOLOGRAPHIC CORE ONLINE**
+      response: `SYSTEM READY // **SKAI HOLOGRAPHIC QUANTUM CORE**
 Architect: **Sumeet Kumar** | Powered by **SK Enterprises**
 
-Bilingual duplex intelligence active (English & Hindi).
+Bilingual duplex intelligence active (English, Hindi & Hinglish).
 • "Open notepad" / "Notepad chalu karo"
 • "Take a screenshot" / "Screenshot le lo"
-• "Remember that my name is Sumeet" / "Yaad rakho"
-• "Search web for AI news"`,
+• "Search web for AI news"
+• 👏 **Double-Clap Wake Detection Active**`,
       timestamp: new Date().toLocaleTimeString(),
     },
   ]);
 
   useEffect(() => {
     checkApiKey();
-    initSpeechRecognition();
+    initVoiceAndClapEngine();
+
+    return () => {
+      voiceServiceRef.current?.stop();
+      clapDetectorRef.current?.stop();
+    };
   }, []);
 
   const checkApiKey = async () => {
@@ -48,64 +58,68 @@ Bilingual duplex intelligence active (English & Hindi).
     }
   };
 
-  const initSpeechRecognition = () => {
-    const SpeechRec = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    if (SpeechRec) {
-      const rec = new SpeechRec();
-      rec.continuous = false;
-      rec.interimResults = false;
-      rec.lang = 'en-US'; // Also parses Hinglish/Hindi phonemes
-
-      rec.onstart = () => {
-        setIsListening(true);
-        setAssistantState('LISTENING');
-      };
-
-      rec.onresult = (event: any) => {
-        const transcript = event.results[0][0].transcript;
+  const initVoiceAndClapEngine = () => {
+    // 1. Initialize Voice Service with 4096-frame chunking and auto-reconnect
+    voiceServiceRef.current = new VoiceService({
+      onStateChange: (vState: VoiceState) => {
+        if (vState === 'LISTENING') setAssistantState('LISTENING');
+        else if (vState === 'SPEAKING') setAssistantState('SPEAKING');
+        else if (vState === 'DISCONNECTED') setAssistantState('STANDBY');
+      },
+      onAudioLevel: (lvl: number) => {
+        setAudioLevel(lvl);
+      },
+      onTranscript: (transcript: string) => {
         handleSendMessage(transcript);
-      };
+      },
+      onError: (err: string) => {
+        console.warn('[VOICE SERVICE] Error:', err);
+      },
+    });
 
-      rec.onerror = (err: any) => {
-        console.warn('Speech Rec Error:', err);
-        setIsListening(false);
-        setAssistantState('STANDBY');
-      };
-
-      rec.onend = () => {
-        setIsListening(false);
-        setAssistantState('STANDBY');
-      };
-
-      setSpeechRec(rec);
-    }
+    // 2. Initialize Double-Clap Wake Detector
+    clapDetectorRef.current = new ClapDetector({
+      onWake: () => {
+        console.log('👏 Double-clap detected! Waking assistant...');
+        handleSendMessage('System wake: Greetings SKAI');
+      },
+    });
+    clapDetectorRef.current.start();
   };
 
-  const toggleMic = () => {
-    if (!speechRec) {
-      alert('Microphone speech recognition is not supported in this environment.');
-      return;
-    }
-    if (isListening) {
-      speechRec.stop();
-      setIsListening(false);
+  const toggleVoice = () => {
+    if (!voiceServiceRef.current) return;
+
+    if (isVoiceActive) {
+      voiceServiceRef.current.stop();
+      setIsVoiceActive(false);
       setAssistantState('STANDBY');
     } else {
-      speechRec.start();
+      voiceServiceRef.current.start();
+      setIsVoiceActive(true);
+      setAssistantState('LISTENING');
     }
   };
 
   const speakText = (text: string) => {
     if (!window.speechSynthesis) return;
     window.speechSynthesis.cancel();
+    voiceServiceRef.current?.setSpeakingLocally(true);
+
     const clean = text.replace(/[*#`_>\[\]]/g, '').trim();
     const utterance = new SpeechSynthesisUtterance(clean);
     utterance.rate = 1.05;
     utterance.pitch = 1.0;
 
     utterance.onstart = () => setAssistantState('SPEAKING');
-    utterance.onend = () => setAssistantState('STANDBY');
-    utterance.onerror = () => setAssistantState('STANDBY');
+    utterance.onend = () => {
+      setAssistantState(isVoiceActive ? 'LISTENING' : 'STANDBY');
+      voiceServiceRef.current?.setSpeakingLocally(false);
+    };
+    utterance.onerror = () => {
+      setAssistantState(isVoiceActive ? 'LISTENING' : 'STANDBY');
+      voiceServiceRef.current?.setSpeakingLocally(false);
+    };
     window.speechSynthesis.speak(utterance);
   };
 
@@ -154,18 +168,18 @@ Bilingual duplex intelligence active (English & Hindi).
       };
 
       setMessages((prev) => [...prev, aiMsg]);
-      setAssistantState('STANDBY');
+      setAssistantState(isVoiceActive ? 'LISTENING' : 'STANDBY');
 
       const voiceFeedback = res.voice_text || aiMsg.response.split('\n')[0];
       speakText(voiceFeedback);
     } catch (err: any) {
-      setAssistantState('STANDBY');
+      setAssistantState(isVoiceActive ? 'LISTENING' : 'STANDBY');
       setMessages((prev) => [
         ...prev,
         {
           id: `err_${Date.now()}`,
           sender: 'AI',
-          response: `❌ **Error:** ${err.message || 'Execution fault.'}`,
+          response: `❌ **Execution Error:** ${err.message || 'Fault encountered.'}`,
           timestamp: new Date().toLocaleTimeString(),
         },
       ]);
@@ -174,7 +188,7 @@ Bilingual duplex intelligence active (English & Hindi).
 
   return (
     <div className="h-screen w-screen flex flex-col bg-[#030305] text-gray-100 overflow-hidden font-sans select-none relative">
-      {/* 1. Top HUD Bar */}
+      {/* 1. Top Bar */}
       <TopBarHUD
         state={assistantState}
         hasKey={hasKey}
@@ -186,9 +200,8 @@ Bilingual duplex intelligence active (English & Hindi).
         {/* Left Telemetry HUD */}
         <TelemetryHUD onQuickAction={handleSendMessage} />
 
-        {/* Center: 3D Holographic Core Sphere */}
+        {/* Center: 3D Holographic Core */}
         <div className="flex-1 flex flex-col items-center justify-between relative overflow-hidden p-4">
-          {/* Top Holographic Banner */}
           <div className="text-center space-y-1 z-10">
             <span className="text-[10px] font-mono tracking-[0.3em] text-cyan-400/80 uppercase">
               // HOLOGRAPHIC QUANTUM INTERACTION CORE //
@@ -198,23 +211,22 @@ Bilingual duplex intelligence active (English & Hindi).
             </h1>
           </div>
 
-          {/* 3D WebGL Particle Sphere */}
           <div className="w-full h-80 flex items-center justify-center">
-            <HolographicCore state={assistantState} />
+            <HolographicCore state={assistantState} audioLevel={audioLevel} />
           </div>
 
-          {/* Center Quick Action Bar */}
+          {/* Quick Action Control Bar */}
           <div className="glass-panel p-2 rounded-2xl flex items-center gap-3 border border-cyan-500/30 shadow-[0_0_30px_rgba(0,240,255,0.15)] z-10">
             <button
-              onClick={toggleMic}
+              onClick={toggleVoice}
               className={`p-3 rounded-xl transition flex items-center gap-2 font-mono text-xs font-bold ${
-                isListening
+                isVoiceActive
                   ? 'bg-rose-600 border border-rose-400 text-white animate-pulse shadow-[0_0_20px_rgba(244,63,94,0.8)]'
                   : 'bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/50 text-cyan-300'
               }`}
             >
               <Mic className="w-4 h-4" />
-              <span>{isListening ? 'LISTENING (SPEAK)' : 'ACTIVATE VOICE'}</span>
+              <span>{isVoiceActive ? 'VOICE LIVE (MUTE)' : 'ACTIVATE VOICE'}</span>
             </button>
 
             <button
@@ -226,7 +238,7 @@ Bilingual duplex intelligence active (English & Hindi).
             </button>
 
             <button
-              onClick={() => handleSendMessage('search web for latest AI news')}
+              onClick={() => handleSendMessage('search web for latest AI breakthroughs')}
               className="p-3 rounded-xl bg-black/60 hover:bg-cyan-950/60 border border-cyan-900/60 text-gray-300 hover:text-cyan-300 transition flex items-center gap-1.5 text-xs font-mono"
             >
               <Globe className="w-4 h-4 text-cyan-400" />
@@ -238,9 +250,9 @@ Bilingual duplex intelligence active (English & Hindi).
         {/* Right Transcript HUD */}
         <TranscriptHUD
           messages={messages}
-          isListening={isListening}
+          isListening={isVoiceActive}
           onSendMessage={handleSendMessage}
-          onToggleMic={toggleMic}
+          onToggleMic={toggleVoice}
         />
       </div>
 

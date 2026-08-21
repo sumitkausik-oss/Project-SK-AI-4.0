@@ -46,6 +46,7 @@ const fs = __importStar(require("fs"));
 const os = __importStar(require("os"));
 const https = __importStar(require("https"));
 const child_process_1 = require("child_process");
+const system_tools_1 = require("./lib/system-tools");
 let mainWindow = null;
 // App Data & Storage Directories
 const APPDATA_DIR = path.join(electron_1.app.getPath('appData'), 'SK Enterprises', 'SKAI');
@@ -913,7 +914,12 @@ function registerIpcHandlers() {
     electron_1.ipcMain.handle('sys:open-app', (_, appName) => OSControl.openApp(appName));
     electron_1.ipcMain.handle('os:openApp', (_, appName) => OSControl.openApp(appName));
     electron_1.ipcMain.handle('os:closeApp', (_, appName) => OSControl.closeApp(appName));
+    electron_1.ipcMain.handle('open-browser', (_, url) => system_tools_1.SystemTools.openBrowser(url));
+    electron_1.ipcMain.handle('os:openBrowser', (_, url) => system_tools_1.SystemTools.openBrowser(url));
     electron_1.ipcMain.handle('os:readFile', (_, filePath) => OSControl.readFile(filePath));
+    electron_1.ipcMain.handle('read-dir', (_, dirPath) => OSControl.listFolder(dirPath));
+    electron_1.ipcMain.handle('write-file', (_, filePath, content) => OSControl.writeFile(filePath, content));
+    electron_1.ipcMain.handle('get-system-metrics', () => getSystemTelemetry());
     electron_1.ipcMain.handle('os:writeFile', (_, filePath, content, append) => OSControl.writeFile(filePath, content, append));
     electron_1.ipcMain.handle('os:createFile', (_, filePath, content) => OSControl.createFile(filePath, content));
     electron_1.ipcMain.handle('os:listFolder', (_, folderPath) => OSControl.listFolder(folderPath));

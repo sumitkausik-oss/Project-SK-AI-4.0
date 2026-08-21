@@ -6,6 +6,12 @@ interface HolographicCoreProps {
   audioLevel?: number;
 }
 
+// Pre-allocated static color objects outside the render loop to eliminate RAM garbage collection
+const COLOR_STANDBY = { r: 0.0, g: 0.94, b: 1.0 }; // Cyan
+const COLOR_LISTENING = { r: 0.0, g: 1.0, b: 0.7 }; // Neon Emerald
+const COLOR_THINKING = { r: 0.96, g: 0.62, b: 0.04 }; // Gold / Amber
+const COLOR_SPEAKING = { r: 0.22, g: 0.74, b: 0.97 }; // Electric Sky
+
 export const HolographicCore: React.FC<HolographicCoreProps> = ({ state, audioLevel = 0 }) => {
   const mountRef = useRef<HTMLDivElement>(null);
   const stateRef = useRef(state);
@@ -20,21 +26,26 @@ export const HolographicCore: React.FC<HolographicCoreProps> = ({ state, audioLe
     const container = mountRef.current;
     if (!container) return;
 
-    // Scene, Camera, Renderer
-    const scene = new THREE.Scene();
-    const width = container.clientWidth || 400;
-    const height = container.clientHeight || 400;
+    // 1. Optimized WebGLRenderer with lowp precision and capped DPR to minimize RAM & GPU load
+    const width = container.clientWidth || 380;
+    const height = container.clientHeight || 380;
 
-    const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 100);
     camera.position.z = 5;
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    const renderer = new THREE.WebGLRenderer({
+      antialias: true,
+      alpha: true,
+      powerPreference: 'default',
+      precision: 'lowp',
+    });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.25));
     container.appendChild(renderer.domElement);
 
-    // Particle Sphere Geometry
-    const particleCount = 1400;
+    // 2. Particle Geometry Allocation
+    const particleCount = 1200;
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
     const originalPositions = new Float32Array(particleCount * 3);
@@ -61,18 +72,16 @@ export const HolographicCore: React.FC<HolographicCoreProps> = ({ state, audioLe
       originalPositions[i * 3 + 1] = y;
       originalPositions[i * 3 + 2] = z;
 
-      // Initial Cyan Tint
-      colors[i * 3] = 0.0;
-      colors[i * 3 + 1] = 0.94;
-      colors[i * 3 + 2] = 1.0;
+      colors[i * 3] = COLOR_STANDBY.r;
+      colors[i * 3 + 1] = COLOR_STANDBY.g;
+      colors[i * 3 + 2] = COLOR_STANDBY.b;
     }
 
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-    // Particle Material
     const material = new THREE.PointsMaterial({
-      size: 0.035,
+      size: 0.032,
       vertexColors: true,
       transparent: true,
       opacity: 0.85,
@@ -82,31 +91,30 @@ export const HolographicCore: React.FC<HolographicCoreProps> = ({ state, audioLe
     const particles = new THREE.Points(geometry, material);
     scene.add(particles);
 
-    // Inner Glowing Wireframe Core
-    const innerGeo = new THREE.IcosahedronGeometry(0.9, 2);
+    // 3. Inner Wireframe Core & Outer Torus
+    const innerGeo = new THREE.IcosahedronGeometry(0.85, 2);
     const innerMat = new THREE.MeshBasicMaterial({
       color: 0x00f0ff,
       wireframe: true,
       transparent: true,
-      opacity: 0.25,
+      opacity: 0.22,
     });
     const innerCore = new THREE.Mesh(innerGeo, innerMat);
     scene.add(innerCore);
 
-    // Outer Orbital Ring
-    const ringGeo = new THREE.TorusGeometry(2.1, 0.015, 16, 100);
+    const ringGeo = new THREE.TorusGeometry(2.0, 0.012, 12, 80);
     const ringMat = new THREE.MeshBasicMaterial({
       color: 0x00f0ff,
       transparent: true,
-      opacity: 0.35,
+      opacity: 0.3,
     });
     const ring = new THREE.Mesh(ringGeo, ringMat);
     ring.rotation.x = Math.PI / 3;
     scene.add(ring);
 
-    // Animation Loop
+    // 4. Animation Loop with Zero Per-Frame Allocations
     let animationFrameId: number;
-    let clock = new THREE.Clock();
+    const clock = new THREE.Clock();
 
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
@@ -118,26 +126,25 @@ export const HolographicCore: React.FC<HolographicCoreProps> = ({ state, audioLe
       const col = geometry.attributes.color.array as Float32Array;
 
       let speedMultiplier = 1.0;
-      let targetColor = { r: 0.0, g: 0.94, b: 1.0 }; // Cyan (Standby)
+      let target = COLOR_STANDBY;
 
       if (currentState === 'LISTENING') {
         speedMultiplier = 1.4;
-        targetColor = { r: 0.0, g: 1.0, b: 0.7 }; // Emerald/Cyan
+        target = COLOR_LISTENING;
       } else if (currentState === 'THINKING') {
-        speedMultiplier = 3.2;
-        targetColor = { r: 0.96, g: 0.62, b: 0.04 }; // Amber/Gold
+        speedMultiplier = 3.0;
+        target = COLOR_THINKING;
       } else if (currentState === 'SPEAKING') {
         speedMultiplier = 2.0;
-        targetColor = { r: 0.22, g: 0.74, b: 0.97 }; // Electric Sky
+        target = COLOR_SPEAKING;
       }
 
-      particles.rotation.y = time * 0.25 * speedMultiplier;
-      particles.rotation.x = time * 0.15 * speedMultiplier;
-      innerCore.rotation.y = -time * 0.4 * speedMultiplier;
-      innerCore.rotation.z = time * 0.2 * speedMultiplier;
-      ring.rotation.z = time * 0.3 * speedMultiplier;
+      particles.rotation.y = time * 0.22 * speedMultiplier;
+      particles.rotation.x = time * 0.12 * speedMultiplier;
+      innerCore.rotation.y = -time * 0.35 * speedMultiplier;
+      ring.rotation.z = time * 0.25 * speedMultiplier;
 
-      // Particle Displacement Dynamics
+      // In-place float buffer calculations without allocating objects
       for (let i = 0; i < particleCount; i++) {
         const ox = originalPositions[i * 3];
         const oy = originalPositions[i * 3 + 1];
@@ -145,13 +152,13 @@ export const HolographicCore: React.FC<HolographicCoreProps> = ({ state, audioLe
 
         let offset = 0;
         if (currentState === 'LISTENING') {
-          offset = Math.sin(time * 6.0 + i) * (0.15 + currentAudio * 0.35);
+          offset = Math.sin(time * 6.0 + i) * (0.12 + currentAudio * 0.35);
         } else if (currentState === 'THINKING') {
-          offset = Math.sin(time * 12.0 + ox * 3.0) * 0.25;
+          offset = Math.sin(time * 12.0 + ox * 3.0) * 0.22;
         } else if (currentState === 'SPEAKING') {
-          offset = Math.sin(time * 8.0 + oz * 4.0) * 0.2;
+          offset = Math.sin(time * 8.0 + oz * 4.0) * 0.18;
         } else {
-          offset = Math.sin(time * 1.5 + i * 0.1) * 0.04;
+          offset = Math.sin(time * 1.5 + i * 0.1) * 0.035;
         }
 
         const scale = 1.0 + offset;
@@ -159,10 +166,9 @@ export const HolographicCore: React.FC<HolographicCoreProps> = ({ state, audioLe
         pos[i * 3 + 1] = oy * scale;
         pos[i * 3 + 2] = oz * scale;
 
-        // Smooth Color Shift
-        col[i * 3] += (targetColor.r - col[i * 3]) * 0.05;
-        col[i * 3 + 1] += (targetColor.g - col[i * 3 + 1]) * 0.05;
-        col[i * 3 + 2] += (targetColor.b - col[i * 3 + 2]) * 0.05;
+        col[i * 3] += (target.r - col[i * 3]) * 0.06;
+        col[i * 3 + 1] += (target.g - col[i * 3 + 1]) * 0.06;
+        col[i * 3 + 2] += (target.b - col[i * 3 + 2]) * 0.06;
       }
 
       geometry.attributes.position.needsUpdate = true;
@@ -175,11 +181,11 @@ export const HolographicCore: React.FC<HolographicCoreProps> = ({ state, audioLe
 
     const handleResize = () => {
       if (!container) return;
-      const newWidth = container.clientWidth || 400;
-      const newHeight = container.clientHeight || 400;
-      camera.aspect = newWidth / newHeight;
+      const w = container.clientWidth || 380;
+      const h = container.clientHeight || 380;
+      camera.aspect = w / h;
       camera.updateProjectionMatrix();
-      renderer.setSize(newWidth, newHeight);
+      renderer.setSize(w, h);
     };
 
     window.addEventListener('resize', handleResize);
@@ -187,7 +193,16 @@ export const HolographicCore: React.FC<HolographicCoreProps> = ({ state, audioLe
     return () => {
       window.removeEventListener('resize', handleResize);
       cancelAnimationFrame(animationFrameId);
+
+      // Clean disposal to eliminate memory leaks
+      geometry.dispose();
+      material.dispose();
+      innerGeo.dispose();
+      innerMat.dispose();
+      ringGeo.dispose();
+      ringMat.dispose();
       renderer.dispose();
+
       if (container.contains(renderer.domElement)) {
         container.removeChild(renderer.domElement);
       }
@@ -196,9 +211,8 @@ export const HolographicCore: React.FC<HolographicCoreProps> = ({ state, audioLe
 
   return (
     <div className="relative w-full h-full flex items-center justify-center pointer-events-none">
-      {/* Glow Center Flare */}
       <div
-        className={`absolute w-72 h-72 rounded-full blur-3xl transition-all duration-700 ${
+        className={`absolute w-64 h-64 rounded-full blur-3xl transition-all duration-700 ${
           state === 'LISTENING'
             ? 'bg-neon-emerald/20'
             : state === 'THINKING'
@@ -208,7 +222,6 @@ export const HolographicCore: React.FC<HolographicCoreProps> = ({ state, audioLe
             : 'bg-neon-cyan/15'
         }`}
       />
-      {/* 3D Canvas Mount Point */}
       <div ref={mountRef} className="w-full h-full" />
     </div>
   );

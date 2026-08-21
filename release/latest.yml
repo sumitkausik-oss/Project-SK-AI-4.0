@@ -1,8 +1,8 @@
 version: 0.0.1
 files:
   - url: SKAI_Setup_v0.0.1.exe
-    sha512: cV9QgxnU04ixtot4PeKd1Vx6QHXHF0duU3Ra9EIaXDJFYxmrKw6XEY4eSIKXi8Q8n+CfIK+FPFN+QZ4zrwYXNg==
-    size: 87320925
+    sha512: Ov94vvR1lehYSvlfHZgqSmb7g6DS2UKAQI0PoHgYL1zlwpE8lh371UifRIAwI9Ax+Lh7uMHVkwZ9DUUHKH4k9A==
+    size: 87323205
 path: SKAI_Setup_v0.0.1.exe
-sha512: cV9QgxnU04ixtot4PeKd1Vx6QHXHF0duU3Ra9EIaXDJFYxmrKw6XEY4eSIKXi8Q8n+CfIK+FPFN+QZ4zrwYXNg==
-releaseDate: '2026-08-21T14:25:02.370Z'
+sha512: Ov94vvR1lehYSvlfHZgqSmb7g6DS2UKAQI0PoHgYL1zlwpE8lh371UifRIAwI9Ax+Lh7uMHVkwZ9DUUHKH4k9A==
+releaseDate: '2026-08-21T14:40:24.098Z'
