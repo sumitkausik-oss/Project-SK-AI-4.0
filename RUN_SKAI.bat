@@ -2,34 +2,26 @@
 title SKAI — Powered by SK Enterprises
 color 0B
 echo ================================================================================
-echo   SKAI DESKTOP ASSISTANT
-echo   Founder ^& Sole Architect: Sumeet Kumar ^| SK Enterprises
+echo   SKAI — Sovereign Local-First Desktop AI Assistant (v0.0.1)
+echo   Founder ^& Sole Architect: Sumeet Kumar ^| Powered by SK Enterprises
 echo ================================================================================
 echo.
-echo Starting SKAI Autonomous Engine and Cyberpunk HUD...
+echo Launching SKAI Desktop Container...
 echo.
 
 cd /d "%~dp0"
 
-REM Try to launch via Electron if npm/npx is present
-where npx >nul 2>nul
-if %errorlevel% equ 0 (
-    echo Launching SKAI via Electron Desktop Container...
+REM If dist-electron exists, launch electron directly
+if exist "dist-electron\main.js" (
+    echo Starting SKAI...
     start "" npx electron .
     goto done
 )
 
-REM Fallback to Python launcher
-where python >nul 2>nul
-if %errorlevel% equ 0 (
-    echo Launching SKAI via Python Direct Desktop Launcher...
-    start "" python run_sk_ai_4.py
-    goto done
-)
-
-echo [ERROR] Neither Node.js (npx) nor Python was found on PATH.
-pause
-exit /b 1
+REM If not built, build first
+echo First-time run detected. Compiling React + TypeScript frontend and Electron shell...
+call npm run build
+start "" npx electron .
 
 :done
 echo.

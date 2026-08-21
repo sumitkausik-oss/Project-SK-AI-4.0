@@ -1,8 +1,8 @@
-version: 5.0.0
+version: 0.0.1
 files:
-  - url: SK_AI_4.0_Setup_x64_v5.0.0.exe
-    sha512: BOenf7yptqnocmStVbR5/5iN8AJSnNvagMVCyq2tgcr/bUwujCkXiq1YFmTJMkBQMR8nQpovh/eRn0wtsyGGEg==
-    size: 82044521
-path: SK_AI_4.0_Setup_x64_v5.0.0.exe
-sha512: BOenf7yptqnocmStVbR5/5iN8AJSnNvagMVCyq2tgcr/bUwujCkXiq1YFmTJMkBQMR8nQpovh/eRn0wtsyGGEg==
-releaseDate: '2026-08-19T13:06:48.298Z'
+  - url: SKAI_Setup_v0.0.1.exe
+    sha512: dRj2CjAsWnQMkXF07RPPtBukPDuC1gBT3YsUX1BJnhlIlmW9LzNKb0OuYEqZooS94hkxxnBMRTYnLDhjE/K8YA==
+    size: 84276055
+path: SKAI_Setup_v0.0.1.exe
+sha512: dRj2CjAsWnQMkXF07RPPtBukPDuC1gBT3YsUX1BJnhlIlmW9LzNKb0OuYEqZooS94hkxxnBMRTYnLDhjE/K8YA==
+releaseDate: '2026-08-21T13:56:28.955Z'
