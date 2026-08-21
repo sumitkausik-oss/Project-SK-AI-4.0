@@ -110,6 +110,7 @@ export interface SkaiApi {
   setApiKey: (provider: string, key: string) => Promise<boolean>;
   hasApiKey: (provider: string) => Promise<boolean>;
   validateGoogleKey: (key: string) => Promise<{ valid: boolean; message: string }>;
+  validateHuggingFaceToken: (token: string) => Promise<{ valid: boolean; message: string; username?: string }>;
 
   // AI & Bilingual Voice/Chat Engine
   sendMessage: (query: string, history: Array<{ role: string; content: string }>) => Promise<{
