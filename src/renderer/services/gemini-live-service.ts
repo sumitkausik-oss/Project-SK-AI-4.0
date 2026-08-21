@@ -1,10 +1,3 @@
-/**
- * SKAI — Gemini Live Bidirectional WebSocket Voice Service
- * Product: SKAI
- * Powered by SK Enterprises | Author: Sumeet Kumar
- * Version: 4.0.1
- */
-
 export interface LiveServiceCallbacks {
   onStateChange: (state: 'IDLE' | 'LISTENING' | 'THINKING' | 'SPEAKING') => void;
   onTranscript: (role: 'user' | 'model', text: string) => void;
@@ -22,24 +15,23 @@ export class GeminiLiveService {
 
   async connect(apiKey: string, callbacks: LiveServiceCallbacks) {
     if (!apiKey || apiKey.trim() === '') {
-      callbacks.onError('Settings (⚙) me jakar valid Gemini API Key save karein.');
-      callbacks.onTranscript('model', 'त्रुटि: कृपया Settings में अपनी Google Gemini API Key दर्ज करें।');
+      callbacks.onError('Settings में जाकर अपनी Google Gemini API Key दर्ज करें।');
       return;
     }
 
     try {
       callbacks.onStateChange('LISTENING');
+      const cleanKey = apiKey.trim();
       const HOST = 'generativelanguage.googleapis.com';
       const API_VERSION = 'v1alpha';
-      const URI = `wss://${HOST}/ws/google.ai.generativelanguage.${API_VERSION}.GenerativeService.BidiGenerateContent?key=${apiKey.trim()}`;
+      const URI = `wss://${HOST}/ws/google.ai.generativelanguage.${API_VERSION}.GenerativeService.BidiGenerateContent?key=${cleanKey}`;
 
       this.ws = new WebSocket(URI);
 
       this.ws.onopen = () => {
         this.isConnected = true;
-        callbacks.onTranscript('model', '✨ SKAI 4.0 ऑनलाइन है। आदेश दीजिए Sumeet Sir!');
-        this.sendInitialSetup();
-        this.startAudioRecording(callbacks);
+        this.sendSetupPayload();
+        this.startMicrophone(callbacks);
       };
 
       this.ws.onmessage = async (event) => {
@@ -50,13 +42,13 @@ export class GeminiLiveService {
           response = JSON.parse(event.data);
         }
 
-        // Live Audio Playback from Gemini
+        // 1. Process Voice Chunks from Gemini
         const parts = response.serverContent?.modelTurn?.parts;
         if (parts) {
           for (const part of parts) {
             if (part.inlineData?.data) {
               callbacks.onStateChange('SPEAKING');
-              this.playPcmChunk(part.inlineData.data);
+              this.playAudioChunk(part.inlineData.data);
             }
             if (part.text) {
               callbacks.onTranscript('model', part.text);
@@ -68,22 +60,17 @@ export class GeminiLiveService {
           callbacks.onStateChange('LISTENING');
         }
 
-        // Native System Action Execution
+        // 2. Process Real-Time Tools
         const toolCalls = response.toolCall?.functionCalls;
         if (toolCalls && toolCalls.length > 0) {
           callbacks.onStateChange('THINKING');
           for (const call of toolCalls) {
-            let result: any;
-            if (window.electron?.ipcRenderer?.invoke) {
-              result = await window.electron.ipcRenderer.invoke('execute-system-tool', {
-                toolName: call.name,
-                args: call.args,
-              });
-            } else {
-              result = { success: true, message: `Executed ${call.name}` };
-            }
+            const result = await window.electron?.ipcRenderer?.invoke('execute-system-tool', {
+              toolName: call.name,
+              args: call.args,
+            });
 
-            callbacks.onTranscript('model', `[System Action]: ${result.message}`);
+            callbacks.onTranscript('model', `[System]: ${result?.message || 'Action executed.'}`);
 
             this.ws?.send(
               JSON.stringify({
@@ -102,21 +89,46 @@ export class GeminiLiveService {
       };
 
       this.ws.onerror = (err) => {
-        console.error('WebSocket Error:', err);
-        callbacks.onError('AI Connection Error. Reconnecting...');
+        console.error('WS Error:', err);
+        callbacks.onError('AI कनेक्शन में त्रुटि हुई। API Key और इंटरनेट की जांच करें।');
       };
 
-      this.ws.onclose = () => {
+      this.ws.onclose = (e) => {
+        console.warn(`WS Closed [Code: ${e.code}, Reason: ${e.reason || 'None'}]`);
         this.disconnect(callbacks);
       };
     } catch (e: any) {
-      callbacks.onError(e.message || 'Microphone initiation failed.');
+      callbacks.onError(e.message || 'माइक्रोफ़ोन शुरू करने में विफल।');
       this.disconnect(callbacks);
     }
   }
 
-  private sendInitialSetup() {
-    const setupMessage = {
+  // Text message sender for the bottom input bar
+  sendTextMessage(text: string, callbacks: LiveServiceCallbacks) {
+    if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
+      callbacks.onError('कृपया पहले "START LIVE GEMINI VOICE" पर क्लिक करके AI को कनेक्ट करें।');
+      return;
+    }
+    callbacks.onTranscript('user', text);
+    callbacks.onStateChange('THINKING');
+
+    this.ws.send(
+      JSON.stringify({
+        clientContent: {
+          turns: [
+            {
+              role: 'user',
+              parts: [{ text }],
+            },
+          ],
+          turnComplete: true,
+        },
+      })
+    );
+  }
+
+  private sendSetupPayload() {
+    const payload = {
       setup: {
         model: 'models/gemini-2.0-flash-exp',
         generationConfig: {
@@ -130,7 +142,7 @@ export class GeminiLiveService {
         systemInstruction: {
           parts: [
             {
-              text: 'You are SK AI, an intelligent desktop assistant created by Sumeet Kumar (Powered by SK Enterprises). Always speak in natural, polite Hindi or Hinglish. When the user asks to open drives (D drive, C drive), applications (Chrome, Notepad, Calculator) or take screenshots, ALWAYS call the appropriate tool immediately and confirm in Hindi.',
+              text: 'You are SK AI, an ultra-fast desktop assistant built for Sumeet Kumar (Powered by SK Enterprises). Always respond in clear, polite Hindi or Hinglish. When the user asks to open D drive, Chrome, Calculator, Notepad, or any app, ALWAYS trigger the tool immediately and confirm in Hindi.',
             },
           ],
         },
@@ -138,30 +150,30 @@ export class GeminiLiveService {
           {
             functionDeclarations: [
               {
-                name: 'open_drive_or_folder',
-                description: 'Opens a local drive like D: drive, C: drive, or specific folders in File Explorer',
+                name: 'open_drive',
+                description: 'Opens a local drive or folder like D Drive or C Drive in Explorer',
                 parameters: {
                   type: 'OBJECT',
                   properties: {
-                    target: { type: 'STRING', description: 'Drive letter or path, e.g., D:, C:, Downloads' },
+                    target: { type: 'STRING', description: 'Drive letter (D:, C:) or folder name' },
                   },
                   required: ['target'],
                 },
               },
               {
                 name: 'open_application',
-                description: 'Opens local Windows applications like Chrome, Notepad, Calculator, VS Code',
+                description: 'Launches Windows applications like Chrome, Notepad, Calculator, VS Code',
                 parameters: {
                   type: 'OBJECT',
                   properties: {
-                    app_name: { type: 'STRING', description: 'Name of the app to launch' },
+                    app_name: { type: 'STRING', description: 'Name of the application' },
                   },
                   required: ['app_name'],
                 },
               },
               {
                 name: 'take_screenshot',
-                description: 'Takes a full desktop screenshot',
+                description: 'Captures full screen screenshot',
                 parameters: { type: 'OBJECT', properties: {} },
               },
             ],
@@ -169,15 +181,16 @@ export class GeminiLiveService {
         ],
       },
     };
-    this.ws?.send(JSON.stringify(setupMessage));
+    this.ws?.send(JSON.stringify(payload));
   }
 
-  private async startAudioRecording(callbacks: LiveServiceCallbacks) {
-    const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
-    this.audioContext = new AudioCtx({ sampleRate: 16000 });
+  private async startMicrophone(callbacks: LiveServiceCallbacks) {
     this.mediaStream = await navigator.mediaDevices.getUserMedia({
       audio: { echoCancellation: true, noiseSuppression: true, channelCount: 1 },
     });
+
+    const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+    this.audioContext = new AudioCtx({ sampleRate: 16000 });
     const source = this.audioContext.createMediaStreamSource(this.mediaStream);
     this.processor = this.audioContext.createScriptProcessor(4096, 1, 1);
 
@@ -215,7 +228,7 @@ export class GeminiLiveService {
     };
   }
 
-  private playPcmChunk(base64Pcm: string) {
+  private playAudioChunk(base64Pcm: string) {
     const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
     if (!this.playbackContext) {
       this.playbackContext = new AudioCtx({ sampleRate: 24000 });

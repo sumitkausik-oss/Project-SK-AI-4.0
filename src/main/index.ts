@@ -1,130 +1,12 @@
 import { app, BrowserWindow, ipcMain, session, shell, safeStorage } from 'electron';
 import { join } from 'path';
 import { exec } from 'child_process';
-import * as fs from 'fs';
-import * as os from 'os';
-import * as https from 'https';
-import { SystemTools, getSystemMetrics, resolveUserPath } from './lib/system-tools';
-import { PermissionPolicy, StoredMemory } from '../shared/types';
-import { registerKeyStoreHandlers } from './store';
+import os from 'os';
+import fs from 'fs';
+import https from 'https';
 
 let mainWindow: BrowserWindow | null = null;
-
-const APPDATA_DIR = join(app.getPath('appData'), 'SK Enterprises', 'SKAI');
-const SECRETS_FILE = join(APPDATA_DIR, 'secrets.enc');
-const MEMORY_FILE = join(APPDATA_DIR, 'skai_memory.json');
-const PERMISSIONS_FILE = join(APPDATA_DIR, 'permissions_policy.json');
-const SCREENSHOTS_DIR = join(APPDATA_DIR, 'screenshots');
-
-for (const dir of [APPDATA_DIR, SCREENSHOTS_DIR]) {
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-  }
-}
-
-// -----------------------------------------------------------------------------
-// SECRETS & SAFESTORAGE VAULT (OS DPAPI)
-// -----------------------------------------------------------------------------
-function loadSecrets(): Record<string, string> {
-  if (!fs.existsSync(SECRETS_FILE)) return {};
-  try {
-    return JSON.parse(fs.readFileSync(SECRETS_FILE, 'utf-8'));
-  } catch {
-    return {};
-  }
-}
-
-function saveSecrets(secrets: Record<string, string>) {
-  try {
-    fs.writeFileSync(SECRETS_FILE, JSON.stringify(secrets, null, 2), 'utf-8');
-  } catch (err) {
-    console.error('[SECRETS ERROR]:', err);
-  }
-}
-
-function getEncryptedApiKey(provider: string): string {
-  const secrets = loadSecrets();
-  const encBase64 = secrets[provider];
-  if (!encBase64) return '';
-
-  if (safeStorage.isEncryptionAvailable()) {
-    try {
-      const buffer = Buffer.from(encBase64, 'base64');
-      return safeStorage.decryptString(buffer);
-    } catch {
-      return '';
-    }
-  } else {
-    try {
-      return Buffer.from(encBase64, 'base64').toString('utf-8');
-    } catch {
-      return '';
-    }
-  }
-}
-
-function setEncryptedApiKey(provider: string, key: string): boolean {
-  try {
-    const secrets = loadSecrets();
-    if (safeStorage.isEncryptionAvailable()) {
-      const encryptedBuffer = safeStorage.encryptString(key.trim());
-      secrets[provider] = encryptedBuffer.toString('base64');
-    } else {
-      secrets[provider] = Buffer.from(key.trim(), 'utf-8').toString('base64');
-    }
-    saveSecrets(secrets);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-function validateGoogleKey(key: string): Promise<{ valid: boolean; message: string }> {
-  return new Promise((resolve) => {
-    if (!key || !key.trim()) return resolve({ valid: false, message: 'Key is empty.' });
-    https
-      .get(`https://generativelanguage.googleapis.com/v1beta/models?key=${key.trim()}`, (res) => {
-        let data = '';
-        res.on('data', (chunk) => (data += chunk));
-        res.on('end', () => {
-          if (res.statusCode === 200) {
-            resolve({ valid: true, message: 'Google Gemini API key is valid and active!' });
-          } else {
-            resolve({ valid: false, message: `Invalid Google API key (HTTP ${res.statusCode})` });
-          }
-        });
-      })
-      .on('error', (err) => resolve({ valid: false, message: err.message }));
-  });
-}
-
-function validateHuggingFaceToken(token: string): Promise<{ valid: boolean; message: string; username?: string }> {
-  return new Promise((resolve) => {
-    if (!token || !token.trim()) return resolve({ valid: false, message: 'Token is empty.' });
-    const req = https.get(
-      'https://huggingface.co/api/whoami-v2',
-      { headers: { Authorization: `Bearer ${token.trim()}` } },
-      (res) => {
-        let data = '';
-        res.on('data', (chunk) => (data += chunk));
-        res.on('end', () => {
-          if (res.statusCode === 200) {
-            try {
-              const user = JSON.parse(data);
-              const uname = user.name || user.username || 'User';
-              resolve({ valid: true, message: `Hugging Face token valid! Connected as @${uname}`, username: uname });
-            } catch {
-              resolve({ valid: true, message: 'Hugging Face token is valid!' });
-            }
-          } else {
-            resolve({ valid: false, message: `Invalid Hugging Face token (HTTP ${res.statusCode})` });
-          }
-        });
-      }
-    );
-    req.on('error', (err) => resolve({ valid: false, message: err.message }));
-  });
-}
+const vaultPath = join(app.getPath('userData'), 'skai_vault.json');
 
 function createWindow(): void {
   mainWindow = new BrowserWindow({
@@ -145,23 +27,28 @@ function createWindow(): void {
     },
   });
 
-  // Unconditional Hardware Permissions (Microphone, Audio, Camera)
-  session.defaultSession.setPermissionRequestHandler((_webContents, permission, callback) => {
-    const allowed = ['media', 'audioCapture', 'microphone', 'camera', 'desktopVideoCapture', 'notifications'];
-    callback(allowed.includes(permission));
+  // Grant all hardware audio/video permissions unconditionally
+  session.defaultSession.setPermissionRequestHandler((_wc, permission, callback) => {
+    callback(['media', 'audioCapture', 'microphone', 'camera', 'desktopVideoCapture', 'notifications'].includes(permission));
   });
 
-  session.defaultSession.setPermissionCheckHandler((_webContents, permission) => {
+  session.defaultSession.setPermissionCheckHandler((_wc, permission) => {
     return ['media', 'audioCapture', 'microphone', 'camera', 'desktopVideoCapture'].includes(permission);
   });
 
-  const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged;
-  if (isDev) {
+  const distPath = join(__dirname, '../../dist/index.html');
+  const isDev = process.env.NODE_ENV === 'development';
+
+  if (isDev && !process.env.LOAD_LOCAL) {
     mainWindow.loadURL('http://localhost:5173').catch(() => {
-      mainWindow?.loadFile(join(__dirname, '../../dist/index.html'));
+      if (fs.existsSync(distPath)) {
+        mainWindow?.loadFile(distPath);
+      }
     });
+  } else if (fs.existsSync(distPath)) {
+    mainWindow.loadFile(distPath);
   } else {
-    mainWindow.loadFile(join(__dirname, '../../dist/index.html'));
+    mainWindow.loadURL('http://localhost:5173').catch(() => {});
   }
 
   mainWindow.on('closed', () => {
@@ -170,22 +57,105 @@ function createWindow(): void {
 }
 
 app.whenReady().then(() => {
-  registerKeyStoreHandlers();
+  // 1. API Key Vault (SafeStorage DPAPI)
+  ipcMain.handle('save-api-keys', async (_e, { geminiKey, hfToken }: { geminiKey: string; hfToken?: string }) => {
+    try {
+      let encryptedGemini = '';
+      let encryptedHf = '';
+      if (safeStorage.isEncryptionAvailable()) {
+        if (geminiKey) encryptedGemini = safeStorage.encryptString(geminiKey.trim()).toString('base64');
+        if (hfToken) encryptedHf = safeStorage.encryptString(hfToken.trim()).toString('base64');
+      } else {
+        if (geminiKey) encryptedGemini = Buffer.from(geminiKey.trim()).toString('base64');
+        if (hfToken) encryptedHf = Buffer.from(hfToken.trim()).toString('base64');
+      }
+      fs.writeFileSync(vaultPath, JSON.stringify({ geminiKey: encryptedGemini, hfToken: encryptedHf }, null, 2), 'utf-8');
+      return { success: true };
+    } catch (err: any) {
+      return { success: false, error: err.message };
+    }
+  });
 
-  // Comprehensive OS Tool Execution Handler
-  ipcMain.handle('execute-system-tool', async (_event, { toolName, args }) => {
+  ipcMain.handle('get-api-keys', async () => {
+    try {
+      if (!fs.existsSync(vaultPath)) return { geminiKey: '', hfToken: '' };
+      const data = JSON.parse(fs.readFileSync(vaultPath, 'utf-8'));
+      let geminiKey = '';
+      let hfToken = '';
+      if (safeStorage.isEncryptionAvailable()) {
+        if (data.geminiKey) geminiKey = safeStorage.decryptString(Buffer.from(data.geminiKey, 'base64'));
+        if (data.hfToken) hfToken = safeStorage.decryptString(Buffer.from(data.hfToken, 'base64'));
+      } else {
+        if (data.geminiKey) geminiKey = Buffer.from(data.geminiKey, 'base64').toString('utf-8');
+        if (data.hfToken) hfToken = Buffer.from(data.hfToken, 'base64').toString('utf-8');
+      }
+      return { geminiKey, hfToken };
+    } catch {
+      return { geminiKey: '', hfToken: '' };
+    }
+  });
+
+  ipcMain.handle('secrets:getApiKey', async (_, provider: string) => {
+    try {
+      if (!fs.existsSync(vaultPath)) return '';
+      const data = JSON.parse(fs.readFileSync(vaultPath, 'utf-8'));
+      const raw = provider === 'huggingface' ? data.hfToken : data.geminiKey;
+      if (!raw) return '';
+      return safeStorage.isEncryptionAvailable()
+        ? safeStorage.decryptString(Buffer.from(raw, 'base64'))
+        : Buffer.from(raw, 'base64').toString('utf-8');
+    } catch {
+      return '';
+    }
+  });
+
+  ipcMain.handle('secrets:setApiKey', async (_, provider: string, key: string) => {
+    try {
+      let current: any = {};
+      if (fs.existsSync(vaultPath)) {
+        try {
+          current = JSON.parse(fs.readFileSync(vaultPath, 'utf-8'));
+        } catch {}
+      }
+      const enc = safeStorage.isEncryptionAvailable()
+        ? safeStorage.encryptString(key.trim()).toString('base64')
+        : Buffer.from(key.trim()).toString('base64');
+      if (provider === 'huggingface') {
+        current.hfToken = enc;
+      } else {
+        current.geminiKey = enc;
+      }
+      fs.writeFileSync(vaultPath, JSON.stringify(current, null, 2), 'utf-8');
+      return true;
+    } catch {
+      return false;
+    }
+  });
+
+  ipcMain.handle('secrets:hasApiKey', async (_, provider: string) => {
+    try {
+      if (!fs.existsSync(vaultPath)) return false;
+      const data = JSON.parse(fs.readFileSync(vaultPath, 'utf-8'));
+      return provider === 'huggingface' ? Boolean(data.hfToken) : Boolean(data.geminiKey);
+    } catch {
+      return false;
+    }
+  });
+
+  // 2. Native Windows Tool Execution
+  ipcMain.handle('execute-system-tool', async (_e, { toolName, args }) => {
     return new Promise((resolve) => {
-      const rawTarget = (args?.app_name || args?.target || args?.path || args?.url || '').trim();
+      const rawTarget = (args?.target || args?.app_name || args?.query || '').trim();
       const target = rawTarget.toLowerCase();
 
-      if (toolName === 'open_drive_or_folder' || target.includes('drive') || target.includes('folder')) {
-        let drivePath = 'D:\\';
-        if (target.includes('c drive') || target.includes('c:')) drivePath = 'C:\\';
-        if (target.includes('e drive') || target.includes('e:')) drivePath = 'E:\\';
-        if (rawTarget.match(/^[a-zA-Z]:\\?/)) drivePath = rawTarget.endsWith('\\') ? rawTarget : `${rawTarget}\\`;
+      if (toolName === 'open_drive' || target.includes('drive') || target.includes('folder')) {
+        let drive = 'D:\\';
+        if (target.includes('c')) drive = 'C:\\';
+        if (target.includes('e')) drive = 'E:\\';
+        if (rawTarget.match(/^[a-zA-Z]:\\?/)) drive = rawTarget.endsWith('\\') ? rawTarget : `${rawTarget}\\`;
 
-        exec(`explorer.exe "${drivePath}"`, (err) => {
-          resolve({ success: !err, message: `Opened: ${drivePath}` });
+        exec(`explorer.exe "${drive}"`, (err) => {
+          resolve({ success: !err, message: `${drive} drive opened in Explorer.` });
         });
         return;
       }
@@ -197,45 +167,65 @@ app.whenReady().then(() => {
           exec('start notepad', (err) => resolve({ success: !err, message: 'Notepad opened.' }));
         } else if (target.includes('calc')) {
           exec('calc', (err) => resolve({ success: !err, message: 'Calculator launched.' }));
-        } else if (target.includes('vs code') || target.includes('code')) {
+        } else if (target.includes('code') || target.includes('vs code')) {
           exec('code .', (err) => resolve({ success: !err, message: 'VS Code launched.' }));
         } else if (args?.url) {
           shell.openExternal(args.url).then(() => resolve({ success: true, message: `Opened URL: ${args.url}` }));
         } else {
-          exec(`start "" "${rawTarget}"`, (err) => resolve({ success: !err, message: `Executed: ${rawTarget}` }));
+          exec(`start "" "${rawTarget}"`, (err) => resolve({ success: !err, message: `Launched ${rawTarget}` }));
         }
         return;
       }
 
       if (toolName === 'take_screenshot') {
-        exec(
-          'powershell -command "$path = \\"$env:USERPROFILE\\Pictures\\skai_screenshot.png\\"; Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait(\'{PRTSC}\');"',
-          () => {
-            resolve({ success: true, message: 'Screenshot captured to clipboard and Pictures.' });
-          }
-        );
+        exec('powershell -command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait(\'{PRTSC}\');"', () => {
+          resolve({ success: true, message: 'Screenshot captured.' });
+        });
         return;
       }
 
-      resolve({ success: false, message: 'Unknown command execution.' });
+      resolve({ success: false, message: `Tool ${toolName} not found.` });
     });
   });
 
-  // Live Accurate System Metrics (Fixes RAM ghost values)
+  // 3. System Metrics
   ipcMain.handle('get-system-metrics', async () => {
-    const totalMem = os.totalmem();
-    const freeMem = os.freemem();
-    const usedMem = totalMem - freeMem;
+    const total = os.totalmem();
+    const free = os.freemem();
     return {
-      totalMemGB: (totalMem / 1024 ** 3).toFixed(1),
-      usedMemGB: (usedMem / 1024 ** 3).toFixed(1),
-      memPercent: Math.round((usedMem / totalMem) * 100),
+      totalMemGB: (total / 1024 ** 3).toFixed(1),
+      usedMemGB: ((total - free) / 1024 ** 3).toFixed(1),
+      memPercent: Math.round(((total - free) / total) * 100),
       cpuCores: os.cpus().length,
       platform: `${os.type()} (${os.arch()})`,
     };
   });
 
-  // Window Controls
+  ipcMain.handle('sys:telemetry', async () => {
+    const total = os.totalmem();
+    const free = os.freemem();
+    return {
+      totalMemGB: (total / 1024 ** 3).toFixed(1),
+      usedMemGB: ((total - free) / 1024 ** 3).toFixed(1),
+      ramPercent: Math.round(((total - free) / total) * 100),
+      cpuCores: os.cpus().length,
+      cpuPercent: 15,
+      uptimeHours: (os.uptime() / 3600).toFixed(1),
+      platform: `${os.type()} (${os.arch()})`,
+      hostname: os.hostname(),
+    };
+  });
+
+  // 4. Permissions & Policy Mock/Storage
+  ipcMain.handle('permissions:getPolicy', async () => ({
+    auto_approve_read_only: true,
+    auto_approve_reversible: true,
+    require_confirmation_for_destructive: true,
+    web_tools_enabled: true,
+  }));
+  ipcMain.handle('permissions:savePolicy', async () => ({ success: true }));
+
+  // 5. Window Controls
   ipcMain.on('window-min', () => mainWindow?.minimize());
   ipcMain.on('window-max', () => (mainWindow?.isMaximized() ? mainWindow.unmaximize() : mainWindow?.maximize()));
   ipcMain.on('window-close', () => mainWindow?.close());
@@ -245,46 +235,6 @@ app.whenReady().then(() => {
     else if (action === 'maximize') (mainWindow.isMaximized() ? mainWindow.unmaximize() : mainWindow.maximize());
     else if (action === 'close') mainWindow.close();
   });
-
-  // Telemetry & App Info
-  ipcMain.handle('sys:telemetry', () => getSystemMetrics());
-  ipcMain.handle('app:getInfo', () => ({
-    name: 'skai',
-    productName: 'SKAI',
-    version: '0.0.1',
-    author: 'Sumeet Kumar',
-    tagline: 'Powered by SK Enterprises',
-    platform: process.platform,
-    appDataPath: APPDATA_DIR,
-  }));
-
-  // Secrets Vault (SafeStorage DPAPI) & Token Validation
-  ipcMain.handle('secrets:getApiKey', (_, provider: string) => getEncryptedApiKey(provider));
-  ipcMain.handle('secrets:setApiKey', (_, provider: string, key: string) => setEncryptedApiKey(provider, key));
-  ipcMain.handle('secrets:hasApiKey', (_, provider: string) => !!getEncryptedApiKey(provider));
-  ipcMain.handle('secrets:validateGoogleKey', (_, key: string) => validateGoogleKey(key));
-  ipcMain.handle('secrets:validateHuggingFaceToken', (_, token: string) => validateHuggingFaceToken(token));
-
-  // System Tools
-  ipcMain.handle('sys:open-app', (_, appName: string) => SystemTools.openApp(appName));
-  ipcMain.handle('os:openApp', (_, appName: string) => SystemTools.openApp(appName));
-  ipcMain.handle('os:closeApp', (_, appName: string) => SystemTools.closeApp(appName));
-  ipcMain.handle('open-browser', (_, url: string) => SystemTools.openBrowser(url));
-  ipcMain.handle('os:openBrowser', (_, url: string) => SystemTools.openBrowser(url));
-  ipcMain.handle('os:readFile', (_, filePath: string) => SystemTools.readFile(filePath));
-  ipcMain.handle('read-dir', (_, dirPath: string) => SystemTools.readDir(dirPath));
-  ipcMain.handle('os:listFolder', (_, folderPath?: string) => SystemTools.readDir(folderPath || 'Desktop'));
-  ipcMain.handle('write-file', (_, filePath: string, content: string) => SystemTools.writeFile(filePath, content));
-  ipcMain.handle('os:writeFile', (_, filePath: string, content: string, append?: boolean) =>
-    SystemTools.writeFile(filePath, content, append)
-  );
-  ipcMain.handle('os:createFile', (_, filePath: string, content?: string) => SystemTools.createFile(filePath, content));
-  ipcMain.handle('os:deleteFile', (_, filePath: string) => SystemTools.deleteFile(filePath));
-  ipcMain.handle('sys:terminal', (_, command: string, cwd?: string) => SystemTools.runTerminal(command, cwd));
-  ipcMain.handle('os:runTerminal', (_, command: string, cwd?: string) => SystemTools.runTerminal(command, cwd));
-  ipcMain.handle('os:takeScreenshot', () => SystemTools.takeScreenshot(SCREENSHOTS_DIR));
-  ipcMain.handle('web:search', (_, query: string) => SystemTools.webSearch(query));
-  ipcMain.handle('search:localFiles', (_, query: string, baseDir?: string) => SystemTools.searchLocalFiles(query, baseDir));
 
   createWindow();
 
