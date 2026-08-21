@@ -1,7 +1,7 @@
 """
-SK Enterprises | System Diagnostics & Telemetry Endpoints
+SK Enterprises | SKAI System Diagnostics & Telemetry Endpoints
 Founder & Sole Architect: Sumeet Kumar
-Platform: Jarvis Platform V5.0
+Platform: SKAI — Powered by SK Enterprises
 """
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
@@ -28,7 +28,7 @@ def get_diagnostics(db: Session = Depends(get_db)):
         "application": {
             "name": settings.PROJECT_NAME,
             "version": settings.VERSION,
-            "platform": "Jarvis Platform V5.0",
+            "platform": settings.TAGLINE,
             "inventor": settings.INVENTOR,
             "organization": settings.ORGANIZATION,
             "environment": settings.ENVIRONMENT,

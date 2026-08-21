@@ -14,7 +14,7 @@ class CoralBrainSchema:
         self.core_modules = {}
         # Memory storage: dict mapping keys to memory dicts
         self.associative_memory = {} 
-        print(f"[CORAL_BRAIN]: Deep Logic initialized for Project SK AI 4.0.")
+        print(f"[CORAL_BRAIN]: Deep Logic initialized for SKAI.")
 
     def integrate_core_engine(self, engine_name, engine_instance):
         self.core_modules[engine_name] = engine_instance
@@ -33,7 +33,6 @@ class CoralBrainSchema:
         # Recall contextually ranked memory
         context = self._recall_memory(task_instruction)
         
-        # Placeholder for dynamic execution based on context and engines
         data = f"Executed '{task_instruction}'. Context keys: {list(context.keys())[:3]}"
         result = {"status": "success", "data": data, "timestamp": datetime.now()}
         
@@ -79,7 +78,6 @@ class CoralBrainSchema:
         
         if failures:
             status = "NEEDS_OPTIMIZATION"
-            # Basic analysis: find recurring failed keywords from task definitions
             failed_keywords = []
             for f in failures:
                 failed_keywords += re.findall(r'\b\w+\b', f['task'].lower())

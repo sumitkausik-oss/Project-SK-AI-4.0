@@ -1,13 +1,13 @@
 {
-  "license_key": "eyJwYXlsb2FkIjogeyJsaWNlbnNlX2lkIjogIlNLNC1DTElFTlQtMjAyNjA4MTkxODM2MTQiLCAiY2xpZW50X25hbWUiOiAiRGVtbyBVc2VyIiwgImNsaWVudF9lbWFpbCI6ICJkZW1vQHVzZXIuY29tIiwgInRpZXIiOiAiMV9ZRUFSX1VTRVIiLCAiaXNzdWVyIjogIlNLIEVudGVycHJpc2VzIChTdW1lZXQgS3VtYXIpIiwgImlzc3VlZF9hdCI6ICIyMDI2LTA4LTE5IiwgImV4cGlyZXNfYXQiOiAiMjAyNy0wOC0xOSIsICJ2YWxpZF9kYXlzIjogMzY1LCAic3RhdHVzIjogIkFDVElWRSJ9LCAic2lnIjogImY4YTMyOTA1ZjRmZTFjYzljMGZhYzFiMGVjNWU5M2M4ZjJiYTI3ZTZjNTY4YTNlMGMwNmM3N2QxYzJlMjI4ZTIifQ==",
+  "license_key": "eyJwYXlsb2FkIjogeyJsaWNlbnNlX2lkIjogIlNLNC1DTElFTlQtMjAyNjA4MjExODM5MjMiLCAiY2xpZW50X25hbWUiOiAiRGVtbyBVc2VyIiwgImNsaWVudF9lbWFpbCI6ICJkZW1vQHVzZXIuY29tIiwgInRpZXIiOiAiMV9ZRUFSX1VTRVIiLCAiaXNzdWVyIjogIlNLIEVudGVycHJpc2VzIChTdW1lZXQgS3VtYXIpIiwgImlzc3VlZF9hdCI6ICIyMDI2LTA4LTIxIiwgImV4cGlyZXNfYXQiOiAiMjAyNy0wOC0yMSIsICJ2YWxpZF9kYXlzIjogMzY1LCAic3RhdHVzIjogIkFDVElWRSJ9LCAic2lnIjogIjY5NzE5MTI0ODgyNDdkODFlNjFmY2U2NjMyNTFiMWY0YzdlNzU4YjQxZTUyMGU5M2YxZjI5MWE5ZWFmYjFhZDcifQ==",
   "details": {
-    "license_id": "SK4-CLIENT-20260819183614",
+    "license_id": "SK4-CLIENT-20260821183923",
     "client_name": "Demo User",
     "client_email": "demo@user.com",
     "tier": "1_YEAR_USER",
     "issuer": "SK Enterprises (Sumeet Kumar)",
-    "issued_at": "2026-08-19",
-    "expires_at": "2027-08-19",
+    "issued_at": "2026-08-21",
+    "expires_at": "2027-08-21",
     "valid_days": 365,
     "status": "ACTIVE"
   }

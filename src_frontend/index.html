@@ -1,596 +1,878 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SK AI 4.0 | Project JARVIS 4.0 - Sumeet Kumar</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <title>SKAI — Powered by SK Enterprises | Sumeet Kumar</title>
+    <script src="js/three.min.js"></script>
+    <script>if (typeof THREE === 'undefined') { document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>'); }</script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="js/api_client.js"></script>
+    <script src="js/ws_manager.js"></script>
     <style>
-        body { background-color: #030712; color: #f3f4f6; font-family: 'Segoe UI', system-ui, sans-serif; overflow: hidden; }
+        body { background-color: #030712; color: #f3f4f6; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif; overflow: hidden; }
         .glass-panel { background: rgba(8, 16, 32, 0.92); backdrop-filter: blur(20px); border: 1px solid rgba(0, 245, 212, 0.25); border-radius: 12px; }
         .cyber-glow { text-shadow: 0 0 12px rgba(0, 245, 212, 0.8); }
         .tab-btn.active { background: rgba(0, 245, 212, 0.22); border-color: #00f5d4; color: #00f5d4; font-weight: bold; }
         .node-btn { background: rgba(12, 24, 48, 0.9); border: 1px solid rgba(0, 245, 212, 0.3); transition: all 0.2s ease; }
-        .node-btn:hover { border-color: #00f5d4; box-shadow: 0 0 12px rgba(0, 245, 212, 0.5); transform: translateX(2px); }
+        .node-btn:hover { border-color: #00f5d4; box-shadow: 0 0 14px rgba(0, 245, 212, 0.5); transform: translateY(-1px); }
         .settings-nav-active { background: rgba(0, 245, 212, 0.15); border-left: 3px solid #00f5d4; color: #00f5d4; }
-        .mic-active { background: #e11d48 !important; border-color: #f43f5e !important; box-shadow: 0 0 15px rgba(244,63,94,0.8); animation: pulse 1.5s infinite; }
+        
+        /* State Indicators */
+        .mic-active { background: #e11d48 !important; border-color: #f43f5e !important; box-shadow: 0 0 20px rgba(244,63,94,0.9); animation: pulse 1.2s infinite; }
+        .thinking-pulse { animation: spinGlow 2s linear infinite; }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.06); opacity: 0.85; }
+        }
+        @keyframes spinGlow {
+            0% { transform: rotate(0deg); box-shadow: 0 0 10px rgba(0,245,212,0.4); }
+            50% { box-shadow: 0 0 25px rgba(0,245,212,0.9); }
+            100% { transform: rotate(360deg); box-shadow: 0 0 10px rgba(0,245,212,0.4); }
+        }
+        
+        /* Waveform Animation */
+        .wave-bar { display: inline-block; width: 3px; background-color: #00f5d4; border-radius: 2px; animation: wave 1s ease-in-out infinite; }
+        .wave-bar:nth-child(2) { animation-delay: 0.15s; }
+        .wave-bar:nth-child(3) { animation-delay: 0.3s; }
+        .wave-bar:nth-child(4) { animation-delay: 0.45s; }
+        .wave-bar:nth-child(5) { animation-delay: 0.6s; }
+        @keyframes wave {
+            0%, 100% { height: 6px; }
+            50% { height: 18px; }
+        }
+
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.4); }
+        ::-webkit-scrollbar-thumb { background: rgba(0, 245, 212, 0.3); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(0, 245, 212, 0.6); }
     </style>
 </head>
-<body class="h-screen w-screen flex flex-col p-2 space-y-2">
-    <!-- Header -->
-    <header class="glass-panel px-4 py-2 flex items-center justify-between">
+<body class="h-screen w-screen flex flex-col p-2.5 space-y-2.5">
+
+    <!-- ================= 1. HEADER ================= -->
+    <header class="glass-panel px-4 py-2 flex items-center justify-between shadow-lg border-cyan-500/30">
         <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 aspect-square rounded-xl bg-cyan-950/80 border border-cyan-400 p-1 flex items-center justify-center shadow-[0_0_15px_rgba(0,245,212,0.4)]">
-                <img src="../assets/sk_logo_3d.svg" class="w-full h-full object-contain" alt="SK Logo">
+            <div class="w-10 h-10 aspect-square rounded-xl bg-cyan-950/90 border border-cyan-400 p-1.5 flex items-center justify-center shadow-[0_0_15px_rgba(0,245,212,0.4)]">
+                <span class="text-cyan-400 font-black text-lg tracking-tighter">SK</span>
             </div>
             <div>
-                <h1 class="text-xs font-black tracking-widest text-cyan-400 cyber-glow">SK ENTERPRISES | SK JARVIS 4.0</h1>
-                <p class="text-[11px] text-gray-400">FOUNDER & SOLE ARCHITECT: <span class="text-white font-bold">SUMEET KUMAR</span> • <span class="text-cyan-300 font-mono">PLATFORM V5.0</span></p>
+                <div class="flex items-center space-x-2">
+                    <h1 class="text-sm font-black tracking-widest text-cyan-400 cyber-glow">SKAI</h1>
+                    <span class="text-[10px] bg-cyan-950/80 border border-cyan-500/50 text-cyan-300 px-2 py-0.5 rounded font-mono">DESKTOP ASSISTANT</span>
+                </div>
+                <p class="text-[11px] text-gray-300">
+                    <span class="font-bold text-white">SKAI — Powered by SK Enterprises</span> • FOUNDER & SOLE ARCHITECT: <span class="text-cyan-300 font-bold">Sumeet Kumar</span>
+                </p>
             </div>
         </div>
+
+        <!-- Assistant Status Indicator Pill -->
+        <div id="state-pill" class="flex items-center space-x-2 bg-black/60 border border-emerald-500/50 px-3 py-1 rounded-full text-xs font-mono text-emerald-400">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" id="state-dot"></span>
+            <span id="state-text">SKAI READY • LOCAL CONTROL ACTIVE</span>
+            <div id="wave-container" class="hidden items-center space-x-0.5 ml-1">
+                <span class="wave-bar"></span>
+                <span class="wave-bar"></span>
+                <span class="wave-bar"></span>
+                <span class="wave-bar"></span>
+                <span class="wave-bar"></span>
+            </div>
+        </div>
+
         <div class="flex items-center space-x-2 text-xs">
-            <button onclick="openModal('settings-modal')" class="bg-cyan-950/90 border border-cyan-500 text-cyan-300 px-3 py-1 rounded font-bold hover:bg-cyan-800">⚙️ SETTINGS & APIS</button>
-            <button onclick="toggleVoiceLang()" id="lang-btn" class="bg-cyan-950 border border-cyan-500/50 text-cyan-300 px-2.5 py-1 rounded font-mono">🌐 VOICE: HINDI</button>
-            <span class="bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 px-2.5 py-1 rounded font-mono">LIFETIME SOVEREIGN KEY</span>
+            <button onclick="openModal('search-modal')" class="bg-cyan-950/80 border border-cyan-400 text-cyan-300 px-2.5 py-1 rounded text-xs font-bold hover:bg-cyan-900 shadow-[0_0_10px_rgba(0,245,212,0.3)]">🔍 LOCAL SEARCH</button>
+            <button onclick="openModal('memory-modal')" class="bg-indigo-950/80 border border-indigo-400 text-indigo-300 px-2.5 py-1 rounded text-xs font-bold hover:bg-indigo-900">🧠 MEMORY STORE</button>
+            <button onclick="openModal('permissions-modal')" class="bg-amber-950/80 border border-amber-400 text-amber-300 px-2.5 py-1 rounded text-xs font-bold hover:bg-amber-900">🛡️ SAFETY & PERMISSIONS</button>
+            <button onclick="toggleVoiceLang()" id="lang-btn" class="bg-cyan-950 border border-cyan-500/50 text-cyan-300 px-2.5 py-1 rounded text-xs font-mono">🌐 VOICE: EN (English)</button>
         </div>
     </header>
 
-    <!-- Main 3-Column Layout -->
-    <main class="flex-1 grid grid-cols-12 gap-2 overflow-hidden">
-        <!-- Left: World Monitor & Live Global TV / Webcams -->
-        <section class="col-span-3 glass-panel p-2.5 flex flex-col justify-between space-y-2 overflow-hidden">
-            <div class="flex items-center justify-between border-b border-cyan-900/60 pb-1">
-                <span class="text-xs font-bold text-cyan-400">● WORLD MONITOR & SATELLITE</span>
-                <span class="text-[10px] text-emerald-400 font-mono">LIVE OSINT</span>
-            </div>
-
-            <!-- Global Channels & Webcams Viewport -->
-            <div class="flex-1 bg-black/70 rounded border border-cyan-950 p-2 flex flex-col justify-between space-y-2 text-xs overflow-y-auto">
-                <div class="space-y-1">
-                    <p class="text-[11px] font-bold text-cyan-300">Live Satellite Stream & Webcams:</p>
-                    <div class="grid grid-cols-2 gap-1 text-[10px]">
-                        <button onclick="changeCam('Tokyo Live Shinjuku')" class="bg-cyan-950/60 border border-cyan-800 p-1 rounded text-left hover:border-cyan-400">📹 Tokyo Live (Japan)</button>
-                        <button onclick="changeCam('London Traffic Hub')" class="bg-cyan-950/60 border border-cyan-800 p-1 rounded text-left hover:border-cyan-400">📹 London Live (UK)</button>
-                        <button onclick="changeCam('New York Times Square')" class="bg-cyan-950/60 border border-cyan-800 p-1 rounded text-left hover:border-cyan-400">📹 New York (USA)</button>
-                        <button onclick="changeCam('Shanghai Bund Harbor')" class="bg-cyan-950/60 border border-cyan-800 p-1 rounded text-left hover:border-cyan-400">📹 Shanghai (China)</button>
+    <!-- ================= 2. MAIN GRID ================= -->
+    <main class="flex-1 grid grid-cols-12 gap-2.5 overflow-hidden">
+        
+        <!-- Left Column: System Status, Safety Posture, Memory Quick-Bar -->
+        <section class="col-span-3 flex flex-col space-y-2.5">
+            <!-- OS Control & System Card -->
+            <div class="glass-panel p-3 flex-1 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-bold text-cyan-400">● OS CONTROLLER</span>
+                        <span class="text-[10px] text-emerald-400 font-mono">LOCAL-FIRST</span>
+                    </div>
+                    <div class="bg-black/60 rounded-lg border border-cyan-900/60 p-2.5 space-y-2 text-xs">
+                        <div class="flex items-center justify-between text-[11px]">
+                            <span class="text-gray-400">Desktop Target:</span>
+                            <span class="text-cyan-300 font-mono font-bold">Windows 64-bit</span>
+                        </div>
+                        <div class="flex items-center justify-between text-[11px]">
+                            <span class="text-gray-400">Destructive Gate:</span>
+                            <span class="text-emerald-400 font-mono font-bold" id="gate-status-text">CONFIRMATION ACTIVE</span>
+                        </div>
+                        <div class="flex items-center justify-between text-[11px]">
+                            <span class="text-gray-400">Web Research Tools:</span>
+                            <span class="text-gray-400 font-mono" id="web-tools-status-text">OFF (Local Only)</span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="bg-black/90 p-2 rounded border border-cyan-900/50 flex-1 flex flex-col items-center justify-center text-center">
-                    <div class="w-10 h-10 rounded-full border border-cyan-400 flex items-center justify-center mb-1 text-cyan-300 animate-pulse">🌐</div>
-                    <span id="active-cam-name" class="text-[11px] font-bold text-cyan-200">Global CCTV Feed Connected</span>
-                    <span class="text-[9px] text-gray-400">OSINT Layers: Spaceports, Undersea Cables, AI Hubs</span>
-                </div>
-
-                <!-- Region Selector -->
-                <div class="border-t border-cyan-900/60 pt-1.5 flex justify-between text-[10px]">
-                    <span class="bg-cyan-950 px-1.5 py-0.5 rounded text-cyan-300">North America</span>
-                    <span class="bg-cyan-950 px-1.5 py-0.5 rounded text-cyan-300">Europe</span>
-                    <span class="bg-cyan-950 px-1.5 py-0.5 rounded text-cyan-300">Asia</span>
-                    <span class="bg-cyan-950 px-1.5 py-0.5 rounded text-cyan-300">Middle East</span>
+                <!-- Quick Action Buttons -->
+                <div class="space-y-1.5 pt-2">
+                    <span class="text-[10px] font-bold text-gray-400">RAPID OS ACTIONS:</span>
+                    <div class="grid grid-cols-2 gap-1.5">
+                        <button onclick="triggerQuickAction('open notepad')" class="bg-cyan-950/70 border border-cyan-800 hover:border-cyan-400 text-cyan-300 p-1.5 rounded text-[11px] text-left">📝 Open Notepad</button>
+                        <button onclick="triggerQuickAction('open calculator')" class="bg-cyan-950/70 border border-cyan-800 hover:border-cyan-400 text-cyan-300 p-1.5 rounded text-[11px] text-left">🧮 Calculator</button>
+                        <button onclick="triggerQuickAction('take a screenshot')" class="bg-cyan-950/70 border border-cyan-800 hover:border-cyan-400 text-cyan-300 p-1.5 rounded text-[11px] text-left">📸 Screenshot</button>
+                        <button onclick="triggerQuickAction('list running apps')" class="bg-cyan-950/70 border border-cyan-800 hover:border-cyan-400 text-cyan-300 p-1.5 rounded text-[11px] text-left">📊 List Apps</button>
+                    </div>
                 </div>
             </div>
 
-            <!-- Instant Kundali Mini Button -->
-            <button onclick="openModal('kundali-modal')" class="w-full bg-amber-950/80 border border-amber-500 text-amber-300 font-bold py-1.5 rounded text-xs hover:bg-amber-900">🌌 1-SEC VEDIC KUNDALI & UPAYAS</button>
+            <!-- Instant Local Search Mini-Card -->
+            <div class="glass-panel p-3 h-48 flex flex-col justify-between">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-cyan-400">● LOCAL CONTENT SEARCH</span>
+                    <span class="text-[10px] text-gray-400 font-mono">RANKED</span>
+                </div>
+                <p class="text-[10px] text-gray-400">Content-aware search across your Desktop, Documents, and project folders.</p>
+                <div class="space-y-1.5 text-xs">
+                    <input type="text" id="quick-search-input" placeholder="Search keyword (e.g. invoice, python, report)..." class="w-full bg-black/60 border border-cyan-800 rounded px-2.5 py-1.5 text-white text-xs focus:border-cyan-400 focus:outline-none" onkeydown="if(event.key==='Enter') executeQuickSearch()">
+                    <button onclick="executeQuickSearch()" class="w-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold py-1.5 rounded text-xs shadow-md">SEARCH COMPUTER</button>
+                </div>
+            </div>
         </section>
 
-        <!-- Center: 4 Nodes + 3D Holographic Sphere & 2D Agent Town -->
-        <section class="col-span-5 flex flex-col space-y-2">
-            <div class="flex-1 grid grid-cols-12 gap-2 relative">
-                <!-- 4 Left Interactive Nodes -->
-                <div class="col-span-4 glass-panel p-2 flex flex-col justify-between space-y-1 z-10">
-                    <button onclick="openModal('memory-modal')" class="node-btn p-2 rounded-lg text-left text-xs font-medium text-cyan-300 flex items-center justify-between"><span>🧠 Memory</span><span class="text-[9px] text-emerald-400">●</span></button>
-                    <button onclick="openModal('skills-modal')" class="node-btn p-2 rounded-lg text-left text-xs font-medium text-amber-300 flex items-center justify-between"><span>📖 Skills</span><span class="text-[9px] text-emerald-400">●</span></button>
-                    <button onclick="openModal('soul-modal')" class="node-btn p-2 rounded-lg text-left text-xs font-medium text-emerald-300 flex items-center justify-between"><span>👻 Soul</span><span class="text-[9px] text-emerald-400">●</span></button>
-                    <button onclick="openModal('settings-modal')" class="node-btn p-2 rounded-lg text-left text-xs font-medium text-gray-300 flex items-center justify-between"><span>⚙️ Setting</span><span class="text-[9px] text-emerald-400">●</span></button>
+        <!-- Center Column: 4 Interactive Nodes + Holographic Neural Core + Timeline/Hub -->
+        <section class="col-span-5 flex flex-col space-y-2.5">
+            <div class="flex-1 grid grid-cols-12 gap-2.5 min-h-[260px]">
+                <!-- 4 Quick Control Nodes -->
+                <div class="col-span-4 glass-panel p-2 flex flex-col justify-between space-y-1.5">
+                    <button onclick="openModal('memory-modal')" class="node-btn p-2 rounded-lg text-left text-xs font-medium text-cyan-300 flex items-center justify-between">
+                        <span>🧠 Memory</span><span class="text-[9px] text-emerald-400">●</span>
+                    </button>
+                    <button onclick="openModal('permissions-modal')" class="node-btn p-2 rounded-lg text-left text-xs font-medium text-amber-300 flex items-center justify-between">
+                        <span>🛡️ Safety</span><span class="text-[9px] text-emerald-400">●</span>
+                    </button>
+                    <button onclick="openModal('search-modal')" class="node-btn p-2 rounded-lg text-left text-xs font-medium text-emerald-300 flex items-center justify-between">
+                        <span>🔍 Search</span><span class="text-[9px] text-emerald-400">●</span>
+                    </button>
+                    <button onclick="openModal('settings-modal')" class="node-btn p-2 rounded-lg text-left text-xs font-medium text-gray-300 flex items-center justify-between">
+                        <span>⚙️ Settings</span><span class="text-[9px] text-emerald-400">●</span>
+                    </button>
                 </div>
 
-                <!-- 3D Holographic Core Viewport -->
-                <div class="col-span-8 glass-panel relative overflow-hidden flex flex-col justify-between p-2" id="three-container">
-                    <div class="flex items-center justify-between z-10">
-                        <div class="text-[10px] text-cyan-400 flex items-center space-x-1.5">
-                            <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" id="core-pulse"></span>
-                            <span class="font-mono" id="core-state-text">JARVIS CORE • STANDBY</span>
-                        </div>
-                        <div class="flex items-center space-x-1.5 bg-black/60 border border-cyan-800 px-2 py-0.5 rounded text-[10px]">
-                            <span class="text-cyan-300 font-bold">THINKING</span>
-                            <input type="checkbox" id="thinking-toggle" checked class="accent-cyan-400 cursor-pointer">
-                        </div>
+                <!-- 3D Holographic WebGL Neural Core -->
+                <div class="col-span-8 glass-panel relative overflow-hidden flex items-center justify-center" id="three-container">
+                    <div class="absolute top-2.5 left-2.5 z-10 text-[10px] text-cyan-400 flex items-center space-x-1.5">
+                        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" id="core-pulse"></span>
+                        <span class="font-mono" id="core-state-text">SKAI COGNITIVE CORE • READY</span>
                     </div>
-
-                    <div class="flex items-center justify-end space-x-2 z-10">
-                        <button onclick="toggleStartAI()" id="start-ai-btn" class="bg-cyan-500 hover:bg-cyan-400 text-black text-xs px-4 py-1.5 rounded font-black shadow-[0_0_15px_rgba(0,245,212,0.6)]">START AI</button>
+                    <div class="absolute bottom-2.5 right-2.5 z-10 flex space-x-2">
+                        <button onclick="toggleStartAI()" id="start-ai-btn" class="bg-cyan-500 hover:bg-cyan-400 text-black text-xs px-3.5 py-1.5 rounded font-black shadow-[0_0_15px_rgba(0,245,212,0.6)]">ASSISTANT ACTIVE</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Bottom Multi-Hub: Multi-Room Agent Town / Visual / Gesture -->
-            <div class="glass-panel h-56 flex flex-col p-2.5">
+            <!-- Bottom Tabs: Command Results & Audit Timeline / Multi-Hub -->
+            <div class="glass-panel h-64 flex flex-col p-2.5">
                 <div class="flex items-center justify-between border-b border-cyan-900/60 pb-1 mb-1.5">
                     <div class="flex space-x-1 text-xs">
-                        <button class="tab-btn active px-3 py-1 rounded border border-transparent" onclick="setTab('agents')">● AGENT TOWN</button>
-                        <button class="tab-btn px-3 py-1 rounded border border-transparent" onclick="setTab('visual')">VISUAL HUB</button>
-                        <button class="tab-btn px-3 py-1 rounded border border-transparent" onclick="setTab('gesture')">GESTURE HUB</button>
+                        <button class="tab-btn active px-3 py-1 rounded border border-transparent" onclick="setTab('timeline')">📋 COMMAND AUDIT TIMELINE</button>
+                        <button class="tab-btn px-3 py-1 rounded border border-transparent" onclick="setTab('agents')">🤖 AGENT TOWN</button>
+                        <button class="tab-btn px-3 py-1 rounded border border-transparent" onclick="setTab('webtools')">🌐 WEB TOOLS (OPTIONAL)</button>
                     </div>
-                    <span class="text-[10px] text-cyan-400 font-mono">HERMES ONLINE</span>
+                    <span class="text-[10px] text-cyan-400 font-mono" id="timeline-count">LIVE LOG</span>
                 </div>
-                <div class="flex-1 relative bg-black/50 rounded border border-cyan-950 overflow-hidden" id="hub-container">
+
+                <!-- Tab 1: Command Results & Audit Timeline Feed -->
+                <div id="tab-content-timeline" class="flex-1 overflow-y-auto space-y-2 pr-1 text-xs font-mono">
+                    <div class="bg-black/50 border border-cyan-950 p-2 rounded flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-[9px] bg-emerald-950 border border-emerald-500/40 text-emerald-300 px-1.5 py-0.5 rounded">ONLINE</span>
+                            <span class="text-gray-300">SKAI Sovereign Assistant Initialized</span>
+                        </div>
+                        <span class="text-[10px] text-gray-500">SYSTEM START</span>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Agent Town (2D Canvas) -->
+                <div id="tab-content-agents" class="hidden flex-1 relative bg-black/50 rounded border border-cyan-950 overflow-hidden">
                     <canvas id="hubCanvas" class="w-full h-full"></canvas>
+                </div>
+
+                <!-- Tab 3: Web Tools (Optional Add-on) -->
+                <div id="tab-content-webtools" class="hidden flex-1 p-3 bg-black/50 rounded border border-cyan-950 overflow-y-auto text-xs space-y-3">
+                    <div class="bg-amber-950/40 border border-amber-500/40 p-2.5 rounded text-amber-200">
+                        <p class="font-bold text-[11px] mb-1">ℹ️ Optional Add-On Notice</p>
+                        <p class="text-[10px]">SKAI core functionality (OS Control, File Management, Terminal, Memory, Local Search) runs 100% locally and offline without cloud dependency. Web research tools are optional add-ons.</p>
+                    </div>
+                    <div class="flex items-center justify-between bg-black/60 p-2.5 rounded border border-gray-800">
+                        <div>
+                            <p class="font-bold text-white">Enable Web Search & Research Add-On</p>
+                            <p class="text-[10px] text-gray-400">Allows SKAI to fetch public documentation and web articles when explicitly requested.</p>
+                        </div>
+                        <input type="checkbox" id="web-tools-toggle" onchange="toggleWebTools()" class="w-4 h-4 accent-cyan-400 cursor-pointer">
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Right: Multi-Agent Voice Stream, Tasks & Embedded PowerShell -->
-        <section class="col-span-4 glass-panel p-3 flex flex-col justify-between overflow-hidden">
-            <div>
-                <div class="flex items-center justify-between border-b border-cyan-900/60 pb-2 mb-2">
-                    <div class="flex space-x-3 text-xs font-semibold text-cyan-400">
-                        <button onclick="switchRightTab('voice')" id="rtab-voice" class="border-b-2 border-cyan-400 pb-1 text-cyan-300 font-bold">VOICE STREAM</button>
-                        <button onclick="switchRightTab('tasks')" id="rtab-tasks" class="text-gray-400 hover:text-white font-bold">TASKS & NOTES</button>
-                        <button onclick="switchRightTab('terminal')" id="rtab-terminal" class="text-gray-400 hover:text-white font-bold">POWERSHELL</button>
-                    </div>
-                    <span class="text-[10px] text-emerald-400 font-mono">HERMES ACTIVE</span>
+        <!-- Right Column: Bilingual Voice Stream, Chat Feed & Command Input -->
+        <section class="col-span-4 glass-panel flex flex-col p-3">
+            <div class="flex items-center justify-between border-b border-cyan-900/60 pb-2 mb-2">
+                <div class="flex space-x-3 text-xs font-semibold text-cyan-400">
+                    <span class="border-b-2 border-cyan-400 pb-1">COMMAND & VOICE STREAM</span>
                 </div>
+                <span class="text-[10px] text-emerald-400 font-mono" id="voice-stream-state">LISTENING READY</span>
+            </div>
 
-                <!-- 1. Voice Chat Stream -->
-                <div class="h-64 overflow-y-auto space-y-2.5 text-xs pr-1" id="chat-stream">
-                    <div class="bg-cyan-950/30 border border-cyan-800/40 p-2.5 rounded-lg text-cyan-200">
-                        <p class="text-[10px] font-bold text-cyan-400 mb-1">SYSTEM READY • SOVEREIGN CORE</p>
-                        <p>प्रणाम सुमीत सर! SK AI 4.0 प्लेटफॉर्म और सभी एजेंट्स तैयार हैं।</p>
-                    </div>
-                </div>
-
-                <!-- 2. Priority Tasks View (Hidden by default) -->
-                <div class="h-64 overflow-y-auto space-y-2 text-xs pr-1 hidden" id="tasks-view">
-                    <div class="flex space-x-1 mb-2">
-                        <span class="bg-rose-950 text-rose-300 border border-rose-800 px-2 py-0.5 rounded text-[10px] font-bold">HIGH (2)</span>
-                        <span class="bg-amber-950 text-amber-300 border border-amber-800 px-2 py-0.5 rounded text-[10px] font-bold">MEDIUM (1)</span>
-                        <span class="bg-emerald-950 text-emerald-300 border border-emerald-800 px-2 py-0.5 rounded text-[10px] font-bold">COMPLETED (8)</span>
-                    </div>
-                    <div class="bg-black/60 p-2 rounded border border-cyan-900 space-y-1">
-                        <p class="font-bold text-cyan-300">● Core System Tasks:</p>
-                        <p class="text-gray-300 text-[11px]">1. Ingest Multi-Provider APIs (Gemini, OpenRouter, OpenAI, Groq) [DONE]</p>
-                        <p class="text-gray-300 text-[11px]">2. 2D Office Simulation & Blinking Server Racks [ACTIVE]</p>
-                        <p class="text-gray-300 text-[11px]">3. Deploy Standalone Windows Setup Installer [PENDING]</p>
-                    </div>
-                </div>
-
-                <!-- 3. Embedded PowerShell Terminal (Hidden by default) -->
-                <div class="h-64 overflow-y-auto bg-black/90 p-2.5 rounded border border-cyan-900 font-mono text-[11px] text-cyan-300 space-y-2 hidden" id="terminal-view">
-                    <p class="text-gray-400">Windows PowerShell [Version 10.0.22631.3880]</p>
-                    <div id="term-output" class="space-y-1 text-emerald-400">PS D:\Project SK AI 4.0> Ready.</div>
-                    <div class="flex items-center space-x-1 pt-1 border-t border-gray-800">
-                        <span class="text-cyan-400 font-bold">></span>
-                        <input type="text" id="term-input" placeholder="Execute PowerShell command..." class="flex-1 bg-transparent border-none outline-none text-white text-xs">
-                        <button onclick="runTerminalCmd()" class="bg-cyan-700 text-black px-2 py-0.5 rounded text-[10px] font-bold">Run</button>
-                    </div>
+            <!-- Chat / Command Interaction Stream -->
+            <div class="flex-1 overflow-y-auto space-y-2.5 text-xs pr-1" id="chat-stream">
+                <div class="bg-cyan-950/30 border border-cyan-800/40 p-2.5 rounded-lg text-cyan-200">
+                    <p class="text-[10px] font-bold text-cyan-400 mb-1">SKAI ASSISTANT READY • Sumeet Kumar</p>
+                    <p>प्रणाम सुमीत सर! **SKAI** पूरी तरह सक्रिय है। आप बोलकर या लिखकर कंप्यूटर पर कोई भी कार्य (ऐप खोलना, फ़ाइल बनाना/पढ़ना, स्क्रीनशॉट, लोकल सर्च) करा सकते हैं।</p>
                 </div>
             </div>
 
-            <!-- Input Box -->
+            <!-- Command Input Bar -->
             <div class="mt-2 flex items-center space-x-2 border-t border-cyan-900/60 pt-2">
-                <button onclick="toggleMic()" id="mic-btn" class="bg-cyan-950 border border-cyan-400 text-cyan-300 p-2 rounded hover:bg-cyan-800 text-xs" title="Speak in Hindi">🎙️</button>
-                <input type="text" id="user-input" placeholder="बोलें या टाइप करें (e.g. हेलो, तुम कैसे हो?)..." class="flex-1 bg-black/60 border border-cyan-800/80 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-400">
-                <button onclick="sendQuery()" class="bg-cyan-500 hover:bg-cyan-400 text-black font-bold px-4 py-2 rounded text-xs shadow-md">SEND</button>
+                <button onclick="toggleMic()" id="mic-btn" class="bg-cyan-950 border border-cyan-400 text-cyan-300 p-2 rounded hover:bg-cyan-800 text-xs transition" title="Speak / बोलें (Click to toggle voice input)">🎙️</button>
+                <button onclick="triggerQuickAction('take a screenshot')" class="bg-cyan-950 border border-cyan-500/60 text-cyan-300 p-2 rounded hover:bg-cyan-800 text-xs" title="Capture Screenshot">📸</button>
+                <input type="text" id="user-input" placeholder="Type or speak a command (e.g. open notepad, take a screenshot)..." class="flex-1 bg-black/60 border border-cyan-800/80 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-400" onkeydown="if(event.key==='Enter') sendQuery()">
+                <button onclick="sendQuery()" id="send-btn" class="bg-cyan-500 hover:bg-cyan-400 text-black font-bold px-4 py-2 rounded text-xs shadow-md transition">EXECUTE</button>
             </div>
         </section>
     </main>
 
-    <!-- ================= FULL PERSISTENT SETTINGS MODAL ================= -->
-    <div id="settings-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md hidden flex items-center justify-center z-50">
-        <div class="glass-panel w-[850px] h-[560px] flex border border-cyan-400 overflow-hidden">
-            <!-- Sidebar -->
-            <div class="w-52 bg-black/70 border-r border-cyan-900/60 p-3 flex flex-col justify-between">
-                <div class="space-y-1 text-xs">
-                    <div class="text-[10px] font-bold text-gray-400 mb-2 px-2">SETTINGS ENGINE</div>
-                    <button onclick="setSettingTab('voice')" id="stab-voice" class="settings-nav-active w-full text-left p-2 rounded text-xs font-bold block">🎤 Voice Assistant</button>
-                    <button onclick="setSettingTab('agent-providers')" id="stab-agent-providers" class="w-full text-left p-2 rounded text-xs font-bold text-gray-400 block hover:text-white">🤖 Agent Town Providers</button>
-                    <button onclick="setSettingTab('demo-video')" id="stab-demo-video" class="w-full text-left p-2 rounded text-xs font-bold text-gray-400 block hover:text-white">▶️ Demo Video</button>
-                    <button onclick="setSettingTab('system')" id="stab-system" class="w-full text-left p-2 rounded text-xs font-bold text-gray-400 block hover:text-white">⚙️ System Settings</button>
-                    <button onclick="setSettingTab('profile')" id="stab-profile" class="w-full text-left p-2 rounded text-xs font-bold text-gray-400 block hover:text-white">👤 User Profile</button>
-                    <button onclick="setSettingTab('whatsapp')" id="stab-whatsapp" class="w-full text-left p-2 rounded text-xs font-bold text-gray-400 block hover:text-white">📱 WhatsApp Link</button>
+    <!-- ================= 3. INTERACTIVE ACTION CONFIRMATION MODAL ================= -->
+    <div id="confirmation-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md hidden flex items-center justify-center z-50">
+        <div class="glass-panel p-5 w-[540px] border border-amber-400 space-y-3.5 shadow-[0_0_30px_rgba(245,158,11,0.3)]">
+            <div class="flex items-center space-x-2 border-b border-amber-900/80 pb-2">
+                <span class="text-xl">⚠️</span>
+                <div>
+                    <h3 class="text-sm font-bold text-amber-300">Safety Gate Confirmation Required</h3>
+                    <p class="text-[10px] text-gray-400">High-impact / destructive operating system action</p>
                 </div>
-                <div class="text-[10px] text-gray-500 font-mono">Platform V5.0 • Live Config</div>
             </div>
 
-            <!-- Content Area -->
-            <div class="flex-1 p-5 overflow-y-auto flex flex-col justify-between" id="settings-viewport">
+            <div class="bg-black/70 p-3 rounded border border-amber-900/50 space-y-2 text-xs font-mono">
+                <div class="flex items-center justify-between">
+                    <span class="text-gray-400">Action:</span>
+                    <span class="text-amber-300 font-bold" id="confirm-action-type">DELETE_FILE</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-gray-400">Action ID:</span>
+                    <span class="text-cyan-400" id="confirm-action-id">act_12345678</span>
+                </div>
                 <div>
-                    <!-- TAB 1: VOICE ASSISTANT -->
-                    <div id="sview-voice" class="space-y-3.5 text-xs">
-                        <div class="flex items-center justify-between border-b border-gray-800 pb-2">
-                            <h3 class="text-sm font-bold text-cyan-300">Voice Assistant Settings</h3>
-                            <span class="text-[10px] text-emerald-400 bg-emerald-950 border border-emerald-800 px-2 py-0.5 rounded">🔒 SECURE</span>
-                        </div>
-                        <div>
-                            <label class="block text-gray-400 mb-1">GEMINI LIVE API KEY</label>
-                            <input type="password" id="set-gemini-key" class="w-full bg-black/70 border border-cyan-800 rounded p-2 text-cyan-300 font-mono">
-                        </div>
-                        <div>
-                            <label class="block text-gray-400 mb-1">BACKUP GEMINI API KEY (Optional Failover)</label>
-                            <input type="password" id="set-backup-gemini-key" placeholder="Secondary fallback key..." class="w-full bg-black/70 border border-gray-700 rounded p-2 text-gray-300 font-mono">
-                        </div>
-                        <div class="flex items-center justify-between border-t border-gray-800 pt-2.5">
-                            <div><p class="font-bold text-white">Wake Word Detection ("Jarvis" / "SK AI")</p><p class="text-[10px] text-gray-400">Always listen in background for hands-free command</p></div>
-                            <input type="checkbox" id="set-wake-word" class="accent-cyan-400 w-4 h-4">
-                        </div>
-                        <div class="flex items-center justify-between border-t border-gray-800 pt-2.5">
-                            <div><p class="font-bold text-white">Double-Clap Activation</p><p class="text-[10px] text-gray-400">Clap twice to wake up the voice assistant faster</p></div>
-                            <input type="checkbox" id="set-double-clap" class="accent-cyan-400 w-4 h-4">
-                        </div>
-                    </div>
-
-                    <!-- TAB 2: AGENT TOWN PROVIDERS -->
-                    <div id="sview-agent-providers" class="hidden space-y-3.5 text-xs">
-                        <div class="flex items-center justify-between border-b border-gray-800 pb-2">
-                            <h3 class="text-sm font-bold text-cyan-300">Agent Town Multi-Model Providers</h3>
-                        </div>
-                        <div class="flex space-x-2">
-                            <button onclick="setProviderTab('gemini')" id="ptab-gemini" class="bg-cyan-950 border border-cyan-400 text-cyan-300 px-3 py-1 rounded font-bold">Google Gemini</button>
-                            <button onclick="setProviderTab('openrouter')" id="ptab-openrouter" class="bg-black/60 border border-gray-700 text-gray-400 px-3 py-1 rounded font-bold">OpenRouter (Claude 3.7)</button>
-                            <button onclick="setProviderTab('chatgpt')" id="ptab-chatgpt" class="bg-black/60 border border-gray-700 text-gray-400 px-3 py-1 rounded font-bold">ChatGPT (OpenAI)</button>
-                        </div>
-                        <div id="pview-gemini" class="space-y-2">
-                            <label class="block text-gray-400">GEMINI MODEL</label>
-                            <select id="set-gemini-model" class="w-full bg-black/70 border border-cyan-800 text-cyan-300 rounded p-2"><option value="gemini-2.5-flash">gemini-2.5-flash (Fast Multimodal)</option><option value="gemini-2.5-pro">gemini-2.5-pro (Deep Reasoning)</option></select>
-                        </div>
-                        <div id="pview-openrouter" class="hidden space-y-2">
-                            <label class="block text-gray-400">OPENROUTER API KEY (Anthropic Claude)</label>
-                            <input type="password" id="set-openrouter-key" placeholder="sk-or-v1-..." class="w-full bg-black/70 border border-cyan-800 rounded p-2 text-cyan-300 font-mono">
-                        </div>
-                        <div id="pview-chatgpt" class="hidden space-y-2">
-                            <label class="block text-gray-400">OPENAI API KEY (GPT-4o / o1)</label>
-                            <input type="password" id="set-openai-key" placeholder="sk-proj-..." class="w-full bg-black/70 border border-cyan-800 rounded p-2 text-cyan-300 font-mono">
-                        </div>
-                        <div class="border-t border-gray-800 pt-2 space-y-1">
-                            <label class="block text-gray-400">GROQ TRANSCRIPTION API KEY</label>
-                            <input type="password" id="set-groq-key" placeholder="gsk_..." class="w-full bg-black/70 border border-gray-700 rounded p-1.5 text-gray-300 font-mono">
-                        </div>
-                    </div>
-
-                    <!-- TAB 3: DEMO VIDEO -->
-                    <div id="sview-demo-video" class="hidden space-y-3 text-xs text-center">
-                        <h3 class="text-sm font-bold text-cyan-300">Application Walkthrough Guide</h3>
-                        <div class="w-full h-44 bg-black/90 border border-cyan-900 rounded-lg flex flex-col items-center justify-center space-y-2 p-4">
-                            <div class="w-12 h-12 rounded-full bg-cyan-500/20 border border-cyan-400 flex items-center justify-center text-xl text-cyan-300 shadow-[0_0_15px_rgba(0,245,212,0.4)]">▶</div>
-                            <p class="text-gray-200 font-bold">SK AI 4.0 Platform V5.0 Master Setup</p>
-                        </div>
-                    </div>
-
-                    <!-- TAB 4: SYSTEM SETTINGS -->
-                    <div id="sview-system" class="hidden space-y-3.5 text-xs">
-                        <h3 class="text-sm font-bold text-cyan-300">System Performance & Updates</h3>
-                        <div class="flex items-center justify-between border-b border-gray-800 pb-3">
-                            <div><p class="font-bold text-white">Automatic Updates</p><p class="text-[10px] text-gray-400">Self-learning continuous updates in background</p></div>
-                            <input type="checkbox" id="set-auto-update" class="accent-cyan-400 w-4 h-4">
-                        </div>
-                    </div>
-
-                    <!-- TAB 5: USER PROFILE -->
-                    <div id="sview-profile" class="hidden space-y-3 text-xs">
-                        <h3 class="text-sm font-bold text-cyan-300">Sovereign Identity Profile</h3>
-                        <div><label class="text-gray-400 block mb-1">Full Name:</label><input type="text" value="Sumeet Kumar" class="w-full bg-black/70 border border-cyan-800 rounded p-2 text-white font-bold" readonly></div>
-                        <div><label class="text-gray-400 block mb-1">Organization:</label><input type="text" value="SK Enterprises" class="w-full bg-black/70 border border-cyan-800 rounded p-2 text-white font-bold" readonly></div>
-                    </div>
-
-                    <!-- TAB 6: WHATSAPP LINK -->
-                    <div id="sview-whatsapp" class="hidden space-y-3 text-xs">
-                        <h3 class="text-sm font-bold text-emerald-300">Hermes WhatsApp Remote Link</h3>
-                        <div class="bg-black/60 p-3 rounded border border-emerald-900 flex items-center justify-between">
-                            <div><p class="font-bold text-white">WhatsApp Bot Channel (+91 9153579979)</p><p class="text-[10px] text-gray-400">Remote dispatch & notifications active</p></div>
-                            <span class="bg-emerald-950 text-emerald-400 border border-emerald-800 px-2 py-0.5 rounded text-[10px]">CONNECTED</span>
-                        </div>
-                    </div>
+                    <span class="text-gray-400 block mb-0.5">Details:</span>
+                    <p class="text-white bg-black/90 p-2 rounded border border-gray-800 text-[11px]" id="confirm-action-details">Target: Desktop/sample.txt</p>
                 </div>
+            </div>
 
-                <div class="flex justify-end space-x-2 border-t border-gray-800 pt-3">
-                    <button onclick="saveAllSettings()" class="bg-cyan-500 hover:bg-cyan-400 text-black font-black text-xs px-5 py-2 rounded shadow-[0_0_15px_rgba(0,245,212,0.4)]">Save Settings</button>
-                    <button onclick="closeModal('settings-modal')" class="bg-gray-800 text-white text-xs px-4 py-2 rounded font-bold">Cancel</button>
-                </div>
+            <p class="text-[11px] text-gray-300">
+                Are you sure you want SKAI to execute this action on your operating system?
+            </p>
+
+            <div class="flex justify-end space-x-2 pt-2 border-t border-gray-800">
+                <button onclick="resolvePendingAction(false)" class="bg-gray-800 hover:bg-gray-700 text-white text-xs px-4 py-2 rounded font-bold transition">❌ Reject (Cancel)</button>
+                <button onclick="resolvePendingAction(true)" class="bg-amber-500 hover:bg-amber-400 text-black text-xs px-5 py-2 rounded font-bold shadow-lg transition">✅ Approve & Execute</button>
             </div>
         </div>
     </div>
 
-    <!-- Scripts -->
-    <script>
-        let currentPersona = 'JARVIS';
-        let currentLanguage = 'hi-IN';
-        let isListening = false;
-        let isAIActive = false;
-        let recognition = null;
+    <!-- ================= 4. LOCAL MEMORY INSPECTOR & EDITOR MODAL ================= -->
+    <div id="memory-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md hidden flex items-center justify-center z-50">
+        <div class="glass-panel p-5 w-[720px] max-h-[85vh] flex flex-col border border-cyan-400 space-y-3 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-cyan-900/80 pb-2">
+                <div class="flex items-center space-x-2">
+                    <span class="text-lg">🧠</span>
+                    <h3 class="text-sm font-bold text-cyan-300">SKAI Durable Memory Store</h3>
+                    <span class="text-[10px] bg-cyan-950 border border-cyan-800 text-cyan-400 px-2 py-0.5 rounded font-mono">SQLite PERSISTED</span>
+                </div>
+                <button onclick="closeModal('memory-modal')" class="text-gray-400 hover:text-white font-bold text-sm">✕</button>
+            </div>
 
-        function openModal(id){ 
-            document.getElementById(id).classList.remove('hidden');
-            if(id === 'settings-modal') loadSettingsToUI();
-        }
-        function closeModal(id){ document.getElementById(id).classList.add('hidden'); }
+            <!-- Add Memory Sub-Form -->
+            <div class="bg-black/60 p-2.5 rounded border border-cyan-900/60 space-y-2 text-xs">
+                <span class="text-[10px] font-bold text-cyan-400">ADD DURABLE FACT:</span>
+                <div class="grid grid-cols-3 gap-2">
+                    <input type="text" id="new-mem-key" placeholder="Key (e.g. Theme Preference)" class="bg-black/80 border border-cyan-800 rounded px-2.5 py-1.5 text-white">
+                    <input type="text" id="new-mem-content" placeholder="Content (e.g. User prefers dark mode)" class="col-span-2 bg-black/80 border border-cyan-800 rounded px-2.5 py-1.5 text-white">
+                </div>
+                <div class="flex justify-end">
+                    <button onclick="saveNewMemory()" class="bg-cyan-500 hover:bg-cyan-400 text-black font-bold px-3 py-1 rounded text-xs">Save Fact</button>
+                </div>
+            </div>
 
-        async function loadSettingsToUI(){
-            try {
-                const res = await fetch("http://127.0.0.1:8000/api/settings/get");
-                const s = await res.json();
-                document.getElementById('set-gemini-key').value = s.gemini_api_key || "";
-                document.getElementById('set-backup-gemini-key').value = s.backup_gemini_api_key || "";
-                document.getElementById('set-openrouter-key').value = s.openrouter_key || "";
-                document.getElementById('set-openai-key').value = s.openai_key || "";
-                document.getElementById('set-groq-key').value = s.groq_key || "";
-                document.getElementById('set-wake-word').checked = s.wake_word_enabled !== false;
-                document.getElementById('set-double-clap').checked = s.double_clap_enabled !== false;
-                document.getElementById('set-auto-update').checked = s.auto_updates !== false;
-            } catch(e){}
-        }
+            <!-- Memory List Table -->
+            <div class="flex-1 overflow-y-auto space-y-2 text-xs pr-1" id="memory-list-container">
+                <p class="text-gray-400 text-center py-4">Loading memory facts...</p>
+            </div>
+        </div>
+    </div>
 
-        async function saveAllSettings(){
-            const payload = {
-                gemini_api_key: document.getElementById('set-gemini-key').value,
-                backup_gemini_api_key: document.getElementById('set-backup-gemini-key').value,
-                openrouter_key: document.getElementById('set-openrouter-key').value,
-                openai_key: document.getElementById('set-openai-key').value,
-                groq_key: document.getElementById('set-groq-key').value,
-                wake_word_enabled: document.getElementById('set-wake-word').checked,
-                double_clap_enabled: document.getElementById('set-double-clap').checked,
-                auto_updates: document.getElementById('set-auto-update').checked
-            };
-            await fetch("http://127.0.0.1:8000/api/settings/save", {
-                method: "POST", headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({settings: payload})
-            });
-            alert("Settings saved successfully!");
-            closeModal('settings-modal');
-        }
+    <!-- ================= 5. INTELLIGENT LOCAL SEARCH MODAL ================= -->
+    <div id="search-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md hidden flex items-center justify-center z-50">
+        <div class="glass-panel p-5 w-[750px] max-h-[85vh] flex flex-col border border-emerald-400 space-y-3">
+            <div class="flex items-center justify-between border-b border-emerald-900/80 pb-2">
+                <div class="flex items-center space-x-2">
+                    <span class="text-lg">🔍</span>
+                    <h3 class="text-sm font-bold text-emerald-300">Intelligent Content Search</h3>
+                </div>
+                <button onclick="closeModal('search-modal')" class="text-gray-400 hover:text-white font-bold text-sm">✕</button>
+            </div>
 
-        function setSettingTab(tab){
-            ['voice','agent-providers','demo-video','system','profile','whatsapp'].forEach(t => {
-                document.getElementById('sview-' + t).classList.add('hidden');
-                document.getElementById('stab-' + t).className = "w-full text-left p-2 rounded text-xs font-bold text-gray-400 block hover:text-white";
-            });
-            document.getElementById('sview-' + tab).classList.remove('hidden');
-            document.getElementById('stab-' + tab).className = "settings-nav-active w-full text-left p-2 rounded text-xs font-bold block";
-        }
+            <div class="flex space-x-2 text-xs">
+                <input type="text" id="modal-search-input" placeholder="Search across your computer (filename or content)..." class="flex-1 bg-black/70 border border-emerald-800 rounded px-3 py-2 text-white" onkeydown="if(event.key==='Enter') executeModalSearch()">
+                <button onclick="executeModalSearch()" class="bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-4 py-2 rounded">SEARCH</button>
+            </div>
 
-        function setProviderTab(p){
-            ['gemini','openrouter','chatgpt'].forEach(t => {
-                document.getElementById('pview-' + t).classList.add('hidden');
-                document.getElementById('ptab-' + t).className = "bg-black/60 border border-gray-700 text-gray-400 px-3 py-1 rounded font-bold";
-            });
-            document.getElementById('pview-' + p).classList.remove('hidden');
-            document.getElementById('ptab-' + p).className = "bg-cyan-950 border border-cyan-400 text-cyan-300 px-3 py-1 rounded font-bold";
-        }
+            <div class="flex-1 overflow-y-auto space-y-2 text-xs pr-1" id="search-results-container">
+                <p class="text-gray-400 text-center py-4">Enter a search keyword to find matching files and text snippets.</p>
+            </div>
+        </div>
+    </div>
 
-        function switchRightTab(t){
-            ['voice','tasks','terminal'].forEach(tab => {
-                document.getElementById(tab + '-view' + (tab==='voice'?'':''))?.classList.add('hidden');
-                document.getElementById('chat-stream').classList.add('hidden');
-                document.getElementById('rtab-' + tab).className = "text-gray-400 hover:text-white font-bold";
-            });
-            if(t === 'voice'){
-                document.getElementById('chat-stream').classList.remove('hidden');
-            } else {
-                document.getElementById(t + '-view').classList.remove('hidden');
-            }
-            document.getElementById('rtab-' + t).className = "border-b-2 border-cyan-400 pb-1 text-cyan-300 font-bold";
-        }
+    <!-- ================= 6. SAFETY & PERMISSIONS SETTINGS MODAL ================= -->
+    <div id="permissions-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md hidden flex items-center justify-center z-50">
+        <div class="glass-panel p-5 w-[650px] border border-amber-400 space-y-3.5">
+            <div class="flex items-center justify-between border-b border-amber-900/80 pb-2">
+                <div class="flex items-center space-x-2">
+                    <span class="text-lg">🛡️</span>
+                    <h3 class="text-sm font-bold text-amber-300">Safety & Permissions Management</h3>
+                </div>
+                <button onclick="closeModal('permissions-modal')" class="text-gray-400 hover:text-white font-bold text-sm">✕</button>
+            </div>
 
-        async function runTerminalCmd(){
-            const inp = document.getElementById('term-input');
-            const out = document.getElementById('term-output');
-            const cmd = inp.value.trim();
-            if(!cmd) return;
-            out.innerHTML += `<div>PS > ${cmd}</div>`;
-            inp.value = '';
-            try {
-                const res = await fetch("http://127.0.0.1:8000/api/terminal/execute", {
-                    method: "POST", headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify({command: cmd})
-                });
-                const d = await res.json();
-                out.innerHTML += `<div class="text-gray-300">${d.stdout || d.stderr || 'Command executed.'}</div>`;
-            } catch(e){
-                out.innerHTML += `<div class="text-rose-400">Execution Error.</div>`;
-            }
-        }
-
-        function changeCam(name){
-            document.getElementById('active-cam-name').innerText = name + " (Active 60 FPS)";
-        }
-
-        function toggleVoiceLang(){
-            currentLanguage = (currentLanguage === 'hi-IN') ? 'en-IN' : 'hi-IN';
-            document.getElementById('lang-btn').innerText = (currentLanguage === 'hi-IN') ? "🌐 VOICE: HINDI" : "🌐 VOICE: ENGLISH";
-        }
-
-        function speakText(text){
-            if(!window.speechSynthesis) return;
-            window.speechSynthesis.cancel();
-            const utter = new SpeechSynthesisUtterance(text);
-            utter.lang = currentLanguage;
-            utter.rate = 1.0;
-            window.speechSynthesis.speak(utter);
-        }
-
-        function toggleStartAI(){
-            const btn = document.getElementById('start-ai-btn');
-            const stateText = document.getElementById('core-state-text');
-            const pulse = document.getElementById('core-pulse');
-            isAIActive = !isAIActive;
-            if(isAIActive){
-                btn.innerText = "TERMINATE";
-                btn.className = "bg-rose-600 hover:bg-rose-500 text-white text-xs px-4 py-1.5 rounded font-black shadow-[0_0_15px_rgba(244,63,94,0.6)]";
-                stateText.innerText = "JARVIS • ACTIVE & LISTENING";
-                pulse.className = "w-2 h-2 rounded-full bg-emerald-400 animate-ping";
-                sphere.material.color.setHex(0x00f5d4);
-                speakText("प्रणाम सुमीत सर! जार्विस कोर और सभी एजेंट्स एक्टिवेट हो चुके हैं।");
-            } else {
-                btn.innerText = "START AI";
-                btn.className = "bg-cyan-500 hover:bg-cyan-400 text-black text-xs px-4 py-1.5 rounded font-black shadow-[0_0_15px_rgba(0,245,212,0.6)]";
-                stateText.innerText = "JARVIS CORE • STANDBY";
-                pulse.className = "w-2 h-2 rounded-full bg-cyan-400 animate-pulse";
-                sphere.material.color.setHex(0x38bdf8);
-            }
-        }
-
-        function toggleMic(){
-            if(!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)){
-                alert("Speech recognition not supported."); return;
-            }
-            const micBtn = document.getElementById('mic-btn');
-            if(isListening){ recognition.stop(); isListening = false; micBtn.classList.remove('mic-active'); return; }
-            const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-            recognition = new SpeechRec();
-            recognition.lang = currentLanguage;
-            recognition.onstart = () => { isListening = true; micBtn.classList.add('mic-active'); document.getElementById('core-state-text').innerText = "JARVIS • LISTENING..."; };
-            recognition.onresult = (e) => { document.getElementById('user-input').value = e.results[0][0].transcript; sendQuery(); };
-            recognition.onerror = () => { isListening = false; micBtn.classList.remove('mic-active'); };
-            recognition.onend = () => { isListening = false; micBtn.classList.remove('mic-active'); };
-            recognition.start();
-        }
-
-        // 1. Three.js 3D WebGL Sphere
-        const container = document.getElementById('three-container');
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
-        camera.position.z = 4.2;
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        renderer.setSize(container.clientWidth, container.clientHeight);
-        container.appendChild(renderer.domElement);
-
-        const geo = new THREE.BufferGeometry();
-        const pCount = 2000;
-        const pos = new Float32Array(pCount * 3);
-        for(let i=0; i<pCount*3; i+=3){
-            const u = Math.random(), v = Math.random();
-            const theta = u * 2 * Math.PI, phi = Math.acos(2 * v - 1), r = Math.cbrt(Math.random()) * 1.4;
-            pos[i] = r * Math.sin(phi) * Math.cos(theta);
-            pos[i+1] = r * Math.sin(phi) * Math.sin(theta);
-            pos[i+2] = r * Math.cos(phi);
-        }
-        geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-        const mat = new THREE.PointsMaterial({ size: 0.024, color: 0x38bdf8, transparent: true, opacity: 0.85 });
-        const sphere = new THREE.Points(geo, mat);
-        scene.add(sphere);
-
-        function animate(){
-            requestAnimationFrame(animate);
-            const speed = isAIActive ? 0.007 : 0.002;
-            sphere.rotation.y += speed;
-            sphere.rotation.x += speed * 0.5;
-            renderer.render(scene, camera);
-        }
-        animate();
-
-        // 2. 2D Multi-Room Agent Town with Office Furniture
-        const canvas = document.getElementById('hubCanvas');
-        const ctx = canvas.getContext('2d');
-        let currentTab = 'agents';
-
-        const officeRooms = [
-            { name: "TACTICAL HQ", x: 10, y: 10, w: 260, h: 90, color: "rgba(14,34,56,0.85)", border: "#38bdf8" },
-            { name: "NEURAL AI LAB", x: 280, y: 10, w: 260, h: 90, color: "rgba(31,16,53,0.85)", border: "#a855f7" },
-            { name: "VEDIC SANCTUM", x: 550, y: 10, w: 260, h: 90, color: "rgba(44,29,5,0.85)", border: "#f59e0b" },
-            { name: "DATA BAY", x: 10, y: 110, w: 390, h: 95, color: "rgba(6,36,25,0.85)", border: "#10b981" },
-            { name: "SECURITY VAULT", x: 410, y: 110, w: 400, h: 95, color: "rgba(45,27,6,0.85)", border: "#fbbf24" }
-        ];
-
-        const furniture = [
-            { x: 30, y: 40, w: 45, h: 20, monitor: "#00f5d4" },
-            { x: 130, y: 40, w: 45, h: 20, monitor: "#38bdf8" },
-            { x: 310, y: 40, w: 45, h: 20, monitor: "#f43f5e" },
-            { x: 430, y: 40, w: 45, h: 20, monitor: "#a855f7" },
-            { x: 610, y: 40, w: 55, h: 22, monitor: "#f59e0b" }
-        ];
-
-        let agents = [
-            { name: "Bob", role: "Data", x: 52, y: 50, dx: 0.2, dy: 0.1, color: "#10b981", status: "Active" },
-            { name: "Carol", role: "Education", x: 152, y: 50, dx: -0.2, dy: 0.15, color: "#ec4899", status: "Active" },
-            { name: "Alice", role: "DevOps", x: 332, y: 50, dx: 0.3, dy: -0.2, color: "#38bdf8", status: "Active" },
-            { name: "Dave", role: "Security", x: 452, y: 50, dx: -0.2, dy: 0.2, color: "#fbbf24", status: "Active" }
-        ];
-
-        function drawHub(){
-            canvas.width = canvas.parentElement.clientWidth;
-            canvas.height = canvas.parentElement.clientHeight;
-            ctx.fillStyle = "#040814";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            if(currentTab === 'agents'){
-                officeRooms.forEach(r => {
-                    ctx.fillStyle = r.color; ctx.fillRect(r.x, r.y, r.w, r.h);
-                    ctx.strokeStyle = r.border; ctx.lineWidth = 1.5; ctx.strokeRect(r.x, r.y, r.w, r.h);
-                    ctx.fillStyle = r.border; ctx.font = "bold 9px sans-serif"; ctx.fillText(`● ${r.name}`, r.x + 8, r.y + 14);
-                });
-
-                furniture.forEach(f => {
-                    ctx.fillStyle = "#1e293b"; ctx.fillRect(f.x, f.y, f.w, f.h);
-                    ctx.fillStyle = f.monitor; ctx.fillRect(f.x + f.w/2 - 6, f.y + 2, 12, 4);
-                });
-
-                agents.forEach(a => {
-                    a.x += a.dx; a.y += a.dy;
-                    if(a.x < 25 || a.x > canvas.width - 60) a.dx *= -1;
-                    if(a.y < 30 || a.y > canvas.height - 35) a.dy *= -1;
-                    ctx.fillStyle = a.color; ctx.beginPath(); ctx.arc(a.x, a.y, 6, 0, Math.PI * 2); ctx.fill();
-                    ctx.fillStyle = "#ffffff"; ctx.font = "bold 9px sans-serif"; ctx.fillText(a.name, a.x - 10, a.y - 8);
-                });
-            } else if(currentTab === 'visual'){
-                ctx.fillStyle = "#00f5d4"; ctx.font = "bold 11px monospace"; ctx.fillText("VISUAL ARCHITECTURE MATRIX • FLOWCHART", 20, 30);
-            } else if(currentTab === 'gesture'){
-                ctx.fillStyle = "#fbbf24"; ctx.font = "bold 11px monospace"; ctx.fillText("IRON-MAN OPTICAL GESTURE HUB • TRACKING ON", 20, 30);
-            }
-            requestAnimationFrame(drawHub);
-        }
-        drawHub();
-
-        function setTab(tab){
-            currentTab = tab;
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-        }
-
-        async function sendQuery(){
-            const input = document.getElementById('user-input');
-            const stream = document.getElementById('chat-stream');
-            const stateText = document.getElementById('core-state-text');
-            const q = input.value.trim();
-            if(!q) return;
-
-            stream.innerHTML += `<div class="bg-cyan-900/20 border border-cyan-700/40 p-2 rounded-lg text-white font-medium">You: ${q}</div>`;
-            input.value = '';
-            stateText.innerText = "JARVIS • THINKING...";
-            sphere.material.color.setHex(0xf59e0b);
-
-            try {
-                const res = await fetch("http://127.0.0.1:8000/api/chat", {
-                    method: "POST", headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify({query: q, persona: currentPersona, language: currentLanguage, provider: "gemini"})
-                });
-                const data = await res.json();
-                stream.innerHTML += `
-                    <div class="bg-black/60 border border-cyan-800/60 p-2.5 rounded-lg space-y-1">
-                        <details class="text-[10px] text-gray-400 bg-cyan-950/40 p-1.5 rounded cursor-pointer" open>
-                            <summary class="font-bold text-cyan-300">THOUGHT PROCESS (JARVIS)</summary>
-                            <div class="mt-1">${data.thought_process.replace(/\n/g, '<br>')}</div>
-                        </details>
-                        <p class="text-cyan-200 mt-1">${data.response}</p>
+            <div class="space-y-3 text-xs">
+                <div class="flex items-center justify-between bg-black/60 p-3 rounded border border-gray-800">
+                    <div>
+                        <p class="font-bold text-white">Require Confirmation for Destructive Actions</p>
+                        <p class="text-[10px] text-gray-400">Requires explicit user prompt before deleting files, folders, or closing applications.</p>
                     </div>
-                `;
-                stateText.innerText = "JARVIS • SPEAKING...";
-                sphere.material.color.setHex(0x10b981);
-                speakText(data.voice_text || data.response);
-                setTimeout(() => {
-                    stateText.innerText = isAIActive ? "JARVIS • ACTIVE & LISTENING" : "JARVIS CORE • STANDBY";
-                    sphere.material.color.setHex(isAIActive ? 0x00f5d4 : 0x38bdf8);
-                }, 3000);
-            } catch(e) {
-                stream.innerHTML += `<div class="text-rose-400 p-2">Connecting to backend on Port 8000...</div>`;
-                stateText.innerText = "JARVIS CORE • STANDBY";
+                    <input type="checkbox" id="perm-destructive-toggle" checked class="w-4 h-4 accent-amber-400 cursor-pointer">
+                </div>
+
+                <div class="flex items-center justify-between bg-black/60 p-3 rounded border border-gray-800">
+                    <div>
+                        <p class="font-bold text-white">Require Confirmation for Terminal Commands</p>
+                        <p class="text-[10px] text-gray-400">Prompts user before executing arbitrary shell or PowerShell commands.</p>
+                    </div>
+                    <input type="checkbox" id="perm-terminal-toggle" checked class="w-4 h-4 accent-amber-400 cursor-pointer">
+                </div>
+
+                <div>
+                    <label class="block text-gray-400 font-bold mb-1">ALLOWED WORKING DIRECTORIES:</label>
+                    <textarea id="perm-dirs-box" class="w-full bg-black/80 border border-gray-700 rounded p-2 text-[11px] text-cyan-300 h-20 resize-none font-mono"></textarea>
+                </div>
+            </div>
+
+            <div class="flex justify-end space-x-2 pt-2 border-t border-gray-800">
+                <button onclick="savePermissionsPolicy()" class="bg-amber-500 hover:bg-amber-400 text-black font-bold px-4 py-1.5 rounded text-xs shadow-md">Save Safety Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 7. GENERAL SETTINGS / ABOUT MODAL ================= -->
+    <div id="settings-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md hidden flex items-center justify-center z-50">
+        <div class="glass-panel p-5 w-[650px] border border-cyan-400 space-y-3">
+            <div class="flex items-center justify-between border-b border-cyan-900/80 pb-2">
+                <div class="flex items-center space-x-2">
+                    <span class="text-lg">⚙️</span>
+                    <h3 class="text-sm font-bold text-cyan-300">About SKAI & Settings</h3>
+                </div>
+                <button onclick="closeModal('settings-modal')" class="text-gray-400 hover:text-white font-bold text-sm">✕</button>
+            </div>
+
+            <div class="bg-black/60 p-3 rounded border border-cyan-900/60 space-y-2 text-xs">
+                <p><span class="font-bold text-white">Product:</span> <span class="text-cyan-300">SKAI</span></p>
+                <p><span class="font-bold text-white">Tagline:</span> <span class="text-cyan-300">SKAI — Powered by SK Enterprises</span></p>
+                <p><span class="font-bold text-white">Founder & Sole Architect:</span> <span class="text-white font-bold">Sumeet Kumar</span></p>
+                <p><span class="font-bold text-white">Company:</span> <span class="text-cyan-300">SK Enterprises</span></p>
+                <p><span class="font-bold text-white">Platform Version:</span> <span class="text-emerald-400 font-mono">5.0.0 (Local-First Cognitive Core)</span></p>
+            </div>
+
+            <div class="flex justify-end pt-2">
+                <button onclick="closeModal('settings-modal')" class="bg-cyan-500 hover:bg-cyan-400 text-black font-bold px-4 py-1.5 rounded text-xs">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= JAVASCRIPT CONTROLLER ================= -->
+    <script>
+        let currentLanguage = 'en-US';
+        let isListening = false;
+        let speechRecognition = null;
+        let currentPendingActionId = null;
+
+        // 1. Initialize Speech Recognition
+        function initSpeech() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (SpeechRecognition) {
+                speechRecognition = new SpeechRecognition();
+                speechRecognition.continuous = false;
+                speechRecognition.interimResults = false;
+                speechRecognition.lang = currentLanguage;
+
+                speechRecognition.onstart = () => {
+                    setAssistantState('LISTENING');
+                    document.getElementById('mic-btn').classList.add('mic-active');
+                    document.getElementById('wave-container').classList.remove('hidden');
+                    document.getElementById('wave-container').classList.add('flex');
+                };
+
+                speechRecognition.onresult = (event) => {
+                    const text = event.results[0][0].transcript;
+                    document.getElementById('user-input').value = text;
+                    sendQuery(text);
+                };
+
+                speechRecognition.onerror = (event) => {
+                    console.warn('[SPEECH RECOGNITION ERROR]:', event.error);
+                    setAssistantState('READY');
+                    document.getElementById('mic-btn').classList.remove('mic-active');
+                    document.getElementById('wave-container').classList.add('hidden');
+                };
+
+                speechRecognition.onend = () => {
+                    isListening = false;
+                    document.getElementById('mic-btn').classList.remove('mic-active');
+                    document.getElementById('wave-container').classList.add('hidden');
+                };
             }
+        }
+
+        function toggleMic() {
+            if (!speechRecognition) initSpeech();
+            if (!speechRecognition) {
+                alert("Speech recognition not supported in this browser. Please use text input.");
+                return;
+            }
+
+            if (isListening) {
+                speechRecognition.stop();
+                isListening = false;
+            } else {
+                speechRecognition.lang = currentLanguage;
+                speechRecognition.start();
+                isListening = true;
+            }
+        }
+
+        function toggleVoiceLang() {
+            currentLanguage = currentLanguage === 'en-US' ? 'hi-IN' : 'en-US';
+            const label = currentLanguage === 'hi-IN' ? '🌐 VOICE: HINDI (हिन्दी)' : '🌐 VOICE: EN (English)';
+            document.getElementById('lang-btn').innerText = label;
+            if (speechRecognition) speechRecognition.lang = currentLanguage;
+        }
+
+        // 2. Assistant States: READY, LISTENING, THINKING, ACTING, DONE
+        function setAssistantState(state, detail = '') {
+            const pill = document.getElementById('state-pill');
+            const dot = document.getElementById('state-dot');
+            const text = document.getElementById('state-text');
+            const coreText = document.getElementById('core-state-text');
+
+            if (state === 'LISTENING') {
+                pill.className = "flex items-center space-x-2 bg-rose-950/80 border border-rose-500 px-3 py-1 rounded-full text-xs font-mono text-rose-300";
+                dot.className = "w-2 h-2 rounded-full bg-rose-500 animate-ping";
+                text.innerText = "LISTENING FOR COMMAND...";
+                coreText.innerText = "SKAI LISTENING...";
+            } else if (state === 'THINKING') {
+                pill.className = "flex items-center space-x-2 bg-amber-950/80 border border-amber-500 px-3 py-1 rounded-full text-xs font-mono text-amber-300";
+                dot.className = "w-2 h-2 rounded-full bg-amber-400 animate-spin";
+                text.innerText = "THINKING & PARSING INTENT...";
+                coreText.innerText = "SKAI REASONING...";
+            } else if (state === 'ACTING') {
+                pill.className = "flex items-center space-x-2 bg-cyan-950/80 border border-cyan-500 px-3 py-1 rounded-full text-xs font-mono text-cyan-300";
+                dot.className = "w-2 h-2 rounded-full bg-cyan-400 animate-bounce";
+                text.innerText = `ACTING ON OS: ${detail || 'EXECUTING'}`;
+                coreText.innerText = `SKAI EXECUTING: ${detail || 'TOOL'}`;
+            } else if (state === 'DONE') {
+                pill.className = "flex items-center space-x-2 bg-emerald-950/80 border border-emerald-500 px-3 py-1 rounded-full text-xs font-mono text-emerald-300";
+                dot.className = "w-2 h-2 rounded-full bg-emerald-400";
+                text.innerText = "COMMAND EXECUTED SUCCESSFULLY";
+                coreText.innerText = "SKAI READY";
+                setTimeout(() => setAssistantState('READY'), 3000);
+            } else {
+                pill.className = "flex items-center space-x-2 bg-black/60 border border-emerald-500/50 px-3 py-1 rounded-full text-xs font-mono text-emerald-400";
+                dot.className = "w-2 h-2 rounded-full bg-emerald-400 animate-pulse";
+                text.innerText = "SKAI READY • LOCAL CONTROL ACTIVE";
+                coreText.innerText = "SKAI COGNITIVE CORE • READY";
+            }
+        }
+
+        // 3. Send Query / Command Pipeline
+        async function sendQuery(customText = null) {
+            const inputEl = document.getElementById('user-input');
+            const query = (customText || inputEl.value).trim();
+            if (!query) return;
+
+            inputEl.value = '';
+            appendChatMessage('USER', query);
+            setAssistantState('THINKING');
+
+            try {
+                const response = await window.apiClient.sendChatQuery(query, "SKAI", currentLanguage);
+                
+                // If requires confirmation:
+                if (response.status === 'REQUIRES_CONFIRMATION') {
+                    setAssistantState('READY');
+                    showConfirmationModal(response.action_id, response.action, response.description || response.response);
+                    appendChatMessage('AI', response.response, response.thought_process);
+                    return;
+                }
+
+                setAssistantState('ACTING', response.action || 'COMPLETED');
+                setTimeout(() => setAssistantState('DONE'), 800);
+
+                appendChatMessage('AI', response.response, response.thought_process, response.result);
+                addTimelineEntry(response.action || 'QUERY', query, response.status, response.result);
+
+                // Voice Feedback
+                if (response.voice_text && window.speechSynthesis) {
+                    const utter = new SpeechSynthesisUtterance(response.voice_text);
+                    utter.lang = currentLanguage;
+                    window.speechSynthesis.speak(utter);
+                }
+            } catch (err) {
+                setAssistantState('READY');
+                appendChatMessage('AI', `❌ **Error:** ${err.message}`);
+                addTimelineEntry('ERROR', query, 'FAILED', { error: err.message });
+            }
+        }
+
+        function triggerQuickAction(command) {
+            document.getElementById('user-input').value = command;
+            sendQuery(command);
+        }
+
+        // 4. Chat Feed Rendering
+        function appendChatMessage(sender, content, thought = null, result = null) {
+            const stream = document.getElementById('chat-stream');
+            const msgDiv = document.createElement('div');
+            
+            if (sender === 'USER') {
+                msgDiv.className = "bg-blue-950/40 border border-blue-800/40 p-2.5 rounded-lg text-blue-100 ml-6";
+                msgDiv.innerHTML = `<p class="text-[10px] font-bold text-blue-400 mb-0.5">YOU</p><p>${escapeHtml(content)}</p>`;
+            } else {
+                msgDiv.className = "bg-cyan-950/40 border border-cyan-800/40 p-2.5 rounded-lg text-cyan-100 mr-4 space-y-1.5";
+                
+                let thoughtHtml = '';
+                if (thought) {
+                    thoughtHtml = `
+                        <details class="text-[10px] text-gray-400 bg-black/50 p-1.5 rounded border border-cyan-950">
+                            <summary class="cursor-pointer font-bold text-cyan-400">Thought Process</summary>
+                            <pre class="mt-1 whitespace-pre-wrap">${escapeHtml(thought)}</pre>
+                        </details>
+                    `;
+                }
+
+                let thumbnailHtml = '';
+                if (result && result.thumbnail_data_uri) {
+                    thumbnailHtml = `
+                        <div class="mt-2 border border-cyan-500/40 rounded overflow-hidden max-w-xs">
+                            <img src="${result.thumbnail_data_uri}" class="w-full object-cover" alt="Screenshot Preview">
+                        </div>
+                    `;
+                }
+
+                msgDiv.innerHTML = `
+                    <p class="text-[10px] font-bold text-cyan-400">SKAI ASSISTANT</p>
+                    <div class="prose prose-invert text-xs">${formatMarkdown(content)}</div>
+                    ${thumbnailHtml}
+                    ${thoughtHtml}
+                `;
+            }
+
+            stream.appendChild(msgDiv);
             stream.scrollTop = stream.scrollHeight;
         }
 
-        document.getElementById('user-input').addEventListener('keypress', (e) => { if(e.key === 'Enter') sendQuery(); });
-        document.getElementById('term-input').addEventListener('keypress', (e) => { if(e.key === 'Enter') runTerminalCmd(); });
+        // 5. Timeline Entry
+        function addTimelineEntry(action, command, status, result) {
+            const container = document.getElementById('tab-content-timeline');
+            const entry = document.createElement('div');
+            const isSuccess = status === 'COMPLETED' || status === 'ONLINE';
+            const badgeColor = isSuccess ? 'bg-emerald-950 text-emerald-300 border-emerald-500/40' : 'bg-rose-950 text-rose-300 border-rose-500/40';
+
+            entry.className = "bg-black/60 border border-cyan-950/80 p-2 rounded flex items-center justify-between text-[11px]";
+            entry.innerHTML = `
+                <div class="flex items-center space-x-2 truncate">
+                    <span class="text-[9px] ${badgeColor} border px-1.5 py-0.5 rounded font-bold">${action}</span>
+                    <span class="text-gray-200 truncate">${escapeHtml(command)}</span>
+                </div>
+                <span class="text-[10px] text-gray-500">${new Date().toLocaleTimeString()}</span>
+            `;
+
+            container.insertBefore(entry, container.firstChild);
+        }
+
+        // 6. Action Confirmation Modal
+        function showConfirmationModal(actionId, actionType, details) {
+            currentPendingActionId = actionId;
+            document.getElementById('confirm-action-type').innerText = actionType;
+            document.getElementById('confirm-action-id').innerText = actionId;
+            document.getElementById('confirm-action-details').innerText = details;
+            openModal('confirmation-modal');
+        }
+
+        async function resolvePendingAction(approved) {
+            if (!currentPendingActionId) return;
+            closeModal('confirmation-modal');
+            setAssistantState('ACTING', approved ? 'APPROVED_ACTION' : 'CANCELLED');
+
+            try {
+                const res = await window.apiClient.confirmAction(currentPendingActionId, approved);
+                currentPendingActionId = null;
+                if (approved) {
+                    setAssistantState('DONE');
+                    appendChatMessage('AI', `✅ **Action Executed:** Successfully completed approved action.`);
+                    addTimelineEntry('CONFIRMED', 'User approved action', 'COMPLETED', res);
+                } else {
+                    setAssistantState('READY');
+                    appendChatMessage('AI', `❌ **Action Cancelled:** Action was safely rejected.`);
+                    addTimelineEntry('REJECTED', 'User rejected action', 'REJECTED', res);
+                }
+            } catch (err) {
+                setAssistantState('READY');
+                appendChatMessage('AI', `❌ **Error:** ${err.message}`);
+            }
+        }
+
+        // 7. Memory Modal Management
+        async function loadMemories() {
+            const container = document.getElementById('memory-list-container');
+            container.innerHTML = `<p class="text-gray-400 text-center py-4">Loading memories...</p>`;
+            try {
+                const res = await window.apiClient.listMemories();
+                if (!res.memories || res.memories.length === 0) {
+                    container.innerHTML = `<p class="text-gray-400 text-center py-4">No durable facts stored yet.</p>`;
+                    return;
+                }
+
+                container.innerHTML = res.memories.map(m => `
+                    <div class="bg-black/60 p-2.5 rounded border border-cyan-900/60 flex items-center justify-between">
+                        <div>
+                            <span class="font-bold text-cyan-300">${escapeHtml(m.key)}:</span>
+                            <span class="text-gray-200 ml-1">${escapeHtml(m.content)}</span>
+                            <div class="flex space-x-1 mt-1">
+                                ${(m.tags || []).map(t => `<span class="text-[9px] bg-cyan-950 text-cyan-400 px-1.5 py-0.2 rounded border border-cyan-900">${escapeHtml(t)}</span>`).join('')}
+                            </div>
+                        </div>
+                        <button onclick="deleteMemoryItem('${m.id}')" class="text-rose-400 hover:text-rose-300 font-bold text-xs p-1">🗑️</button>
+                    </div>
+                `).join('');
+            } catch (err) {
+                container.innerHTML = `<p class="text-rose-400 text-center py-4">Error loading memories: ${err.message}</p>`;
+            }
+        }
+
+        async function saveNewMemory() {
+            const key = document.getElementById('new-mem-key').value.trim();
+            const content = document.getElementById('new-mem-content').value.trim();
+            if (!key || !content) return;
+
+            try {
+                await window.apiClient.storeMemory(key, content);
+                document.getElementById('new-mem-key').value = '';
+                document.getElementById('new-mem-content').value = '';
+                loadMemories();
+            } catch (err) {
+                alert("Failed to save memory: " + err.message);
+            }
+        }
+
+        async function deleteMemoryItem(id) {
+            if (!confirm("Delete this memory fact?")) return;
+            try {
+                await window.apiClient.deleteMemory(id);
+                loadMemories();
+            } catch (err) {
+                alert("Failed to delete memory: " + err.message);
+            }
+        }
+
+        // 8. Local Search
+        async function executeQuickSearch() {
+            const q = document.getElementById('quick-search-input').value.trim();
+            if (!q) return;
+            document.getElementById('modal-search-input').value = q;
+            openModal('search-modal');
+            executeModalSearch();
+        }
+
+        async function executeModalSearch() {
+            const q = document.getElementById('modal-search-input').value.trim();
+            const container = document.getElementById('search-results-container');
+            if (!q) return;
+
+            container.innerHTML = `<p class="text-gray-400 text-center py-4">Searching local files...</p>`;
+            try {
+                const res = await window.apiClient.searchLocalFiles(q);
+                if (!res.results || res.results.length === 0) {
+                    container.innerHTML = `<p class="text-gray-400 text-center py-4">No matching files found for '${escapeHtml(q)}'.</p>`;
+                    return;
+                }
+
+                container.innerHTML = res.results.map(r => `
+                    <div class="bg-black/60 p-2.5 rounded border border-emerald-900/60 space-y-1">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-emerald-300">${escapeHtml(r.filename)}</span>
+                            <span class="text-[9px] bg-emerald-950 text-emerald-400 px-1.5 py-0.5 rounded border border-emerald-900">${r.match_type}</span>
+                        </div>
+                        <p class="text-[10px] text-gray-400 font-mono truncate">${escapeHtml(r.path)}</p>
+                        ${r.snippet ? `<p class="text-[11px] text-cyan-200 bg-black/80 p-1 rounded font-mono">Matched: "${escapeHtml(r.snippet)}"</p>` : ''}
+                    </div>
+                `).join('');
+            } catch (err) {
+                container.innerHTML = `<p class="text-rose-400 text-center py-4">Search failed: ${err.message}</p>`;
+            }
+        }
+
+        // 9. Permissions Settings
+        async function loadPermissions() {
+            try {
+                const p = await window.apiClient.getPermissions();
+                document.getElementById('perm-destructive-toggle').checked = p.require_confirmation_for_destructive !== false;
+                document.getElementById('perm-terminal-toggle').checked = p.require_confirmation_for_terminal !== false;
+                document.getElementById('web-tools-toggle').checked = p.web_tools_enabled === true;
+                document.getElementById('perm-dirs-box').value = (p.allowed_directories || []).join('\n');
+                
+                document.getElementById('web-tools-status-text').innerText = p.web_tools_enabled ? "ENABLED (Online)" : "OFF (Local Only)";
+            } catch (err) {
+                console.warn('[PERMISSIONS LOAD ERROR]:', err);
+            }
+        }
+
+        async function savePermissionsPolicy() {
+            const destructive = document.getElementById('perm-destructive-toggle').checked;
+            const terminal = document.getElementById('perm-terminal-toggle').checked;
+            const webTools = document.getElementById('web-tools-toggle').checked;
+            const dirs = document.getElementById('perm-dirs-box').value.split('\n').map(d => d.trim()).filter(Boolean);
+
+            try {
+                await window.apiClient.updatePermissions({
+                    require_confirmation_for_destructive: destructive,
+                    require_confirmation_for_terminal: terminal,
+                    web_tools_enabled: webTools,
+                    allowed_directories: dirs
+                });
+                alert("Safety and permission settings saved.");
+                closeModal('permissions-modal');
+                loadPermissions();
+            } catch (err) {
+                alert("Failed to save permissions: " + err.message);
+            }
+        }
+
+        async function toggleWebTools() {
+            const enabled = document.getElementById('web-tools-toggle').checked;
+            await window.apiClient.updatePermissions({ web_tools_enabled: enabled });
+            loadPermissions();
+        }
+
+        // Modal Helpers
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+            if (id === 'memory-modal') loadMemories();
+            if (id === 'permissions-modal') loadPermissions();
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        function setTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('tab-content-timeline').classList.add('hidden');
+            document.getElementById('tab-content-agents').classList.add('hidden');
+            document.getElementById('tab-content-webtools').classList.add('hidden');
+
+            if (tab === 'timeline') {
+                event.target.classList.add('active');
+                document.getElementById('tab-content-timeline').classList.remove('hidden');
+            } else if (tab === 'agents') {
+                event.target.classList.add('active');
+                document.getElementById('tab-content-agents').classList.remove('hidden');
+            } else if (tab === 'webtools') {
+                event.target.classList.add('active');
+                document.getElementById('tab-content-webtools').classList.remove('hidden');
+            }
+        }
+
+        function toggleStartAI() {
+            setAssistantState('READY');
+            appendChatMessage('AI', "SKAI Cognitive Operating System is running and active at 100% coherence.");
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        function formatMarkdown(str) {
+            if (!str) return '';
+            let formatted = escapeHtml(str)
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/```([\s\S]*?)```/g, '<pre class="bg-black/80 p-2 rounded text-cyan-300 font-mono text-[11px] overflow-x-auto my-1">$1</pre>')
+                .replace(/`([^`]+)`/g, '<code class="bg-black/60 px-1 py-0.5 rounded text-cyan-300 font-mono text-[11px]">$1</code>')
+                .replace(/\n/g, '<br>');
+            return formatted;
+        }
+
+        // Initialize 3D Neural Core
+        function init3DCore() {
+            const container = document.getElementById('three-container');
+            if (!container || typeof THREE === 'undefined') return;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+            camera.position.z = 4;
+
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(renderer.domElement);
+
+            // Wireframe Holographic Core Sphere
+            const geometry = new THREE.IcosahedronGeometry(1.4, 2);
+            const material = new THREE.MeshBasicMaterial({ color: 0x00f5d4, wireframe: true, transparent: true, opacity: 0.75 });
+            const sphere = new THREE.Mesh(geometry, material);
+            scene.add(sphere);
+
+            // Inner Core
+            const innerGeo = new THREE.SphereGeometry(0.7, 16, 16);
+            const innerMat = new THREE.MeshBasicMaterial({ color: 0x0ea5e9, wireframe: true, transparent: true, opacity: 0.5 });
+            const innerSphere = new THREE.Mesh(innerGeo, innerMat);
+            scene.add(innerSphere);
+
+            function animate() {
+                requestAnimationFrame(animate);
+                sphere.rotation.x += 0.003;
+                sphere.rotation.y += 0.005;
+                innerSphere.rotation.y -= 0.004;
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            window.addEventListener('resize', () => {
+                if (!container.clientWidth || !container.clientHeight) return;
+                camera.aspect = container.clientWidth / container.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.clientWidth, container.clientHeight);
+            });
+        }
+
+        // Window Onload
+        window.addEventListener('DOMContentLoaded', () => {
+            initSpeech();
+            init3DCore();
+            loadPermissions();
+        });
     </script>
 </body>
 </html>

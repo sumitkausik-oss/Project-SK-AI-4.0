@@ -1,13 +1,13 @@
 /**
- * SK Enterprises | Electron Main Process & Lifecycle Supervisor
+ * SK Enterprises | SKAI Electron Main Process & Lifecycle Supervisor
  * Founder & Sole Architect: Sumeet Kumar
- * Platform: Jarvis Platform V5.0
+ * Platform: SKAI — Powered by SK Enterprises
  */
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const http = require('http');
 const fs = require('fs');
-const { spawn, exec } = require('child_process');
+const { spawn, exec, spawnSync } = require('child_process');
 
 let mainWindow = null;
 let backendProcess = null;
@@ -17,7 +17,7 @@ let backendPort = 8000;
 // Single Instance Lock
 const gotTheLock = app.requestSingleInstanceLock();
 if (!gotTheLock) {
-  console.log('[ELECTRON]: Another instance is already running. Quitting duplicate...');
+  console.log('[ELECTRON]: Another instance of SKAI is already running. Quitting duplicate...');
   app.quit();
 } else {
   app.on('second-instance', () => {
@@ -60,39 +60,42 @@ async function waitForBackend(port = 8000, maxRetries = 20) {
 }
 
 function findPythonExecutable(rootDir) {
-  if (process.platform !== 'win32') {
-    return 'python3';
-  }
-
   const candidates = [
-    path.join(rootDir, '.venv', 'Scripts', 'python.exe'),
-    path.join(rootDir, 'venv', 'Scripts', 'python.exe'),
+    'python.exe',
+    'python',
+    'python3',
     path.join(process.env.LOCALAPPDATA || '', 'Programs', 'Python', 'Python311', 'python.exe'),
     path.join(process.env.LOCALAPPDATA || '', 'Programs', 'Python', 'Python312', 'python.exe'),
     path.join(process.env.LOCALAPPDATA || '', 'Programs', 'Python', 'Python310', 'python.exe'),
+    path.join(rootDir, '.venv', 'Scripts', 'python.exe'),
+    path.join(rootDir, 'venv', 'Scripts', 'python.exe'),
     path.join(process.env.ProgramFiles || '', 'Python311', 'python.exe'),
     'C:\\Python311\\python.exe',
-    'C:\\Python312\\python.exe',
-    'python.exe',
-    'python'
+    'C:\\Python312\\python.exe'
   ];
 
   for (const candidate of candidates) {
-    if (candidate.includes('\\') && fs.existsSync(candidate)) {
-      return candidate;
+    try {
+      const check = spawnSync(candidate, ['-c', 'import fastapi'], { stdio: 'ignore', shell: false });
+      if (check.status === 0) {
+        return candidate;
+      }
+    } catch {
+      // try next
     }
   }
 
+  // Fallback to python
   return 'python';
 }
 
 function findBackendExecutable(rootDir) {
   const possiblePaths = [
-    path.join(process.resourcesPath || '', 'dist', 'SK_AI_4.0', 'SK_AI_4.0.exe'),
-    path.join(process.resourcesPath || '', 'SK_AI_4.0', 'SK_AI_4.0.exe'),
-    path.join(process.resourcesPath || '', 'SK_AI_4.0.exe'),
-    path.join(rootDir, 'dist', 'SK_AI_4.0', 'SK_AI_4.0.exe'),
-    path.join(rootDir, 'SK_AI_4.0.exe')
+    path.join(process.resourcesPath || '', 'dist', 'SKAI', 'SKAI.exe'),
+    path.join(process.resourcesPath || '', 'SKAI', 'SKAI.exe'),
+    path.join(process.resourcesPath || '', 'SKAI.exe'),
+    path.join(rootDir, 'dist', 'SKAI', 'SKAI.exe'),
+    path.join(rootDir, 'SKAI.exe')
   ];
 
   for (const p of possiblePaths) {
@@ -109,7 +112,7 @@ function spawnBackend() {
   // 1. Check for standalone compiled backend executable first
   const standaloneExe = findBackendExecutable(rootDir);
   if (standaloneExe) {
-    console.log(`[ELECTRON PROCESS SUPERVISOR]: Spawning Standalone Backend Engine:\n  ${standaloneExe}`);
+    console.log(`[ELECTRON PROCESS SUPERVISOR]: Spawning Standalone SKAI Backend Engine:\n  ${standaloneExe}`);
     try {
       backendProcess = spawn(standaloneExe, [], {
         cwd: path.dirname(standaloneExe),
@@ -152,7 +155,7 @@ function spawnBackend() {
     backendProcess = spawn(pythonCmd, [scriptToRun], {
       cwd: rootDir,
       env: { ...process.env, PYTHONUNBUFFERED: '1' },
-      shell: process.platform === 'win32',
+      shell: false,
       stdio: ['ignore', 'pipe', 'pipe']
     });
 
@@ -202,7 +205,7 @@ async function createWindow() {
     height: 900,
     minWidth: 1024,
     minHeight: 700,
-    title: 'SK AI 4.0 | Project JARVIS 4.0 — Sumeet Kumar',
+    title: 'SKAI — Powered by SK Enterprises | Sumeet Kumar',
     backgroundColor: '#030712',
     icon: fs.existsSync(iconPath) ? iconPath : undefined,
     webPreferences: {

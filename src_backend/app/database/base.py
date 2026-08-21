@@ -1,6 +1,7 @@
 """
 SK Enterprises | SQLAlchemy Database Base & Session Manager
-Inventor & Sole Architect: Sumeet Kumar
+Founder & Sole Architect: Sumeet Kumar
+Platform: SKAI — Powered by SK Enterprises
 """
 from typing import Generator
 from sqlalchemy import create_engine
@@ -24,6 +25,13 @@ engine = create_engine(
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
+
+def init_db():
+    """Initializes all database tables registered with Base."""
+    import src_backend.app.models.chat  # ensure models are registered
+    import src_backend.app.models.user
+    import src_backend.app.models.audit
+    Base.metadata.create_all(bind=engine)
 
 def get_db() -> Generator[Session, None, None]:
     """FastAPI Dependency for database session management with automatic cleanup."""

@@ -1,8 +1,8 @@
 """
-SK Enterprises | System Status Endpoints
-Inventor & Sole Architect: Sumeet Kumar
+SK Enterprises | SKAI System Status Endpoints
+Founder & Sole Architect: Sumeet Kumar
+Platform: SKAI Cognitive Operating System
 """
-import json
 from datetime import datetime
 from fastapi import APIRouter
 from src_backend.app.core.config import settings
@@ -10,17 +10,15 @@ from src_backend.app.schemas.system import SystemStatusResponse
 
 router = APIRouter(tags=["System & Identity"])
 
-@router.get("/system/status", response_model=SystemStatusResponse, summary="Get Sovereign System Status")
+@router.get("/system/status", response_model=SystemStatusResponse, summary="Get SKAI System Status")
 @router.get("/status", response_model=SystemStatusResponse, summary="Get System Status (Alias)")
 def get_system_status():
-    identity_file = settings.CONFIG_DIR if hasattr(settings, "CONFIG_DIR") else settings.DATABASE_PATH.parent
-    
     return {
         "status": "ONLINE",
         "timestamp": datetime.utcnow().isoformat(),
         "system": settings.PROJECT_NAME,
         "codename": settings.CODENAME,
-        "platform": "Jarvis Platform V5.0",
+        "platform": settings.TAGLINE,
         "inventor": settings.INVENTOR,
         "founder": settings.FOUNDER,
         "sole_architect": settings.SOLE_ARCHITECT,
@@ -34,17 +32,16 @@ def get_system_status():
             "lifetime_license": "ACTIVE - VERIFIED"
         },
         "hubs": [
-            "Agent Town 2D",
-            "Visual Hub",
-            "Gesture Hub",
-            "Vedic Astrology",
-            "STEM Matrix",
+            "OS Control Engine",
+            "Local Memory Store",
+            "Intelligent Search",
+            "Safety Gatekeeper",
+            "Stem Matrix",
             "Data Studio"
         ],
         "supported_platforms": [
-            "Windows (EXE)",
-            "Android (APK)",
+            "Windows (EXE/Electron)",
             "macOS (DMG)",
-            "iOS (IPA/PWA)"
+            "Linux (AppImage)"
         ]
     }

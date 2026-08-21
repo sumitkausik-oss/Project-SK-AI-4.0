@@ -1,6 +1,7 @@
 """
 SK Enterprises | Chat Conversation & Message Database Models
-Inventor & Sole Architect: Sumeet Kumar
+Founder & Sole Architect: Sumeet Kumar
+Platform: SKAI — Powered by SK Enterprises
 """
 from datetime import datetime
 from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey
@@ -13,7 +14,7 @@ class Conversation(Base):
     id = Column(Integer, primary_key=True, index=True)
     session_id = Column(String(100), unique=True, index=True, nullable=False)
     user_email = Column(String(255), index=True, default="sumeet.admin@skenterprises.ai")
-    persona = Column(String(50), default="JARVIS")
+    persona = Column(String(50), default="SKAI")
     title = Column(String(200), default="Cognitive Session")
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
@@ -30,7 +31,7 @@ class Message(Base):
     thought_process = Column(Text, nullable=True)
     response_content = Column(Text, nullable=False)
     voice_text = Column(Text, nullable=True)
-    persona = Column(String(50), default="JARVIS")
+    persona = Column(String(50), default="SKAI")
     timestamp = Column(DateTime, default=datetime.utcnow, nullable=False)
     
     conversation = relationship("Conversation", back_populates="messages")

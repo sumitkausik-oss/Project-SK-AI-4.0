@@ -1,7 +1,8 @@
 {
-  "system_name": "SK AI 4.0",
-  "codename": "Project JARVIS 4.0",
-  "platform_version": "Jarvis Platform V5.0",
+  "system_name": "SKAI",
+  "tagline": "SKAI — Powered by SK Enterprises",
+  "codename": "SKAI Desktop",
+  "platform_version": "5.0.0",
   "inventor": "Sumeet Kumar",
   "founder": "Sumeet Kumar",
   "sole_architect": "Sumeet Kumar",

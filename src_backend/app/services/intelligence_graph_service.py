@@ -1,7 +1,7 @@
 """
-SK Enterprises | Core Intelligence Graph & Neural Matrix Service
+SK Enterprises | SKAI Intelligence Graph & Neural Matrix Service
 Founder & Sole Architect: Sumeet Kumar
-Platform: Jarvis Platform V5.0
+Platform: SKAI — Powered by SK Enterprises
 """
 from typing import Dict, Any, List
 from datetime import datetime
@@ -11,7 +11,7 @@ class IntelligenceGraphService:
     """
     Implements the 5-layer Cognitive Architecture:
     1. Base Intelligence
-    2. SK AI Core
+    2. SKAI Core
     3. Omnipresent Cognition
     4. Existential Synthesis
     5. Causal Master
@@ -32,8 +32,8 @@ class IntelligenceGraphService:
                 "description": "Foundational Cognitive & Mathematical Primitives"
             },
             {
-                "id": "sk_ai_core",
-                "label": "SK AI CORE (JARVIS 4.0)",
+                "id": "skai_core",
+                "label": "SKAI CORE",
                 "layer": "core",
                 "status": "ACTIVE",
                 "coherence": 1.0,
@@ -48,7 +48,7 @@ class IntelligenceGraphService:
                 "status": "ONLINE",
                 "coherence": 0.99,
                 "latency_ms": 0.5,
-                "description": "Global Context, Ephemeris & Real-time State Aggregator"
+                "description": "Global Context, Memory & Real-time State Aggregator"
             },
             {
                 "id": "existential_synthesis",
@@ -57,7 +57,7 @@ class IntelligenceGraphService:
                 "status": "ONLINE",
                 "coherence": 1.0,
                 "latency_ms": 0.3,
-                "description": "Identity Lock, Goal Planning & Multi-Persona Engine"
+                "description": "Identity Lock, Goal Planning & Assistant Engine"
             },
             {
                 "id": "causal_master",
@@ -80,10 +80,10 @@ class IntelligenceGraphService:
         ]
 
         edges = [
-            {"source": "base_intelligence", "target": "sk_ai_core", "protocol": "IPC/Direct", "bandwidth_gbps": 10.0},
-            {"source": "sk_ai_core", "target": "omnipresent_cognition", "protocol": "Neural/Sync", "bandwidth_gbps": 8.5},
-            {"source": "sk_ai_core", "target": "existential_synthesis", "protocol": "Identity/HMAC", "bandwidth_gbps": 8.5},
-            {"source": "sk_ai_core", "target": "causal_master", "protocol": "DAG/Vector", "bandwidth_gbps": 8.5},
+            {"source": "base_intelligence", "target": "skai_core", "protocol": "IPC/Direct", "bandwidth_gbps": 10.0},
+            {"source": "skai_core", "target": "omnipresent_cognition", "protocol": "Neural/Sync", "bandwidth_gbps": 8.5},
+            {"source": "skai_core", "target": "existential_synthesis", "protocol": "Identity/HMAC", "bandwidth_gbps": 8.5},
+            {"source": "skai_core", "target": "causal_master", "protocol": "DAG/Vector", "bandwidth_gbps": 8.5},
             {"source": "omnipresent_cognition", "target": "final_nexus", "protocol": "Convergence", "bandwidth_gbps": 12.0},
             {"source": "existential_synthesis", "target": "final_nexus", "protocol": "Convergence", "bandwidth_gbps": 12.0},
             {"source": "causal_master", "target": "final_nexus", "protocol": "Convergence", "bandwidth_gbps": 12.0}
@@ -106,7 +106,7 @@ class IntelligenceGraphService:
         """Runs an end-to-end multi-layer cognitive pass through the 5 graph tiers."""
         trace = [
             {"stage": "Base Intelligence", "action": "Primitives validated", "status": "OK"},
-            {"stage": "SK AI Core", "action": "Task routed to sovereign pipeline", "status": "OK"},
+            {"stage": "SKAI Core", "action": "Task routed to sovereign pipeline", "status": "OK"},
             {"stage": "Omnipresent Cognition", "action": "Contextual memory & temporal anchors loaded", "status": "OK"},
             {"stage": "Existential Synthesis", "action": f"Owner identity ({settings.INVENTOR}) verified", "status": "OK"},
             {"stage": "Causal Master", "action": "Execution plan synthesized with zero deadlocks", "status": "OK"},

@@ -1,7 +1,7 @@
 """
 SK Enterprises | Master Desktop Application Lifecycle Coordinator
 Founder & Sole Architect: Sumeet Kumar
-Platform: Jarvis Platform V5.0
+Platform: SKAI — Powered by SK Enterprises
 """
 import os
 import sys
@@ -56,7 +56,7 @@ def recycle_stale_port(port: int = 8000):
 
 def launch_desktop():
     print("=" * 80)
-    print("⚡ SK ENTERPRISES | SK AI 4.0 (PROJECT JARVIS 4.0)")
+    print("⚡ SK ENTERPRISES | SKAI (SKAI — Powered by SK Enterprises)")
     print("   FOUNDER & SOLE ARCHITECT: SUMEET KUMAR | DESKTOP RUNTIME")
     print("=" * 80)
 
@@ -64,7 +64,7 @@ def launch_desktop():
 
     if is_port_open(8000):
         if check_backend_readiness(8000):
-            print("[BACKEND]: Existing SK AI 4.0 FastAPI Engine verified on http://127.0.0.1:8000")
+            print("[BACKEND]: Existing SKAI FastAPI Engine verified on http://127.0.0.1:8000")
             backend_ready = True
         else:
             print("[PORT RECOVERY]: Stale process found on port 8000. Releasing socket...")
@@ -81,16 +81,16 @@ def launch_desktop():
             time.sleep(0.5)
             if check_backend_readiness(8000):
                 backend_ready = True
-                print("[BACKEND ONLINE]: 5-Layer Intelligence Graph, Agent Registry & Telemetry Active.")
+                print("[BACKEND ONLINE]: SKAI OS Control, Memory, & Safety Gate Active.")
                 break
 
     # Launch Desktop Shell Window
     from desktop.app_window import open_desktop_window
     frontend_uri = f"file:///{FRONTEND_FILE.as_posix()}"
-    print(f"[DESKTOP SHELL]: Opening Cyberpunk Command Center HUD at:\n  {frontend_uri}")
+    print(f"[DESKTOP SHELL]: Opening SKAI Command Center HUD at:\n  {frontend_uri}")
     
     try:
-        open_desktop_window(frontend_uri, title="SK AI 4.0 | Project JARVIS 4.0 — Sumeet Kumar")
+        open_desktop_window(frontend_uri, title="SKAI — Powered by SK Enterprises | Sumeet Kumar")
     finally:
         pass
 

@@ -1,6 +1,7 @@
 """
 SK Enterprises | System Paths & Crash Interception Infrastructure
-Inventor & Sole Architect: Sumeet Kumar
+Founder & Sole Architect: Sumeet Kumar
+Platform: SKAI — Powered by SK Enterprises
 """
 import os
 import sys
@@ -16,8 +17,8 @@ else:
     BASE_DIR = Path(__file__).resolve().parent.parent
 
 # 2. UAC-Safe AppData Directory Mapping
-APPDATA_DIR = Path(os.path.expandvars(r"%APPDATA%\SK Enterprises\SK AI 4.0"))
-LOCALAPPDATA_DIR = Path(os.path.expandvars(r"%LOCALAPPDATA%\SK_AI_4.0"))
+APPDATA_DIR = Path(os.path.expandvars(r"%APPDATA%\SK Enterprises\SKAI"))
+LOCALAPPDATA_DIR = Path(os.path.expandvars(r"%LOCALAPPDATA%\SKAI"))
 
 for d in [APPDATA_DIR, LOCALAPPDATA_DIR]:
     try:
@@ -60,9 +61,9 @@ def log_crash_and_notify(title: str, exc: Exception):
         pass
     
     msg = (
-        f"A critical exception occurred in SK AI 4.0:\n\n"
+        f"A critical exception occurred in SKAI:\n\n"
         f"{str(exc)}\n\n"
         f"Full crash logs have been saved to:\n{CRASH_LOG}\n\n"
-        f"Inventor: Sumeet Kumar (SK Enterprises)"
+        f"Founder: Sumeet Kumar (SK Enterprises)"
     )
     show_native_error_dialog(title, msg)

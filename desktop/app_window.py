@@ -1,7 +1,7 @@
 """
 SK Enterprises | Native Desktop Window Shell Wrapper
 Founder & Sole Architect: Sumeet Kumar
-Platform: Jarvis Platform V5.0
+Platform: SKAI — Powered by SK Enterprises
 """
 import os
 import sys
@@ -9,7 +9,7 @@ import webbrowser
 import subprocess
 from pathlib import Path
 
-def open_desktop_window(target_url: str, title: str = "SK AI 4.0 | Project JARVIS 4.0", width: int = 1440, height: int = 900):
+def open_desktop_window(target_url: str, title: str = "SKAI — Powered by SK Enterprises | Sumeet Kumar", width: int = 1440, height: int = 900):
     """
     Opens the desktop application shell.
     Tries:

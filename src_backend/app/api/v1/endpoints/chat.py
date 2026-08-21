@@ -1,19 +1,20 @@
 """
-SK Enterprises | Cognitive Chat Endpoints
-Inventor & Sole Architect: Sumeet Kumar
+SK Enterprises | SKAI Cognitive Assistant Endpoints
+Founder & Sole Architect: Sumeet Kumar
+Platform: SKAI Cognitive Operating System
 """
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from src_backend.app.database.base import get_db
 from src_backend.app.schemas.chat import ChatQueryRequest, ChatResponse
-from src_backend.app.services.chat_service import ChatService
+from src_backend.app.services.assistant_service import AssistantService
 
-router = APIRouter(tags=["Cognitive Chat"])
+router = APIRouter(tags=["Cognitive Assistant"])
 
-@router.post("/chat/process", response_model=ChatResponse, summary="Process Cognitive Chat Query")
-@router.post("/chat", response_model=ChatResponse, summary="Process Chat Query (Alias)")
+@router.post("/chat/process", response_model=ChatResponse, summary="Process Assistant Voice or Text Command")
+@router.post("/chat", response_model=ChatResponse, summary="Process Command (Alias)")
 def process_chat(req: ChatQueryRequest, db: Session = Depends(get_db)):
-    return ChatService.process_query(
+    return AssistantService.process_command(
         db=db,
         query=req.query,
         persona=req.persona,

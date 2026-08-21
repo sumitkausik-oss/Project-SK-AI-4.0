@@ -1,11 +1,15 @@
 """
 SK Enterprises | API v1 Master Router
-Inventor & Sole Architect: Sumeet Kumar
+Founder & Sole Architect: Sumeet Kumar
+Platform: SKAI Cognitive Operating System
 """
 from fastapi import APIRouter
 from src_backend.app.api.v1.endpoints.health import router as health_router
 from src_backend.app.api.v1.endpoints.system import router as system_router
 from src_backend.app.api.v1.endpoints.chat import router as chat_router
+from src_backend.app.api.v1.endpoints.os_control import router as os_control_router
+from src_backend.app.api.v1.endpoints.permissions import router as permissions_router
+from src_backend.app.api.v1.endpoints.memory import router as memory_router
 from src_backend.app.api.v1.endpoints.astrology import router_agent_town, router_astrology
 from src_backend.app.api.v1.endpoints.education_data_cloud import (
     router_education, router_data, router_cloud
@@ -18,10 +22,15 @@ from src_backend.app.api.v1.endpoints.diagnostics import router as diagnostics_r
 
 api_v1_router = APIRouter()
 
-# Register all modular sub-routers
+# Register core OS Control, Safety & Memory sub-routers
 api_v1_router.include_router(health_router)
 api_v1_router.include_router(system_router)
 api_v1_router.include_router(chat_router)
+api_v1_router.include_router(os_control_router)
+api_v1_router.include_router(permissions_router)
+api_v1_router.include_router(memory_router)
+
+# Register specialized modular capabilities
 api_v1_router.include_router(router_agent_town)
 api_v1_router.include_router(router_astrology)
 api_v1_router.include_router(router_education)

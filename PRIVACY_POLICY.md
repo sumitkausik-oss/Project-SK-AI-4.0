@@ -1,14 +1,14 @@
-# PRIVACY POLICY — SK AI 4.0
+# PRIVACY POLICY — SKAI
 
-**Effective Date:** 2026-08-19  
-**Organization:** SK Enterprises (Sumeet Kumar)  
+**Effective Date:** 2026-08-21  
+**Organization:** SK Enterprises (Founder & Sole Architect: Sumeet Kumar)  
 
-## 1. LOCAL-FIRST SOVEREIGN DATA ARCHITECTURE
-SK AI 4.0 is engineered with privacy as a foundational principle. All chat conversations, associative memories, client databases, and log files are stored locally on your device under `%APPDATA%\SK Enterprises\SK AI 4.0\`.
+## 1. LOCAL-FIRST DATA ARCHITECTURE
+SKAI is engineered with privacy as a foundational principle. All chat conversations, durable memories, client databases, safety logs, and screenshot artifacts are stored locally on your device under `%APPDATA%\SK Enterprises\SK AI 4.0\` (or `%APPDATA%\SK Enterprises\SKAI\`).
 
 ## 2. DATA COLLECTION
-- **Offline Mode**: No personal data or speech input leaves your machine.
-- **External AI Providers (Optional)**: If you configure external cloud API keys (e.g. Gemini, OpenAI), queries are sent directly from your device to the configured API endpoint over encrypted TLS connections. SK Enterprises does not intercept or broker these API calls.
+- **Offline / Local Mode**: No personal data, files, or speech input leave your machine.
+- **External AI Providers / Web Tools (Optional)**: If you enable optional cloud add-ons or external API keys, queries are sent directly from your device over encrypted TLS connections. SK Enterprises does not intercept or broker these API calls.
 
-## 3. DATA RETENTION & CONTROL
-You retain 100% ownership and control over your data. To completely delete all local data, simply delete the local database directory at `%APPDATA%\SK Enterprises\SK AI 4.0\`.
+## 3. DATA RETENTION & USER CONTROL
+You retain 100% ownership and control over your data. You can inspect, edit, or delete any stored memories directly from the in-app Memory Store modal at any time.

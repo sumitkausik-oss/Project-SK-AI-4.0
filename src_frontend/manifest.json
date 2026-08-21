@@ -1,6 +1,6 @@
 {
-  "name": "SK AI 4.0 - Project JARVIS",
-  "short_name": "SK AI",
+  "name": "SKAI — Powered by SK Enterprises",
+  "short_name": "SKAI",
   "start_url": "/src_frontend/index.html",
   "display": "standalone",
   "background_color": "#030712",

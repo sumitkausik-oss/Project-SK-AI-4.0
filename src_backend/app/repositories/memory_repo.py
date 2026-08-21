@@ -1,9 +1,10 @@
 """
 SK Enterprises | Memory, Chat & Audit Repository Layers
-Inventor & Sole Architect: Sumeet Kumar
+Founder & Sole Architect: Sumeet Kumar
+Platform: SKAI Cognitive Operating System
 """
 import re
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any, Union
 from sqlalchemy.orm import Session
 from src_backend.app.models.memory import MemoryItem
 from src_backend.app.models.chat import Conversation, Message
@@ -31,12 +32,29 @@ class MemoryRepository:
         return db.query(MemoryItem).filter(MemoryItem.key == key).first()
 
     @staticmethod
+    def get_memory_by_id(db: Session, memory_id: int) -> Optional[MemoryItem]:
+        return db.query(MemoryItem).filter(MemoryItem.id == memory_id).first()
+
+    @staticmethod
+    def delete_memory(db: Session, key_or_id: Union[str, int]) -> bool:
+        if isinstance(key_or_id, int) or (isinstance(key_or_id, str) and key_or_id.isdigit()):
+            item = db.query(MemoryItem).filter(MemoryItem.id == int(key_or_id)).first()
+        else:
+            item = db.query(MemoryItem).filter(MemoryItem.key == str(key_or_id)).first()
+
+        if item:
+            db.delete(item)
+            db.commit()
+            return True
+        return False
+
+    @staticmethod
     def recall_associative(db: Session, query: str, limit: int = 5) -> List[MemoryItem]:
         words = set(re.findall(r'\b\w+\b', query.lower()))
         all_items = db.query(MemoryItem).all()
         scored = []
         for item in all_items:
-            item_words = set(re.findall(r'\b\w+\b', (item.key + " " + (item.tags or "")).lower()))
+            item_words = set(re.findall(r'\b\w+\b', (item.key + " " + (item.tags or "") + " " + item.content).lower()))
             overlap = len(words.intersection(item_words))
             if overlap > 0:
                 scored.append((overlap, item))
@@ -49,7 +67,7 @@ class MemoryRepository:
 
 class ChatRepository:
     @staticmethod
-    def get_or_create_conversation(db: Session, session_id: str, user_email: str = "sumeet.admin@skenterprises.ai", persona: str = "JARVIS") -> Conversation:
+    def get_or_create_conversation(db: Session, session_id: str, user_email: str = "sumeet.admin@skenterprises.ai", persona: str = "SKAI") -> Conversation:
         conv = db.query(Conversation).filter(Conversation.session_id == session_id).first()
         if not conv:
             conv = Conversation(session_id=session_id, user_email=user_email, persona=persona)
@@ -59,7 +77,7 @@ class ChatRepository:
         return conv
 
     @staticmethod
-    def add_message(db: Session, conversation_id: int, sender: str, response_content: str, query: Optional[str] = None, thought_process: Optional[str] = None, voice_text: Optional[str] = None, persona: str = "JARVIS") -> Message:
+    def add_message(db: Session, conversation_id: int, sender: str, response_content: str, query: Optional[str] = None, thought_process: Optional[str] = None, voice_text: Optional[str] = None, persona: str = "SKAI") -> Message:
         msg = Message(
             conversation_id=conversation_id,
             sender=sender,

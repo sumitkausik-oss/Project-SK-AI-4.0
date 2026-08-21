@@ -1,7 +1,7 @@
 """
-SK Enterprises | Master Backend Server
+SK Enterprises | SKAI Master Backend Server
 Founder & Sole Architect: Sumeet Kumar
-Platform: Jarvis Platform V5.0
+Platform: SKAI — Powered by SK Enterprises
 """
 import sys
 from pathlib import Path

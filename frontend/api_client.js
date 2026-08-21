@@ -1,7 +1,7 @@
 /**
- * SK ENTERPRISES | Centralized Typed API Client
+ * SK ENTERPRISES | SKAI Centralized Typed API Client
  * Founder & Sole Architect: Sumeet Kumar
- * Platform: Jarvis Platform V5.0
+ * Platform: SKAI — Powered by SK Enterprises
  */
 
 const API_BASE = "http://127.0.0.1:8000/api/v1";
@@ -10,7 +10,7 @@ const API_LEGACY_BASE = "http://127.0.0.1:8000/api";
 class SKApiClient {
     constructor(baseUrl = API_BASE) {
         this.baseUrl = baseUrl;
-        this.timeoutMs = 10000;
+        this.timeoutMs = 15000;
     }
 
     async request(endpoint, options = {}) {
@@ -62,8 +62,8 @@ class SKApiClient {
         return this.request("/system/status");
     }
 
-    // Cognitive Chat
-    async sendChatQuery(query, persona = "JARVIS", language = "hi-IN", userEmail = "sumeet.admin@skenterprises.ai") {
+    // Cognitive Assistant / Command Processing
+    async sendChatQuery(query, persona = "SKAI", language = "en-US", userEmail = "sumeet.admin@skenterprises.ai") {
         return this.request("/chat", {
             method: "POST",
             body: JSON.stringify({
@@ -75,40 +75,130 @@ class SKApiClient {
         });
     }
 
-    // 2D Agent Town
-    async getAgentTownState() {
-        return this.request("/agent_town/state");
-    }
-
-    // Vedic Astrology & Kundali
-    async generateKundali(name, dob, tob, pob) {
-        return this.request("/kundali/generate", {
+    // ------------------------------------------------------------------------
+    // OS Control & Actuators
+    // ------------------------------------------------------------------------
+    async openApp(app) {
+        return this.request("/os/app/open", {
             method: "POST",
-            body: JSON.stringify({ name, dob, tob, pob })
+            body: JSON.stringify({ app })
         });
     }
 
-    // Universal STEM & Education
-    async generateEducationTest(subject, standard, difficulty, topic) {
-        return this.request("/education/test", {
+    async closeApp(target) {
+        return this.request("/os/app/close", {
             method: "POST",
-            body: JSON.stringify({ subject, standard, difficulty, topic })
+            body: JSON.stringify({ target })
         });
     }
 
-    // Autonomous Data Analyst
-    async analyzeData(datasetName, columns) {
-        return this.request("/data/analyze", {
+    async listRunningApps() {
+        return this.request("/os/app/running");
+    }
+
+    async createFile(filePath, content = "") {
+        return this.request("/os/file/create", {
             method: "POST",
-            body: JSON.stringify({ dataset_name: datasetName, columns })
+            body: JSON.stringify({ file_path: filePath, content })
         });
     }
 
-    // Cloud DevOps & Zero-Trust
-    async executeCloudTask(action, targetUser) {
-        return this.request("/cloud/execute", {
+    async createFolder(folderPath) {
+        return this.request("/os/folder/create", {
             method: "POST",
-            body: JSON.stringify({ action, target_user: targetUser })
+            body: JSON.stringify({ folder_path: folderPath })
+        });
+    }
+
+    async readFile(filePath) {
+        return this.request(`/os/file/read?path=${encodeURIComponent(filePath)}`);
+    }
+
+    async writeFile(filePath, content, append = false) {
+        return this.request("/os/file/write", {
+            method: "POST",
+            body: JSON.stringify({ file_path: filePath, content, append })
+        });
+    }
+
+    async deleteFile(targetPath) {
+        return this.request(`/os/file/delete?path=${encodeURIComponent(targetPath)}`, {
+            method: "DELETE"
+        });
+    }
+
+    async listFolder(folderPath = "Desktop") {
+        return this.request(`/os/folder/list?path=${encodeURIComponent(folderPath)}`);
+    }
+
+    async runTerminal(command, cwd = null, timeoutSec = 30) {
+        return this.request("/os/terminal/run", {
+            method: "POST",
+            body: JSON.stringify({ command, cwd, timeout_sec: timeoutSec })
+        });
+    }
+
+    async searchLocalFiles(query, baseDir = null, contentSearch = true) {
+        const params = new URLSearchParams({ q: query, content: contentSearch });
+        if (baseDir) params.append("base_dir", baseDir);
+        return this.request(`/os/search?${params.toString()}`);
+    }
+
+    async takeScreenshot(filename = null) {
+        const query = filename ? `?filename=${encodeURIComponent(filename)}` : "";
+        return this.request(`/os/screenshot${query}`, { method: "POST" });
+    }
+
+    async getProjectTree(path) {
+        return this.request(`/os/code/tree?path=${encodeURIComponent(path)}`);
+    }
+
+    // ------------------------------------------------------------------------
+    // Safety & Permissions
+    // ------------------------------------------------------------------------
+    async getPermissions() {
+        return this.request("/permissions");
+    }
+
+    async updatePermissions(policy) {
+        return this.request("/permissions", {
+            method: "POST",
+            body: JSON.stringify(policy)
+        });
+    }
+
+    async getPendingActions() {
+        return this.request("/permissions/pending");
+    }
+
+    async confirmAction(actionId, approved = true) {
+        return this.request("/permissions/confirm", {
+            method: "POST",
+            body: JSON.stringify({ action_id: actionId, approved })
+        });
+    }
+
+    // ------------------------------------------------------------------------
+    // Local Memory Management
+    // ------------------------------------------------------------------------
+    async listMemories(limit = 100) {
+        return this.request(`/memory?limit=${limit}`);
+    }
+
+    async storeMemory(key, content, tags = ["preference", "user_context"], category = "GENERAL") {
+        return this.request("/memory", {
+            method: "POST",
+            body: JSON.stringify({ key, content, tags, category })
+        });
+    }
+
+    async searchMemory(query, limit = 5) {
+        return this.request(`/memory/search?q=${encodeURIComponent(query)}&limit=${limit}`);
+    }
+
+    async deleteMemory(memoryId) {
+        return this.request(`/memory/${encodeURIComponent(memoryId)}`, {
+            method: "DELETE"
         });
     }
 
@@ -137,43 +227,6 @@ class SKApiClient {
             method: "POST",
             body: JSON.stringify({ email, active })
         });
-    }
-
-    // Core Intelligence Graph (5-Layer Architecture)
-    async getIntelligenceGraph() {
-        return this.request("/intelligence/graph");
-    }
-
-    async executeNexusTask(task) {
-        return this.request("/intelligence/nexus/execute", {
-            method: "POST",
-            body: JSON.stringify({ task })
-        });
-    }
-
-    // Structured Agent Hub & Lifecycle
-    async listAgents() {
-        return this.request("/agents");
-    }
-
-    async getAgent(agentKey) {
-        return this.request(`/agents/${agentKey}`);
-    }
-
-    async dispatchAgentTask(agentKey, task) {
-        return this.request(`/agents/${agentKey}/task`, {
-            method: "POST",
-            body: JSON.stringify({ task })
-        });
-    }
-
-    // AI Provider Management
-    async listProviders() {
-        return this.request("/providers");
-    }
-
-    async testProvider(providerId) {
-        return this.request(`/providers/${providerId}/test`, { method: "POST" });
     }
 
     // System Diagnostics

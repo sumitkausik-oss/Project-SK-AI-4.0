@@ -1,7 +1,7 @@
 """
-SK Enterprises | Master Cognitive Backend Engine
-Inventor & Sole Architect: Sumeet Kumar
-Platform: Jarvis Platform V5.0
+SK Enterprises | SKAI Master Cognitive Backend Engine
+Founder & Sole Architect: Sumeet Kumar
+Platform: SKAI — Powered by SK Enterprises
 """
 import sys
 import asyncio
@@ -32,9 +32,9 @@ async def lifespan(app: FastAPI):
     # 1. Startup
     setup_logging()
     logger.info("=" * 80)
-    logger.info(f"⚡ SK ENTERPRISES | {settings.PROJECT_NAME} ({settings.CODENAME})")
-    logger.info(f"   INVENTOR & SOLE ARCHITECT: {settings.INVENTOR}")
-    logger.info(f"   PLATFORM VERSION: {settings.VERSION} | COGNITIVE CORE STARTUP")
+    logger.info(f"[SKAI] SK ENTERPRISES | {settings.PROJECT_NAME} ({settings.TAGLINE})")
+    logger.info(f"   FOUNDER & SOLE ARCHITECT: {settings.INVENTOR}")
+    logger.info(f"   PLATFORM VERSION: {settings.VERSION} | LOCAL COGNITIVE ASSISTANT STARTUP")
     logger.info("=" * 80)
     
     # Initialize SQLite Database & Tables
@@ -46,7 +46,7 @@ async def lifespan(app: FastAPI):
     yield
     
     # 2. Shutdown
-    logger.info("Shutting down SK AI 4.0 Cognitive Engine...")
+    logger.info("Shutting down SKAI Engine...")
     telemetry_task.cancel()
     try:
         await telemetry_task
@@ -57,8 +57,8 @@ async def lifespan(app: FastAPI):
 def create_app() -> FastAPI:
     """FastAPI Application Factory."""
     app = FastAPI(
-        title=f"{settings.PROJECT_NAME} Sovereign Cognitive Core",
-        description=f"Proprietary Cognitive Core engineered by {settings.INVENTOR} ({settings.ORGANIZATION})",
+        title=f"{settings.PROJECT_NAME} — Powered by {settings.ORGANIZATION}",
+        description=f"Local-First Desktop AI Assistant engineered by {settings.INVENTOR} ({settings.ORGANIZATION})",
         version=settings.VERSION,
         lifespan=lifespan,
         docs_url="/docs",

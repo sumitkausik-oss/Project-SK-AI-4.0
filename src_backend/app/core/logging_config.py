@@ -32,8 +32,14 @@ def setup_logging():
     for handler in list(root_logger.handlers):
         root_logger.removeHandler(handler)
         
-    # 1. Console Handler
-    console_handler = logging.StreamHandler(sys.stdout)
+    # 1. Console Handler (Safe UTF-8 encoding on Windows)
+    stream = sys.stdout
+    if hasattr(sys.stdout, 'reconfigure'):
+        try:
+            sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+        except Exception:
+            pass
+    console_handler = logging.StreamHandler(stream)
     console_handler.setLevel(log_level)
     console_handler.setFormatter(formatter)
     root_logger.addHandler(console_handler)

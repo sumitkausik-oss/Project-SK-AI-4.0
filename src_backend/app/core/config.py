@@ -1,6 +1,7 @@
 """
-SK Enterprises | Core Settings Module
-Inventor & Sole Architect: Sumeet Kumar
+SK Enterprises | SKAI Core Settings Module
+Founder & Sole Architect: Sumeet Kumar
+Platform: SKAI Cognitive Operating System
 """
 import os
 from pathlib import Path
@@ -11,8 +12,9 @@ from pydantic import Field
 from core.system_paths import BASE_DIR, APPDATA_DIR, LOGS_DIR
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "SK AI 4.0"
-    CODENAME: str = "Project JARVIS 4.0"
+    PROJECT_NAME: str = "SKAI"
+    TAGLINE: str = "SKAI — Powered by SK Enterprises"
+    CODENAME: str = "SKAI Desktop"
     VERSION: str = "5.0.0"
     API_V1_STR: str = "/api/v1"
     
@@ -27,11 +29,10 @@ class Settings(BaseSettings):
     PORT: int = Field(default=8000, env="PORT")
     
     # Database Configuration (SQLite)
-    DATABASE_PATH: Path = APPDATA_DIR / "sk_ai_master.db"
+    DATABASE_PATH: Path = APPDATA_DIR / "skai_master.db"
     
     @property
     def DATABASE_URL(self) -> str:
-        # SQLite URL with forward slashes for cross-platform compatibility
         return f"sqlite:///{self.DATABASE_PATH.as_posix()}"
     
     # CORS Origins (Restricted strictly to local addresses)
@@ -46,8 +47,8 @@ class Settings(BaseSettings):
     ]
     
     # Security Secrets
-    SECRET_KEY: str = Field(default="SK_SOVEREIGN_KEY_SUMIT_KUMAR_2026_MASTER", env="SECRET_KEY")
-    HMAC_SALT: str = Field(default="SK_ENTERPRISES_SUMIT_KUMAR_SOVEREIGN_CORE_5_0", env="HMAC_SALT")
+    SECRET_KEY: str = Field(default="SKAI_SOVEREIGN_KEY_SUMEET_KUMAR_2026_MASTER", env="SECRET_KEY")
+    HMAC_SALT: str = Field(default="SK_ENTERPRISES_SUMEET_KUMAR_SKAI_CORE_5_0", env="HMAC_SALT")
     
     # Logging Configuration
     LOG_LEVEL: str = Field(default="INFO", env="LOG_LEVEL")
