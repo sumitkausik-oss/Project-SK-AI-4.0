@@ -7,35 +7,36 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "#090a10",
-        surface: "#0f111a",
-        surfaceBorder: "rgba(99, 102, 241, 0.2)",
-        primary: {
-          DEFAULT: "#6366f1",
-          hover: "#4f46e5",
-          light: "#818cf8",
-          dark: "#3730a3",
-        },
-        accent: {
-          DEFAULT: "#38bdf8",
-          purple: "#a855f7",
+        background: "#030305",
+        surface: "#08090f",
+        surfaceBorder: "rgba(0, 240, 255, 0.25)",
+        neon: {
+          cyan: "#00f0ff",
+          blue: "#38bdf8",
           emerald: "#10b981",
-          rose: "#f43f5e",
           amber: "#f59e0b",
+          rose: "#f43f5e",
+          violet: "#8b5cf6",
+        },
+        primary: {
+          DEFAULT: "#00f0ff",
+          hover: "#00c8d6",
+          dark: "#005566",
         }
       },
       fontFamily: {
         sans: ['Segoe UI', '-apple-system', 'BlinkMacSystemFont', 'Roboto', 'sans-serif'],
         mono: ['Fira Code', 'Cascadia Code', 'Consolas', 'monospace'],
+        display: ['Orbitron', 'Segoe UI', 'sans-serif'],
       },
       animation: {
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'glow-pulse': 'glow 2s ease-in-out infinite alternate',
+        'hologram-scan': 'scan 4s linear infinite',
       },
       keyframes: {
-        glow: {
-          '0%': { boxShadow: '0 0 10px rgba(99, 102, 241, 0.4)' },
-          '100%': { boxShadow: '0 0 25px rgba(99, 102, 241, 0.8), 0 0 40px rgba(56, 189, 248, 0.4)' },
+        scan: {
+          '0%': { transform: 'translateY(-100%)' },
+          '100%': { transform: 'translateY(1000%)' },
         }
       }
     },

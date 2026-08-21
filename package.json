@@ -2,8 +2,8 @@
   "name": "skai",
   "productName": "SKAI",
   "version": "0.0.1",
-  "description": "SKAI — Powered by SK Enterprises. Local-First Voice & Desktop AI Assistant engineered by Sumeet Kumar.",
-  "main": "dist-electron/main.js",
+  "description": "SKAI — Powered by SK Enterprises. Local-First Holographic Voice & Desktop AI Assistant engineered by Sumeet Kumar.",
+  "main": "dist-electron/main/index.js",
   "author": {
     "name": "Sumeet Kumar",
     "email": "sumeet.admin@skenterprises.ai",
@@ -14,20 +14,24 @@
     "dev": "concurrently -k \"vite\" \"cross-env NODE_ENV=development electron .\"",
     "start": "electron .",
     "build": "tsc && vite build && tsc -p tsconfig.electron.json",
+    "build:win": "npm run dist:win",
     "dist:win": "npm run build && electron-builder --win nsis --x64",
     "pack:win": "npm run build && electron-builder --dir"
   },
   "dependencies": {
     "clsx": "^2.1.1",
+    "framer-motion": "^12.4.7",
     "lucide-react": "^0.475.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "tailwind-merge": "^3.0.1"
+    "tailwind-merge": "^3.0.1",
+    "three": "^0.173.0"
   },
   "devDependencies": {
     "@types/node": "^22.13.4",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
+    "@types/three": "^0.173.0",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
     "concurrently": "^9.1.2",

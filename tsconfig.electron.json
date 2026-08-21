@@ -6,10 +6,10 @@
     "skipLibCheck": true,
     "sourceMap": false,
     "outDir": "dist-electron",
-    "rootDir": "electron",
+    "rootDir": "src",
     "strict": false,
     "esModuleInterop": true,
     "resolveJsonModule": true
   },
-  "include": ["electron/**/*"]
+  "include": ["src/main/**/*", "src/preload/**/*"]
 }

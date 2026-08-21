@@ -1,3 +1,17 @@
+export interface SystemTelemetry {
+  cpuPercent: number;
+  cpuCores: number;
+  cpuModel: string;
+  ramTotalGB: string;
+  ramUsedGB: string;
+  ramFreeGB: string;
+  ramPercent: number;
+  uptimeHours: string;
+  platform: string;
+  hostname: string;
+  timestamp: string;
+}
+
 export interface AppInfo {
   name: string;
   productName: string;
@@ -54,12 +68,8 @@ export interface SearchMatch {
   filename: string;
   path: string;
   extension: string;
-  size_bytes: number;
-  modified_at: string | null;
-  match_type: string;
   score: number;
   snippet: string;
-  matched_lines: Array<{ line: number; text: string }>;
 }
 
 export interface WebSearchResult {
@@ -84,6 +94,7 @@ export interface ChatMessage {
 
 export interface SkaiApi {
   getAppInfo: () => Promise<AppInfo>;
+  getTelemetry: () => Promise<SystemTelemetry>;
   windowControl: (action: 'minimize' | 'maximize' | 'close') => Promise<void>;
   
   // Secrets & API Keys
@@ -92,7 +103,7 @@ export interface SkaiApi {
   hasApiKey: (provider: string) => Promise<boolean>;
   validateGoogleKey: (key: string) => Promise<{ valid: boolean; message: string }>;
 
-  // AI & Chat
+  // AI & Bilingual Engine
   sendMessage: (query: string, history: Array<{ role: string; content: string }>) => Promise<{
     status: string;
     response: string;
@@ -105,15 +116,13 @@ export interface SkaiApi {
 
   // OS Control
   os: {
+    openApp: (appName: string) => Promise<ToolResult>;
+    closeApp: (appName: string) => Promise<ToolResult>;
     readFile: (filePath: string) => Promise<ToolResult>;
     writeFile: (filePath: string, content: string, append?: boolean) => Promise<ToolResult>;
     createFile: (filePath: string, content?: string) => Promise<ToolResult>;
-    createFolder: (folderPath: string) => Promise<ToolResult>;
     listFolder: (folderPath?: string) => Promise<ToolResult>;
     deleteFile: (filePath: string) => Promise<ToolResult>;
-    openApp: (appName: string) => Promise<ToolResult>;
-    closeApp: (appName: string) => Promise<ToolResult>;
-    listRunningApps: () => Promise<ToolResult>;
     runTerminal: (command: string, cwd?: string) => Promise<ToolResult>;
     takeScreenshot: () => Promise<ToolResult>;
   };
@@ -144,7 +153,6 @@ export interface SkaiApi {
     getPolicy: () => Promise<PermissionPolicy>;
     savePolicy: (policy: Partial<PermissionPolicy>) => Promise<PermissionPolicy>;
     confirmAction: (actionId: string, approved: boolean) => Promise<ToolResult>;
-    onConfirmRequested: (callback: (action: PendingAction) => void) => () => void;
   };
 
   // Audit Logs

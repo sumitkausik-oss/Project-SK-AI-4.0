@@ -12,8 +12,8 @@ echo.
 cd /d "%~dp0"
 
 REM If dist-electron exists, launch electron directly
-if exist "dist-electron\main.js" (
-    echo Starting SKAI...
+if exist "dist-electron\main\index.js" (
+    echo Starting SKAI Holographic HUD...
     start "" npx electron .
     goto done
 )
