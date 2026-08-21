@@ -5,93 +5,88 @@ import { TelemetryHUD } from './components/TelemetryHUD';
 import { TranscriptHUD } from './components/TranscriptHUD';
 import { SettingsModal } from '../components/SettingsModal';
 import { ActionConfirmModal } from '../components/ActionConfirmModal';
-import { GeminiLiveService } from './services/gemini-live-service';
+import { VoiceEngine } from './services/voice-engine';
 import { ClapDetector } from './utils/clapDetector';
-import { Mic, Camera, Globe } from 'lucide-react';
+import { Mic, Camera, Globe, Folder } from 'lucide-react';
 import { ChatMessage, PendingAction } from '../types/electron';
 
 export const App: React.FC = () => {
   const [assistantState, setAssistantState] = useState<'STANDBY' | 'LISTENING' | 'THINKING' | 'SPEAKING'>('STANDBY');
   const [audioLevel, setAudioLevel] = useState(0);
   const [hasKey, setHasKey] = useState(false);
-  const [apiKey, setApiKey] = useState('');
+  const [googleKey, setGoogleKey] = useState('');
+  const [hfToken, setHfToken] = useState('');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [pendingAction, setPendingAction] = useState<PendingAction | null>(null);
   const [isVoiceActive, setIsVoiceActive] = useState(false);
 
-  const liveServiceRef = useRef<GeminiLiveService>(new GeminiLiveService());
+  const voiceEngineRef = useRef<VoiceEngine>(new VoiceEngine());
   const clapDetectorRef = useRef<ClapDetector | null>(null);
 
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: 'welcome',
       sender: 'AI',
-      response: `✨ **SKAI 4.0 — QUANTUM BILINGUAL CORE ONLINE**
+      response: `✨ **SKAI 4.0 — 2-WAY HINDI VOICE ASSISTANT ONLINE**
 Architect: **Sumeet Kumar** | Powered by **SK Enterprises**
 
-🎙️ **Gemini Live 2-Way Voice Stream Ready (Hindi & English):**
-• *"Chrome kholo"* / *"Open Google Chrome"*
-• *"Notepad chalu karo"* / *"Launch Calculator"*
-• *"Screenshot le lo"* / *"Take display screenshot"*
-• 👏 **Double-Clap Wake Detection Active**`,
+🎙️ **2-Way Voice Communication Active (Pure Hindi & Hinglish):**
+• *"D drive kholo"* / *"Open D Drive"*
+• *"Chrome kholo"* / *"Notepad chalu karo"*
+• *"Calculator kholo"* / *"Screenshot le lo"*
+• 👏 **Double-Clap Wake Detection Ready**`,
       timestamp: new Date().toLocaleTimeString(),
     },
   ]);
 
   useEffect(() => {
-    checkApiKey();
+    loadApiKeys();
 
     // Initialize Double-Clap Wake Detector
     clapDetectorRef.current = new ClapDetector({
       onWake: () => {
         console.log('👏 Double-clap detected! Waking assistant...');
-        if (!liveServiceRef.current.isConnected && apiKey) {
-          startLiveVoice();
+        if (!isVoiceActive) {
+          startVoice();
         } else {
-          handleSendMessage('Namaste SKAI! Ready for instructions.');
+          voiceEngineRef.current.speakResponse('हाँ जी Sumeet Sir, मैं सुन रहा हूँ। क्या करना है?');
         }
       },
     });
     clapDetectorRef.current.start();
 
     return () => {
-      liveServiceRef.current.disconnect();
+      voiceEngineRef.current.stop();
       clapDetectorRef.current?.stop();
     };
-  }, [apiKey]);
+  }, []);
 
-  const checkApiKey = async () => {
+  const loadApiKeys = async () => {
     try {
+      let gKey = '';
+      let hf = '';
       if (window.skaiApi?.getApiKey) {
-        const key = await window.skaiApi.getApiKey('google');
-        if (key && key.trim()) {
-          setApiKey(key.trim());
-          setHasKey(true);
-        } else {
-          setHasKey(false);
-        }
+        gKey = (await window.skaiApi.getApiKey('google')) || '';
+        hf = (await window.skaiApi.getApiKey('huggingface')) || '';
       }
+      if (!gKey) gKey = localStorage.getItem('skai_key_google') || '';
+      if (!hf) hf = localStorage.getItem('skai_key_huggingface') || '';
+
+      setGoogleKey(gKey);
+      setHfToken(hf);
+      setHasKey(Boolean(gKey || hf));
+      voiceEngineRef.current.setKeys(gKey, hf);
     } catch (err) {
       console.warn('Key check error:', err);
     }
   };
 
-  const startLiveVoice = async () => {
-    if (!apiKey) {
-      setIsSettingsOpen(true);
-      return;
-    }
-
+  const startVoice = async () => {
     setIsVoiceActive(true);
-    await liveServiceRef.current.connect(apiKey, {
-      onStateChange: (st) => {
-        if (st === 'IDLE') {
-          setAssistantState('STANDBY');
-          setIsVoiceActive(false);
-        } else {
-          setAssistantState(st);
-        }
-      },
+    voiceEngineRef.current.init(googleKey, hfToken);
+
+    await voiceEngineRef.current.start({
+      onStateChange: (st) => setAssistantState(st),
       onTranscript: (role, text) => {
         setMessages((prev) => [
           ...prev,
@@ -112,7 +107,7 @@ Architect: **Sumeet Kumar** | Powered by **SK Enterprises**
           {
             id: `err_${Date.now()}`,
             sender: 'AI',
-            response: `⚠️ **Voice Error:** ${err}`,
+            response: `⚠️ **Voice Info:** ${err}`,
             timestamp: new Date().toLocaleTimeString(),
           },
         ]);
@@ -122,11 +117,11 @@ Architect: **Sumeet Kumar** | Powered by **SK Enterprises**
 
   const toggleVoice = () => {
     if (isVoiceActive) {
-      liveServiceRef.current.disconnect();
+      voiceEngineRef.current.stop();
       setIsVoiceActive(false);
       setAssistantState('STANDBY');
     } else {
-      startLiveVoice();
+      startVoice();
     }
   };
 
@@ -141,77 +136,7 @@ Architect: **Sumeet Kumar** | Powered by **SK Enterprises**
     };
 
     setMessages((prev) => [...prev, userMsg]);
-    setAssistantState('THINKING');
-
-    try {
-      let responseText = '';
-      const qLower = queryText.toLowerCase().trim();
-
-      // Fast Local Tool Execution Dispatch
-      if (qLower.includes('chrome') || qLower.includes('browser')) {
-        const res = await window.electron?.ipcRenderer?.invoke('execute-system-tool', {
-          toolName: 'open_browser',
-          args: { app_name: 'chrome' },
-        });
-        responseText = res?.message || 'Google Chrome opened.';
-      } else if (qLower.includes('notepad')) {
-        const res = await window.electron?.ipcRenderer?.invoke('execute-system-tool', {
-          toolName: 'open_application',
-          args: { app_name: 'notepad' },
-        });
-        responseText = res?.message || 'Notepad opened.';
-      } else if (qLower.includes('calc') || qLower.includes('calculator')) {
-        const res = await window.electron?.ipcRenderer?.invoke('execute-system-tool', {
-          toolName: 'open_application',
-          args: { app_name: 'calc' },
-        });
-        responseText = res?.message || 'Calculator opened.';
-      } else if (qLower.includes('screenshot')) {
-        const res = await window.electron?.ipcRenderer?.invoke('execute-system-tool', {
-          toolName: 'take_screenshot',
-          args: {},
-        });
-        responseText = res?.message || 'Screenshot captured and saved.';
-      } else {
-        // AI query
-        if (apiKey) {
-          responseText = `हाँ जी Sumeet Kumar सर, मैंने आपका निर्देश नोट कर लिया है: "${queryText}"`;
-        } else {
-          responseText = `कमांड निष्पादित: "${queryText}". लाइव AI बातचीत के लिए कृपया सेटिंग्स में जाकर Gemini API Key सेव करें।`;
-        }
-      }
-
-      setAssistantState('SPEAKING');
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: `ai_${Date.now()}`,
-          sender: 'AI',
-          response: responseText,
-          timestamp: new Date().toLocaleTimeString(),
-        },
-      ]);
-
-      // Speak feedback
-      if (window.speechSynthesis) {
-        const u = new SpeechSynthesisUtterance(responseText.replace(/[*#`_]/g, ''));
-        u.onend = () => setAssistantState(isVoiceActive ? 'LISTENING' : 'STANDBY');
-        window.speechSynthesis.speak(u);
-      } else {
-        setTimeout(() => setAssistantState(isVoiceActive ? 'LISTENING' : 'STANDBY'), 1200);
-      }
-    } catch (err: any) {
-      setAssistantState('STANDBY');
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: `err_${Date.now()}`,
-          sender: 'AI',
-          response: `❌ Error: ${err.message}`,
-          timestamp: new Date().toLocaleTimeString(),
-        },
-      ]);
-    }
+    await voiceEngineRef.current.handleUserQuery(queryText);
   };
 
   return (
@@ -232,7 +157,7 @@ Architect: **Sumeet Kumar** | Powered by **SK Enterprises**
         <div className="flex-1 flex flex-col items-center justify-between relative overflow-hidden p-4">
           <div className="text-center space-y-1 z-10">
             <span className="text-[10px] font-mono tracking-[0.3em] text-cyan-400/80 uppercase">
-              // HOLOGRAPHIC QUANTUM INTERACTION CORE //
+              // 2-WAY HINDI VOICE & HOLOGRAPHIC CORE //
             </span>
             <h1 className="text-lg font-black tracking-widest text-cyan-300 drop-shadow-[0_0_15px_rgba(0,240,255,0.6)]">
               SKAI PLATFORM
@@ -254,23 +179,31 @@ Architect: **Sumeet Kumar** | Powered by **SK Enterprises**
               }`}
             >
               <Mic className="w-4 h-4" />
-              <span>{isVoiceActive ? 'VOICE LIVE (MUTE)' : 'ACTIVATE VOICE'}</span>
+              <span>{isVoiceActive ? 'VOICE LIVE (बोलिए)' : 'START 2-WAY VOICE'}</span>
             </button>
 
             <button
-              onClick={() => handleSendMessage('take screenshot')}
+              onClick={() => handleSendMessage('D drive kholo')}
+              className="p-3 rounded-xl bg-black/60 hover:bg-cyan-950/60 border border-cyan-900/60 text-gray-300 hover:text-cyan-300 transition flex items-center gap-1.5 text-xs font-mono"
+            >
+              <Folder className="w-4 h-4 text-cyan-400" />
+              <span>OPEN D DRIVE</span>
+            </button>
+
+            <button
+              onClick={() => handleSendMessage('screenshot le lo')}
               className="p-3 rounded-xl bg-black/60 hover:bg-cyan-950/60 border border-cyan-900/60 text-gray-300 hover:text-cyan-300 transition flex items-center gap-1.5 text-xs font-mono"
             >
               <Camera className="w-4 h-4 text-cyan-400" />
-              <span>VISION CAPTURE</span>
+              <span>SCREENSHOT</span>
             </button>
 
             <button
-              onClick={() => handleSendMessage('open chrome')}
+              onClick={() => handleSendMessage('chrome kholo')}
               className="p-3 rounded-xl bg-black/60 hover:bg-cyan-950/60 border border-cyan-900/60 text-gray-300 hover:text-cyan-300 transition flex items-center gap-1.5 text-xs font-mono"
             >
               <Globe className="w-4 h-4 text-cyan-400" />
-              <span>LAUNCH CHROME</span>
+              <span>CHROME</span>
             </button>
           </div>
         </div>
@@ -288,7 +221,7 @@ Architect: **Sumeet Kumar** | Powered by **SK Enterprises**
       <SettingsModal
         isOpen={isSettingsOpen}
         onClose={() => setIsSettingsOpen(false)}
-        onKeyUpdated={checkApiKey}
+        onKeyUpdated={loadApiKeys}
       />
 
       {/* 4. Action Confirmation Modal */}
