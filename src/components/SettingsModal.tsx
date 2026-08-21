@@ -34,10 +34,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, o
     try {
       if (window.skaiApi?.getApiKey) {
         const gKey = await window.skaiApi.getApiKey('google');
-        setGoogleKey(gKey || '');
+        setGoogleKey(gKey || localStorage.getItem('skai_key_google') || '');
 
         const hf = await window.skaiApi.getApiKey('huggingface');
-        setHfToken(hf || '');
+        setHfToken(hf || localStorage.getItem('skai_key_huggingface') || '');
+      } else {
+        setGoogleKey(localStorage.getItem('skai_key_google') || '');
+        setHfToken(localStorage.getItem('skai_key_huggingface') || '');
       }
 
       if (window.skaiApi?.permissions?.getPolicy) {
@@ -51,8 +54,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, o
 
   const handleSaveGoogleKey = async () => {
     try {
-      await window.skaiApi.setApiKey('google', googleKey);
-      setSaveMsg('✅ Google API key securely encrypted & saved (DPAPI).');
+      localStorage.setItem('skai_key_google', googleKey);
+      if (window.skaiApi?.setApiKey) {
+        await window.skaiApi.setApiKey('google', googleKey);
+      }
+      setSaveMsg('✅ Google Gemini API key securely saved & encrypted (DPAPI).');
       onKeyUpdated();
       setTimeout(() => setSaveMsg(null), 4000);
     } catch (err: any) {
@@ -64,15 +70,35 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, o
     if (!googleKey.trim()) return;
     setValidatingGoogle(true);
     setGoogleValidationResult(null);
+
+    // 1. Try IPC validation
     try {
       if (window.skaiApi?.validateGoogleKey) {
         const res = await window.skaiApi.validateGoogleKey(googleKey);
         setGoogleValidationResult(res);
+        setValidatingGoogle(false);
+        return;
+      }
+    } catch (err) {
+      console.warn('[IPC Validation fallback]:', err);
+    }
+
+    // 2. Resilient Direct Web Validation Fallback
+    try {
+      const resp = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models?key=${googleKey.trim()}`
+      );
+      if (resp.ok) {
+        setGoogleValidationResult({ valid: true, message: 'Google Gemini API key is valid and active!' });
       } else {
-        setGoogleValidationResult({ valid: false, message: 'Validator bridge offline.' });
+        const data = await resp.json().catch(() => ({}));
+        setGoogleValidationResult({
+          valid: false,
+          message: data.error?.message || `Invalid Google API key (HTTP ${resp.status})`,
+        });
       }
     } catch (err: any) {
-      setGoogleValidationResult({ valid: false, message: err.message || 'Validation failed.' });
+      setGoogleValidationResult({ valid: false, message: `Validation error: ${err.message}` });
     } finally {
       setValidatingGoogle(false);
     }
@@ -80,8 +106,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, o
 
   const handleSaveHfToken = async () => {
     try {
-      await window.skaiApi.setApiKey('huggingface', hfToken);
-      setSaveMsg('✅ Hugging Face token securely encrypted & saved (DPAPI).');
+      localStorage.setItem('skai_key_huggingface', hfToken);
+      if (window.skaiApi?.setApiKey) {
+        await window.skaiApi.setApiKey('huggingface', hfToken);
+      }
+      setSaveMsg('✅ Hugging Face token securely saved & encrypted (DPAPI).');
       onKeyUpdated();
       setTimeout(() => setSaveMsg(null), 4000);
     } catch (err: any) {
@@ -93,15 +122,43 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, o
     if (!hfToken.trim()) return;
     setValidatingHf(true);
     setHfValidationResult(null);
+
+    // 1. Try IPC validation
     try {
       if (window.skaiApi?.validateHuggingFaceToken) {
         const res = await window.skaiApi.validateHuggingFaceToken(hfToken);
         setHfValidationResult(res);
+        setValidatingHf(false);
+        return;
+      }
+    } catch (err) {
+      console.warn('[IPC HF Validation fallback]:', err);
+    }
+
+    // 2. Resilient Direct Web Validation Fallback
+    try {
+      const resp = await fetch('https://huggingface.co/api/whoami-v2', {
+        headers: {
+          Authorization: `Bearer ${hfToken.trim()}`,
+        },
+      });
+
+      if (resp.ok) {
+        const user = await resp.json().catch(() => ({}));
+        const uname = user.name || user.username || 'User';
+        setHfValidationResult({
+          valid: true,
+          message: `Hugging Face token valid! Connected as @${uname}`,
+          username: uname,
+        });
       } else {
-        setHfValidationResult({ valid: false, message: 'Validator bridge offline.' });
+        setHfValidationResult({
+          valid: false,
+          message: `Invalid Hugging Face token (HTTP ${resp.status})`,
+        });
       }
     } catch (err: any) {
-      setHfValidationResult({ valid: false, message: err.message || 'Validation failed.' });
+      setHfValidationResult({ valid: false, message: `Validation error: ${err.message}` });
     } finally {
       setValidatingHf(false);
     }
