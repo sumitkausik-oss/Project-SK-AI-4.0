@@ -9,7 +9,6 @@ export interface LiveServiceCallbacks {
   onStateChange: (state: 'IDLE' | 'LISTENING' | 'THINKING' | 'SPEAKING') => void;
   onTranscript: (role: 'user' | 'model', text: string) => void;
   onError: (error: string) => void;
-  onAudioLevel?: (level: number) => void;
 }
 
 export class GeminiLiveService {
@@ -22,14 +21,14 @@ export class GeminiLiveService {
   public isConnected = false;
 
   async connect(apiKey: string, callbacks: LiveServiceCallbacks) {
-    if (!apiKey || !apiKey.trim()) {
-      callbacks.onError('Settings me jakar Gemini API Key enter karein.');
+    if (!apiKey || apiKey.trim() === '') {
+      callbacks.onError('Settings (⚙) me jakar valid Gemini API Key save karein.');
+      callbacks.onTranscript('model', 'त्रुटि: कृपया Settings में अपनी Google Gemini API Key दर्ज करें।');
       return;
     }
 
     try {
       callbacks.onStateChange('LISTENING');
-
       const HOST = 'generativelanguage.googleapis.com';
       const API_VERSION = 'v1alpha';
       const URI = `wss://${HOST}/ws/google.ai.generativelanguage.${API_VERSION}.GenerativeService.BidiGenerateContent?key=${apiKey.trim()}`;
@@ -38,23 +37,20 @@ export class GeminiLiveService {
 
       this.ws.onopen = () => {
         this.isConnected = true;
+        callbacks.onTranscript('model', '✨ SKAI 4.0 ऑनलाइन है। आदेश दीजिए Sumeet Sir!');
         this.sendInitialSetup();
         this.startAudioRecording(callbacks);
       };
 
       this.ws.onmessage = async (event) => {
         let response: any;
-        try {
-          if (event.data instanceof Blob) {
-            response = JSON.parse(await event.data.text());
-          } else {
-            response = JSON.parse(event.data);
-          }
-        } catch {
-          return;
+        if (event.data instanceof Blob) {
+          response = JSON.parse(await event.data.text());
+        } else {
+          response = JSON.parse(event.data);
         }
 
-        // 1. Play Real AI Voice Stream
+        // Live Audio Playback from Gemini
         const parts = response.serverContent?.modelTurn?.parts;
         if (parts) {
           for (const part of parts) {
@@ -72,7 +68,7 @@ export class GeminiLiveService {
           callbacks.onStateChange('LISTENING');
         }
 
-        // 2. Real Tool Execution Handling
+        // Native System Action Execution
         const toolCalls = response.toolCall?.functionCalls;
         if (toolCalls && toolCalls.length > 0) {
           callbacks.onStateChange('THINKING');
@@ -84,12 +80,11 @@ export class GeminiLiveService {
                 args: call.args,
               });
             } else {
-              result = { success: true, message: `Tool ${call.name} executed.` };
+              result = { success: true, message: `Executed ${call.name}` };
             }
 
-            callbacks.onTranscript('model', `[System Action]: ${result.message || 'Action completed'}`);
+            callbacks.onTranscript('model', `[System Action]: ${result.message}`);
 
-            // Return output to model for spoken Hindi feedback
             this.ws?.send(
               JSON.stringify({
                 toolResponse: {
@@ -108,14 +103,14 @@ export class GeminiLiveService {
 
       this.ws.onerror = (err) => {
         console.error('WebSocket Error:', err);
-        callbacks.onError('AI Live connection dropped. Retrying...');
+        callbacks.onError('AI Connection Error. Reconnecting...');
       };
 
       this.ws.onclose = () => {
         this.disconnect(callbacks);
       };
     } catch (e: any) {
-      callbacks.onError(e.message || 'Microphone activation failed.');
+      callbacks.onError(e.message || 'Microphone initiation failed.');
       this.disconnect(callbacks);
     }
   }
@@ -135,7 +130,7 @@ export class GeminiLiveService {
         systemInstruction: {
           parts: [
             {
-              text: 'You are SK AI, an intelligent desktop assistant created by Sumeet Kumar (Powered by SK Enterprises). Always converse in natural, respectful Hindi or Hinglish. When the user asks to open any app, drive (e.g. D Drive, C Drive), notepad, or chrome, ALWAYS call the corresponding function tool immediately and inform them.',
+              text: 'You are SK AI, an intelligent desktop assistant created by Sumeet Kumar (Powered by SK Enterprises). Always speak in natural, polite Hindi or Hinglish. When the user asks to open drives (D drive, C drive), applications (Chrome, Notepad, Calculator) or take screenshots, ALWAYS call the appropriate tool immediately and confirm in Hindi.',
             },
           ],
         },
@@ -144,22 +139,22 @@ export class GeminiLiveService {
             functionDeclarations: [
               {
                 name: 'open_drive_or_folder',
-                description: 'Opens a drive (D Drive, C Drive) or system folder on Windows File Explorer',
+                description: 'Opens a local drive like D: drive, C: drive, or specific folders in File Explorer',
                 parameters: {
                   type: 'OBJECT',
                   properties: {
-                    target: { type: 'STRING', description: 'Drive letter or folder path, e.g. D:, C:, Downloads' },
+                    target: { type: 'STRING', description: 'Drive letter or path, e.g., D:, C:, Downloads' },
                   },
                   required: ['target'],
                 },
               },
               {
                 name: 'open_application',
-                description: 'Opens Windows applications like Chrome, Notepad, Calculator, VS Code',
+                description: 'Opens local Windows applications like Chrome, Notepad, Calculator, VS Code',
                 parameters: {
                   type: 'OBJECT',
                   properties: {
-                    app_name: { type: 'STRING', description: 'Name of the app' },
+                    app_name: { type: 'STRING', description: 'Name of the app to launch' },
                   },
                   required: ['app_name'],
                 },
@@ -194,16 +189,9 @@ export class GeminiLiveService {
 
       const inputData = e.inputBuffer.getChannelData(0);
       const pcm16 = new Int16Array(inputData.length);
-      let sum = 0;
-
       for (let i = 0; i < inputData.length; i++) {
         const s = Math.max(-1, Math.min(1, inputData[i]));
         pcm16[i] = s < 0 ? s * 0x8000 : s * 0x7fff;
-        sum += inputData[i] * inputData[i];
-      }
-
-      if (callbacks.onAudioLevel) {
-        callbacks.onAudioLevel(Math.sqrt(sum / inputData.length));
       }
 
       let binary = '';
@@ -262,7 +250,7 @@ export class GeminiLiveService {
     this.isConnected = false;
     this.processor?.disconnect();
     this.processor = null;
-    this.mediaStream?.getTracks().forEach((track) => track.stop());
+    this.mediaStream?.getTracks().forEach((t) => t.stop());
     this.mediaStream = null;
     this.audioContext?.close();
     this.audioContext = null;

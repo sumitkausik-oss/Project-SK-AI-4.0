@@ -5,88 +5,104 @@ import { TelemetryHUD } from './components/TelemetryHUD';
 import { TranscriptHUD } from './components/TranscriptHUD';
 import { SettingsModal } from '../components/SettingsModal';
 import { ActionConfirmModal } from '../components/ActionConfirmModal';
-import { VoiceEngine } from './services/voice-engine';
+import { GeminiLiveService } from './services/gemini-live-service';
 import { ClapDetector } from './utils/clapDetector';
 import { Mic, Camera, Globe, Folder } from 'lucide-react';
 import { ChatMessage, PendingAction } from '../types/electron';
 
 export const App: React.FC = () => {
   const [assistantState, setAssistantState] = useState<'STANDBY' | 'LISTENING' | 'THINKING' | 'SPEAKING'>('STANDBY');
-  const [audioLevel, setAudioLevel] = useState(0);
   const [hasKey, setHasKey] = useState(false);
-  const [googleKey, setGoogleKey] = useState('');
-  const [hfToken, setHfToken] = useState('');
+  const [apiKey, setApiKey] = useState('');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [pendingAction, setPendingAction] = useState<PendingAction | null>(null);
   const [isVoiceActive, setIsVoiceActive] = useState(false);
 
-  const voiceEngineRef = useRef<VoiceEngine>(new VoiceEngine());
+  const liveServiceRef = useRef<GeminiLiveService>(new GeminiLiveService());
   const clapDetectorRef = useRef<ClapDetector | null>(null);
 
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: 'welcome',
       sender: 'AI',
-      response: `✨ **SKAI 4.0 — 2-WAY HINDI VOICE ASSISTANT ONLINE**
+      response: `✨ **SKAI 4.0 — LIVE GEMINI VOICE & NATIVE TOOLS ACTIVE**
 Architect: **Sumeet Kumar** | Powered by **SK Enterprises**
 
-🎙️ **2-Way Voice Communication Active (Pure Hindi & Hinglish):**
+🎙️ **Live Bidirectional 2-Way Voice Stream (Hindi & Hinglish):**
 • *"D drive kholo"* / *"Open D Drive"*
 • *"Chrome kholo"* / *"Notepad chalu karo"*
 • *"Calculator kholo"* / *"Screenshot le lo"*
-• 👏 **Double-Clap Wake Detection Ready**`,
+• 👏 **Double-Clap Wake Detection Online**`,
       timestamp: new Date().toLocaleTimeString(),
     },
   ]);
 
+  // Load persistent API keys on initial boot
   useEffect(() => {
-    loadApiKeys();
+    loadPersistentKeys();
 
-    // Initialize Double-Clap Wake Detector
     clapDetectorRef.current = new ClapDetector({
       onWake: () => {
         console.log('👏 Double-clap detected! Waking assistant...');
-        if (!isVoiceActive) {
-          startVoice();
-        } else {
-          voiceEngineRef.current.speakResponse('हाँ जी Sumeet Sir, मैं सुन रहा हूँ। क्या करना है?');
+        if (!liveServiceRef.current.isConnected) {
+          startLiveVoice();
         }
       },
     });
     clapDetectorRef.current.start();
 
     return () => {
-      voiceEngineRef.current.stop();
+      liveServiceRef.current.disconnect();
       clapDetectorRef.current?.stop();
     };
   }, []);
 
-  const loadApiKeys = async () => {
+  const loadPersistentKeys = async () => {
     try {
-      let gKey = '';
-      let hf = '';
-      if (window.skaiApi?.getApiKey) {
-        gKey = (await window.skaiApi.getApiKey('google')) || '';
-        hf = (await window.skaiApi.getApiKey('huggingface')) || '';
-      }
-      if (!gKey) gKey = localStorage.getItem('skai_key_google') || '';
-      if (!hf) hf = localStorage.getItem('skai_key_huggingface') || '';
+      let key = '';
 
-      setGoogleKey(gKey);
-      setHfToken(hf);
-      setHasKey(Boolean(gKey || hf));
-      voiceEngineRef.current.setKeys(gKey, hf);
+      if (window.electron?.ipcRenderer?.invoke) {
+        const keys = await window.electron.ipcRenderer.invoke('get-api-keys');
+        if (keys?.geminiKey) {
+          key = keys.geminiKey;
+        }
+      }
+
+      if (!key && window.skaiApi?.getApiKey) {
+        key = (await window.skaiApi.getApiKey('google')) || '';
+      }
+
+      if (!key) {
+        key = localStorage.getItem('skai_key_google') || '';
+      }
+
+      if (key && key.trim()) {
+        setApiKey(key.trim());
+        setHasKey(true);
+      } else {
+        setHasKey(false);
+      }
     } catch (err) {
-      console.warn('Key check error:', err);
+      console.warn('[KEY LOAD ERROR]:', err);
     }
   };
 
-  const startVoice = async () => {
-    setIsVoiceActive(true);
-    voiceEngineRef.current.init(googleKey, hfToken);
+  const startLiveVoice = async () => {
+    if (!apiKey || !apiKey.trim()) {
+      setIsSettingsOpen(true);
+      return;
+    }
 
-    await voiceEngineRef.current.start({
-      onStateChange: (st) => setAssistantState(st),
+    setIsVoiceActive(true);
+    await liveServiceRef.current.connect(apiKey, {
+      onStateChange: (st) => {
+        if (st === 'IDLE') {
+          setAssistantState('STANDBY');
+          setIsVoiceActive(false);
+        } else {
+          setAssistantState(st);
+        }
+      },
       onTranscript: (role, text) => {
         setMessages((prev) => [
           ...prev,
@@ -98,7 +114,6 @@ Architect: **Sumeet Kumar** | Powered by **SK Enterprises**
           },
         ]);
       },
-      onAudioLevel: (lvl) => setAudioLevel(lvl),
       onError: (err) => {
         setIsVoiceActive(false);
         setAssistantState('STANDBY');
@@ -107,7 +122,7 @@ Architect: **Sumeet Kumar** | Powered by **SK Enterprises**
           {
             id: `err_${Date.now()}`,
             sender: 'AI',
-            response: `⚠️ **Voice Info:** ${err}`,
+            response: `⚠️ **Voice Error:** ${err}`,
             timestamp: new Date().toLocaleTimeString(),
           },
         ]);
@@ -117,11 +132,11 @@ Architect: **Sumeet Kumar** | Powered by **SK Enterprises**
 
   const toggleVoice = () => {
     if (isVoiceActive) {
-      voiceEngineRef.current.stop();
+      liveServiceRef.current.disconnect();
       setIsVoiceActive(false);
       setAssistantState('STANDBY');
     } else {
-      startVoice();
+      startLiveVoice();
     }
   };
 
@@ -136,7 +151,128 @@ Architect: **Sumeet Kumar** | Powered by **SK Enterprises**
     };
 
     setMessages((prev) => [...prev, userMsg]);
-    await voiceEngineRef.current.handleUserQuery(queryText);
+    setAssistantState('THINKING');
+
+    const qLower = queryText.toLowerCase().trim();
+
+    // 1. Direct High-Speed OS Tool Execution
+    if (qLower.includes('d drive') || qLower.includes('d:') || qLower.includes('d ड्राइव')) {
+      const res = await window.electron?.ipcRenderer?.invoke('execute-system-tool', {
+        toolName: 'open_drive_or_folder',
+        args: { target: 'D:\\' },
+      });
+      speakAndRecordResponse(res?.message || 'D Drive opened.');
+      return;
+    }
+
+    if (qLower.includes('c drive') || qLower.includes('c:') || qLower.includes('c ड्राइव')) {
+      const res = await window.electron?.ipcRenderer?.invoke('execute-system-tool', {
+        toolName: 'open_drive_or_folder',
+        args: { target: 'C:\\' },
+      });
+      speakAndRecordResponse(res?.message || 'C Drive opened.');
+      return;
+    }
+
+    if (qLower.includes('chrome') || qLower.includes('browser') || qLower.includes('क्रोम')) {
+      const res = await window.electron?.ipcRenderer?.invoke('execute-system-tool', {
+        toolName: 'open_application',
+        args: { app_name: 'chrome' },
+      });
+      speakAndRecordResponse(res?.message || 'Google Chrome opened.');
+      return;
+    }
+
+    if (qLower.includes('notepad') || qLower.includes('नोटपैड')) {
+      const res = await window.electron?.ipcRenderer?.invoke('execute-system-tool', {
+        toolName: 'open_application',
+        args: { app_name: 'notepad' },
+      });
+      speakAndRecordResponse(res?.message || 'Notepad opened.');
+      return;
+    }
+
+    if (qLower.includes('calc') || qLower.includes('calculator') || qLower.includes('कैलकुलेटर')) {
+      const res = await window.electron?.ipcRenderer?.invoke('execute-system-tool', {
+        toolName: 'open_application',
+        args: { app_name: 'calc' },
+      });
+      speakAndRecordResponse(res?.message || 'Calculator opened.');
+      return;
+    }
+
+    if (qLower.includes('screenshot') || qLower.includes('स्क्रीनशॉट')) {
+      const res = await window.electron?.ipcRenderer?.invoke('execute-system-tool', {
+        toolName: 'take_screenshot',
+        args: {},
+      });
+      speakAndRecordResponse(res?.message || 'Screenshot captured.');
+      return;
+    }
+
+    // 2. Direct Gemini Live / REST Query
+    if (apiKey) {
+      try {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey.trim()}`;
+        const resp = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [
+              {
+                role: 'user',
+                parts: [
+                  {
+                    text: `You are SK AI created by Sumeet Kumar (Powered by SK Enterprises). Answer in concise, polite Hindi/Hinglish: ${queryText}`,
+                  },
+                ],
+              },
+            ],
+            generationConfig: { maxOutputTokens: 180 },
+          }),
+        });
+
+        if (resp.ok) {
+          const data = await resp.json();
+          const reply = data.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (reply) {
+            speakAndRecordResponse(reply);
+            return;
+          }
+        }
+      } catch (err) {
+        console.warn('[GEMINI FETCH ERROR]:', err);
+      }
+    }
+
+    speakAndRecordResponse('कृपया सेटिंग्स (⚙) में अपनी Google Gemini API Key दर्ज करें।');
+  };
+
+  const speakAndRecordResponse = (responseText: string) => {
+    setAssistantState('SPEAKING');
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: `ai_${Date.now()}`,
+        sender: 'AI',
+        response: responseText,
+        timestamp: new Date().toLocaleTimeString(),
+      },
+    ]);
+
+    if (window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(responseText.replace(/[*#`_]/g, ''));
+      const voices = window.speechSynthesis.getVoices();
+      const hindiVoice = voices.find((v) => v.lang.includes('hi') || v.name.includes('Hindi') || v.lang.includes('IN'));
+      if (hindiVoice) u.voice = hindiVoice;
+      u.rate = 1.05;
+      u.onend = () => setAssistantState(isVoiceActive ? 'LISTENING' : 'STANDBY');
+      u.onerror = () => setAssistantState(isVoiceActive ? 'LISTENING' : 'STANDBY');
+      window.speechSynthesis.speak(u);
+    } else {
+      setTimeout(() => setAssistantState(isVoiceActive ? 'LISTENING' : 'STANDBY'), 1000);
+    }
   };
 
   return (
@@ -157,7 +293,7 @@ Architect: **Sumeet Kumar** | Powered by **SK Enterprises**
         <div className="flex-1 flex flex-col items-center justify-between relative overflow-hidden p-4">
           <div className="text-center space-y-1 z-10">
             <span className="text-[10px] font-mono tracking-[0.3em] text-cyan-400/80 uppercase">
-              // 2-WAY HINDI VOICE & HOLOGRAPHIC CORE //
+              // GEMINI LIVE 2-WAY QUANTUM AUDIO CORE //
             </span>
             <h1 className="text-lg font-black tracking-widest text-cyan-300 drop-shadow-[0_0_15px_rgba(0,240,255,0.6)]">
               SKAI PLATFORM
@@ -165,7 +301,7 @@ Architect: **Sumeet Kumar** | Powered by **SK Enterprises**
           </div>
 
           <div className="w-full h-80 flex items-center justify-center">
-            <HolographicCore state={assistantState} audioLevel={audioLevel} />
+            <HolographicCore state={assistantState} />
           </div>
 
           {/* Quick Action Control Bar */}
@@ -179,7 +315,7 @@ Architect: **Sumeet Kumar** | Powered by **SK Enterprises**
               }`}
             >
               <Mic className="w-4 h-4" />
-              <span>{isVoiceActive ? 'VOICE LIVE (बोलिए)' : 'START 2-WAY VOICE'}</span>
+              <span>{isVoiceActive ? 'VOICE LIVE (MUTE)' : 'START LIVE GEMINI VOICE'}</span>
             </button>
 
             <button
@@ -221,7 +357,7 @@ Architect: **Sumeet Kumar** | Powered by **SK Enterprises**
       <SettingsModal
         isOpen={isSettingsOpen}
         onClose={() => setIsSettingsOpen(false)}
-        onKeyUpdated={loadApiKeys}
+        onKeyUpdated={loadPersistentKeys}
       />
 
       {/* 4. Action Confirmation Modal */}

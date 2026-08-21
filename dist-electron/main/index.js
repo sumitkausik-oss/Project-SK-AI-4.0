@@ -40,6 +40,7 @@ const fs = __importStar(require("fs"));
 const os = __importStar(require("os"));
 const https = __importStar(require("https"));
 const system_tools_1 = require("./lib/system-tools");
+const store_1 = require("./store");
 let mainWindow = null;
 const APPDATA_DIR = (0, path_1.join)(electron_1.app.getPath('appData'), 'SK Enterprises', 'SKAI');
 const SECRETS_FILE = (0, path_1.join)(APPDATA_DIR, 'secrets.enc');
@@ -198,6 +199,7 @@ function createWindow() {
     });
 }
 electron_1.app.whenReady().then(() => {
+    (0, store_1.registerKeyStoreHandlers)();
     // Comprehensive OS Tool Execution Handler
     electron_1.ipcMain.handle('execute-system-tool', async (_event, { toolName, args }) => {
         return new Promise((resolve) => {

@@ -55,6 +55,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, o
   const handleSaveGoogleKey = async () => {
     try {
       localStorage.setItem('skai_key_google', googleKey);
+      if (window.electron?.ipcRenderer?.invoke) {
+        await window.electron.ipcRenderer.invoke('save-api-keys', { geminiKey: googleKey, hfToken });
+      }
       if (window.skaiApi?.setApiKey) {
         await window.skaiApi.setApiKey('google', googleKey);
       }
@@ -107,6 +110,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, o
   const handleSaveHfToken = async () => {
     try {
       localStorage.setItem('skai_key_huggingface', hfToken);
+      if (window.electron?.ipcRenderer?.invoke) {
+        await window.electron.ipcRenderer.invoke('save-api-keys', { geminiKey: googleKey, hfToken });
+      }
       if (window.skaiApi?.setApiKey) {
         await window.skaiApi.setApiKey('huggingface', hfToken);
       }

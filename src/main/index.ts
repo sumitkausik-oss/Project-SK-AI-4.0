@@ -6,6 +6,7 @@ import * as os from 'os';
 import * as https from 'https';
 import { SystemTools, getSystemMetrics, resolveUserPath } from './lib/system-tools';
 import { PermissionPolicy, StoredMemory } from '../shared/types';
+import { registerKeyStoreHandlers } from './store';
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -169,6 +170,8 @@ function createWindow(): void {
 }
 
 app.whenReady().then(() => {
+  registerKeyStoreHandlers();
+
   // Comprehensive OS Tool Execution Handler
   ipcMain.handle('execute-system-tool', async (_event, { toolName, args }) => {
     return new Promise((resolve) => {
