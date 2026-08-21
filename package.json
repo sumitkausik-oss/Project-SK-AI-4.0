@@ -11,7 +11,7 @@
   },
   "license": "MIT",
   "scripts": {
-    "dev": "concurrently -k \"vite\" \"cross-env NODE_ENV=development electron .\"",
+    "dev": "tsc -p tsconfig.electron.json && concurrently -k \"vite\" \"cross-env NODE_ENV=development electron .\"",
     "start": "electron .",
     "build": "tsc && vite build && tsc -p tsconfig.electron.json",
     "build:win": "npm run dist:win",
