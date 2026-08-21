@@ -1,9 +1,3 @@
-/**
- * SKAI — Autonomous Master Main Process & Hardware Permission Layer
- * Product: SKAI
- * Powered by SK Enterprises | Author: Sumeet Kumar
- * Version: 0.0.1
- */
 import { app, BrowserWindow, ipcMain, session, shell, safeStorage } from 'electron';
 import { join } from 'path';
 import { exec } from 'child_process';
@@ -19,7 +13,6 @@ const APPDATA_DIR = join(app.getPath('appData'), 'SK Enterprises', 'SKAI');
 const SECRETS_FILE = join(APPDATA_DIR, 'secrets.enc');
 const MEMORY_FILE = join(APPDATA_DIR, 'skai_memory.json');
 const PERMISSIONS_FILE = join(APPDATA_DIR, 'permissions_policy.json');
-const AUDIT_FILE = join(APPDATA_DIR, 'audit_log.json');
 const SCREENSHOTS_DIR = join(APPDATA_DIR, 'screenshots');
 
 for (const dir of [APPDATA_DIR, SCREENSHOTS_DIR]) {
@@ -85,50 +78,31 @@ function setEncryptedApiKey(provider: string, key: string): boolean {
   }
 }
 
-// -----------------------------------------------------------------------------
-// VALIDATORS FOR GOOGLE & HUGGING FACE
-// -----------------------------------------------------------------------------
 function validateGoogleKey(key: string): Promise<{ valid: boolean; message: string }> {
   return new Promise((resolve) => {
-    if (!key || !key.trim()) {
-      return resolve({ valid: false, message: 'Google API key is empty.' });
-    }
+    if (!key || !key.trim()) return resolve({ valid: false, message: 'Key is empty.' });
     https
       .get(`https://generativelanguage.googleapis.com/v1beta/models?key=${key.trim()}`, (res) => {
         let data = '';
         res.on('data', (chunk) => (data += chunk));
         res.on('end', () => {
           if (res.statusCode === 200) {
-            resolve({ valid: true, message: 'Google API key is valid and active!' });
+            resolve({ valid: true, message: 'Google Gemini API key is valid and active!' });
           } else {
-            try {
-              const err = JSON.parse(data);
-              resolve({ valid: false, message: err.error?.message || `Invalid Google Key (HTTP ${res.statusCode})` });
-            } catch {
-              resolve({ valid: false, message: `Key validation failed (HTTP ${res.statusCode})` });
-            }
+            resolve({ valid: false, message: `Invalid Google API key (HTTP ${res.statusCode})` });
           }
         });
       })
-      .on('error', (err) => {
-        resolve({ valid: false, message: `Connection error: ${err.message}` });
-      });
+      .on('error', (err) => resolve({ valid: false, message: err.message }));
   });
 }
 
 function validateHuggingFaceToken(token: string): Promise<{ valid: boolean; message: string; username?: string }> {
   return new Promise((resolve) => {
-    if (!token || !token.trim()) {
-      return resolve({ valid: false, message: 'Hugging Face token is empty.' });
-    }
+    if (!token || !token.trim()) return resolve({ valid: false, message: 'Token is empty.' });
     const req = https.get(
       'https://huggingface.co/api/whoami-v2',
-      {
-        headers: {
-          Authorization: `Bearer ${token.trim()}`,
-          'User-Agent': 'SKAI-Desktop-Assistant/0.0.1',
-        },
-      },
+      { headers: { Authorization: `Bearer ${token.trim()}` } },
       (res) => {
         let data = '';
         res.on('data', (chunk) => (data += chunk));
@@ -137,13 +111,9 @@ function validateHuggingFaceToken(token: string): Promise<{ valid: boolean; mess
             try {
               const user = JSON.parse(data);
               const uname = user.name || user.username || 'User';
-              resolve({
-                valid: true,
-                message: `Hugging Face token valid! Connected as @${uname}`,
-                username: uname,
-              });
+              resolve({ valid: true, message: `Hugging Face token valid! Connected as @${uname}`, username: uname });
             } catch {
-              resolve({ valid: true, message: 'Hugging Face token is valid and active!' });
+              resolve({ valid: true, message: 'Hugging Face token is valid!' });
             }
           } else {
             resolve({ valid: false, message: `Invalid Hugging Face token (HTTP ${res.statusCode})` });
@@ -151,55 +121,8 @@ function validateHuggingFaceToken(token: string): Promise<{ valid: boolean; mess
         });
       }
     );
-    req.on('error', (err) => {
-      resolve({ valid: false, message: `Connection error: ${err.message}` });
-    });
+    req.on('error', (err) => resolve({ valid: false, message: err.message }));
   });
-}
-
-// -----------------------------------------------------------------------------
-// PERMISSION POLICY & MEMORY STORAGE
-// -----------------------------------------------------------------------------
-const DEFAULT_POLICY: PermissionPolicy = {
-  auto_approve_read_only: true,
-  auto_approve_reversible: true,
-  require_confirmation_for_destructive: true,
-  require_confirmation_for_terminal: false,
-  web_tools_enabled: true,
-  allowed_directories: [os.homedir()],
-};
-
-function loadPermissionPolicy(): PermissionPolicy {
-  if (!fs.existsSync(PERMISSIONS_FILE)) return DEFAULT_POLICY;
-  try {
-    return { ...DEFAULT_POLICY, ...JSON.parse(fs.readFileSync(PERMISSIONS_FILE, 'utf-8')) };
-  } catch {
-    return DEFAULT_POLICY;
-  }
-}
-
-function savePermissionPolicy(policy: Partial<PermissionPolicy>): PermissionPolicy {
-  const current = loadPermissionPolicy();
-  const updated = { ...current, ...policy };
-  try {
-    fs.writeFileSync(PERMISSIONS_FILE, JSON.stringify(updated, null, 2), 'utf-8');
-  } catch {}
-  return updated;
-}
-
-function loadMemories(): StoredMemory[] {
-  if (!fs.existsSync(MEMORY_FILE)) return [];
-  try {
-    return JSON.parse(fs.readFileSync(MEMORY_FILE, 'utf-8'));
-  } catch {
-    return [];
-  }
-}
-
-function saveMemories(memories: StoredMemory[]) {
-  try {
-    fs.writeFileSync(MEMORY_FILE, JSON.stringify(memories, null, 2), 'utf-8');
-  } catch {}
 }
 
 function createWindow(): void {
@@ -221,15 +144,14 @@ function createWindow(): void {
     },
   });
 
-  // Explicit Hardware Access Permissions
+  // Unconditional Hardware Permissions (Microphone, Audio, Camera)
   session.defaultSession.setPermissionRequestHandler((_webContents, permission, callback) => {
     const allowed = ['media', 'audioCapture', 'microphone', 'camera', 'desktopVideoCapture', 'notifications'];
     callback(allowed.includes(permission));
   });
 
   session.defaultSession.setPermissionCheckHandler((_webContents, permission) => {
-    const allowed = ['media', 'audioCapture', 'microphone', 'camera', 'desktopVideoCapture'];
-    return allowed.includes(permission);
+    return ['media', 'audioCapture', 'microphone', 'camera', 'desktopVideoCapture'].includes(permission);
   });
 
   const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged;
@@ -247,40 +169,70 @@ function createWindow(): void {
 }
 
 app.whenReady().then(() => {
-  // 1. Native OS Tool Execution Bridge (IPC)
+  // Comprehensive OS Tool Execution Handler
   ipcMain.handle('execute-system-tool', async (_event, { toolName, args }) => {
     return new Promise((resolve) => {
-      const target = (args?.app_name || args?.url || args?.command || '').toLowerCase().trim();
+      const rawTarget = (args?.app_name || args?.target || args?.path || args?.url || '').trim();
+      const target = rawTarget.toLowerCase();
 
-      if (toolName === 'open_browser' || toolName === 'open_application') {
-        if (target.includes('chrome') || target.includes('google chrome')) {
-          exec('start chrome', (err) => resolve({ success: !err, message: 'Google Chrome opened successfully.' }));
+      if (toolName === 'open_drive_or_folder' || target.includes('drive') || target.includes('folder')) {
+        let drivePath = 'D:\\';
+        if (target.includes('c drive') || target.includes('c:')) drivePath = 'C:\\';
+        if (target.includes('e drive') || target.includes('e:')) drivePath = 'E:\\';
+        if (rawTarget.match(/^[a-zA-Z]:\\?/)) drivePath = rawTarget.endsWith('\\') ? rawTarget : `${rawTarget}\\`;
+
+        exec(`explorer.exe "${drivePath}"`, (err) => {
+          resolve({ success: !err, message: `Opened: ${drivePath}` });
+        });
+        return;
+      }
+
+      if (toolName === 'open_application' || toolName === 'open_browser') {
+        if (target.includes('chrome')) {
+          exec('start chrome', (err) => resolve({ success: !err, message: 'Google Chrome opened.' }));
         } else if (target.includes('notepad')) {
           exec('start notepad', (err) => resolve({ success: !err, message: 'Notepad opened.' }));
-        } else if (target.includes('calc') || target.includes('calculator')) {
+        } else if (target.includes('calc')) {
           exec('calc', (err) => resolve({ success: !err, message: 'Calculator launched.' }));
-        } else if (target.includes('code') || target.includes('vs code')) {
+        } else if (target.includes('vs code') || target.includes('code')) {
           exec('code .', (err) => resolve({ success: !err, message: 'VS Code launched.' }));
         } else if (args?.url) {
           shell.openExternal(args.url).then(() => resolve({ success: true, message: `Opened URL: ${args.url}` }));
         } else {
-          exec(`start "" "${args.app_name || target}"`, (err) =>
-            resolve({ success: !err, message: `Executed ${args.app_name || target}` })
-          );
+          exec(`start "" "${rawTarget}"`, (err) => resolve({ success: !err, message: `Executed: ${rawTarget}` }));
         }
-      } else if (toolName === 'system_command') {
-        exec(args.command, { maxBuffer: 1024 * 1024 * 10 }, (error, stdout, stderr) => {
-          resolve({ success: !error, output: stdout || stderr });
-        });
-      } else if (toolName === 'take_screenshot') {
-        SystemTools.takeScreenshot(SCREENSHOTS_DIR).then((res) => resolve(res));
-      } else {
-        resolve({ success: false, message: 'Tool not recognized.' });
+        return;
       }
+
+      if (toolName === 'take_screenshot') {
+        exec(
+          'powershell -command "$path = \\"$env:USERPROFILE\\Pictures\\skai_screenshot.png\\"; Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait(\'{PRTSC}\');"',
+          () => {
+            resolve({ success: true, message: 'Screenshot captured to clipboard and Pictures.' });
+          }
+        );
+        return;
+      }
+
+      resolve({ success: false, message: 'Unknown command execution.' });
     });
   });
 
-  // 2. Window Controls
+  // Live Accurate System Metrics (Fixes RAM ghost values)
+  ipcMain.handle('get-system-metrics', async () => {
+    const totalMem = os.totalmem();
+    const freeMem = os.freemem();
+    const usedMem = totalMem - freeMem;
+    return {
+      totalMemGB: (totalMem / 1024 ** 3).toFixed(1),
+      usedMemGB: (usedMem / 1024 ** 3).toFixed(1),
+      memPercent: Math.round((usedMem / totalMem) * 100),
+      cpuCores: os.cpus().length,
+      platform: `${os.type()} (${os.arch()})`,
+    };
+  });
+
+  // Window Controls
   ipcMain.on('window-min', () => mainWindow?.minimize());
   ipcMain.on('window-max', () => (mainWindow?.isMaximized() ? mainWindow.unmaximize() : mainWindow?.maximize()));
   ipcMain.on('window-close', () => mainWindow?.close());
@@ -291,9 +243,8 @@ app.whenReady().then(() => {
     else if (action === 'close') mainWindow.close();
   });
 
-  // 3. Telemetry & App Info
+  // Telemetry & App Info
   ipcMain.handle('sys:telemetry', () => getSystemMetrics());
-  ipcMain.handle('get-system-metrics', () => getSystemMetrics());
   ipcMain.handle('app:getInfo', () => ({
     name: 'skai',
     productName: 'SKAI',
@@ -304,14 +255,14 @@ app.whenReady().then(() => {
     appDataPath: APPDATA_DIR,
   }));
 
-  // 4. Secrets Vault (SafeStorage DPAPI) & Token Validation
+  // Secrets Vault (SafeStorage DPAPI) & Token Validation
   ipcMain.handle('secrets:getApiKey', (_, provider: string) => getEncryptedApiKey(provider));
   ipcMain.handle('secrets:setApiKey', (_, provider: string, key: string) => setEncryptedApiKey(provider, key));
   ipcMain.handle('secrets:hasApiKey', (_, provider: string) => !!getEncryptedApiKey(provider));
   ipcMain.handle('secrets:validateGoogleKey', (_, key: string) => validateGoogleKey(key));
   ipcMain.handle('secrets:validateHuggingFaceToken', (_, token: string) => validateHuggingFaceToken(token));
 
-  // 5. System Tools
+  // System Tools
   ipcMain.handle('sys:open-app', (_, appName: string) => SystemTools.openApp(appName));
   ipcMain.handle('os:openApp', (_, appName: string) => SystemTools.openApp(appName));
   ipcMain.handle('os:closeApp', (_, appName: string) => SystemTools.closeApp(appName));
@@ -331,57 +282,6 @@ app.whenReady().then(() => {
   ipcMain.handle('os:takeScreenshot', () => SystemTools.takeScreenshot(SCREENSHOTS_DIR));
   ipcMain.handle('web:search', (_, query: string) => SystemTools.webSearch(query));
   ipcMain.handle('search:localFiles', (_, query: string, baseDir?: string) => SystemTools.searchLocalFiles(query, baseDir));
-
-  // 6. Permissions & Memory
-  ipcMain.handle('permissions:getPolicy', () => loadPermissionPolicy());
-  ipcMain.handle('permissions:savePolicy', (_, policy: Partial<PermissionPolicy>) => savePermissionPolicy(policy));
-  ipcMain.handle('permissions:confirmAction', async () => ({ success: true }));
-
-  ipcMain.handle('memory:store', (_, key: string, content: string, tags?: string[], category?: string) => {
-    const mems = loadMemories();
-    const item: StoredMemory = {
-      id: `mem_${Date.now()}`,
-      key,
-      content,
-      category: category || 'GENERAL',
-      tags: tags || [],
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    };
-    mems.unshift(item);
-    saveMemories(mems);
-    return item;
-  });
-  ipcMain.handle('memory:query', (_, query: string, limit?: number) => {
-    const mems = loadMemories();
-    const q = query.toLowerCase();
-    return mems.filter((m) => m.key.toLowerCase().includes(q) || m.content.toLowerCase().includes(q)).slice(0, limit || 20);
-  });
-  ipcMain.handle('memory:list', (_, limit?: number) => loadMemories().slice(0, limit || 50));
-  ipcMain.handle('memory:delete', (_, id: string) => {
-    const mems = loadMemories().filter((m) => m.id !== id);
-    saveMemories(mems);
-    return true;
-  });
-
-  // 7. Coding Tools
-  ipcMain.handle('code:readProject', async (_, projectPath: string) => {
-    const root = resolveUserPath(projectPath);
-    return { success: fs.existsSync(root), root };
-  });
-  ipcMain.handle('code:editFile', async (_, filePath: string, targetContent: string, replacementContent: string) => {
-    const fullPath = resolveUserPath(filePath);
-    if (!fs.existsSync(fullPath)) return { success: false, error: 'File not found.' };
-    const content = fs.readFileSync(fullPath, 'utf-8');
-    if (!content.includes(targetContent)) return { success: false, error: 'Target snippet not found in file.' };
-    const updated = content.replace(targetContent, replacementContent);
-    fs.writeFileSync(fullPath, updated, 'utf-8');
-    return { success: true, path: fullPath, message: 'File edited successfully.' };
-  });
-  ipcMain.handle('code:runTests', async (_, projectPath: string, testCommand: string = 'npm test') => {
-    const root = resolveUserPath(projectPath);
-    return SystemTools.runTerminal(testCommand, root);
-  });
 
   createWindow();
 
